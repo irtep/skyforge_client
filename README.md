@@ -28,3 +28,6 @@ sitten alas ilmestyy "create pull request", klikkaa sitä, eli tehdään pyyntö
 8. mene githubin repoon, siellä "pull request" välilehti ja siellä klikkaa ilmestynyttä.
 9. jos kaikki näyttää olevan kunnossa, niin "merge pull request" liittää sen "main" branchiin, eli sitten se onkin siinä.
 
+10. repon issues kohdassa valitse ruudusta ja valitse niistä jostain, että "closed".
+11. ja käy laittamassa projekti ruudusta myös done
+
