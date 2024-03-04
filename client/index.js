@@ -39,9 +39,12 @@ function sendMessage(){
 
 // Receive messages from server:
 socket.on('message', (message) => {
+  
   const command = message.command;
   const data = message.data;
   const messut = document.getElementById('mudScreen');
+
+  /*
   // experimental trigger
   const triggers = [
     'You are knocked',
@@ -52,6 +55,7 @@ socket.on('message', (message) => {
     const checkThis = data.includes(trig);
     if (checkThis) { socket.emit('command', 'lead cersei'); }
    });
+   */
   /*
     var str = "Hello world, welcome to the universe.";
     var n = str.includes("world");
