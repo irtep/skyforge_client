@@ -1,40 +1,58 @@
-import * as net from "net";
-import { TelnetSocket } from "telnet-stream";
+import express from 'express';
+import net from 'net';
+import http from 'http';
+import { Server } from 'socket.io';
 
-// Some global variable for further use
-let socket;
-let tSocket;
+const app = express();
+const port = 3333;
+let connected = false;
 
-// Initialize the socket with our IP and port
-socket = net.createConnection(23, "batmud.bat.org");
+const httpServer = http.createServer(app);
+const io = new Server(httpServer);
 
-// Connect the socket with telnet
-tSocket = new TelnetSocket(socket);
- 
-// Connect the socket with telnet
-tSocket = new TelnetSocket(socket);
- 
-// If the connection are close "close handler"
-tSocket.on("close", function () {
-    return process.exit();
+app.use(express.static('client'));
+
+// Define createResponse function
+function createResponse(type, data) {
+    return {
+        type: type,
+        data: data
+    };
+}
+
+// Handle Socket.IO connection
+io.on('connection', (socket) => {
+    console.log('a user connected');
+
+    try {
+        // connect to batmud
+        const mud = net.createConnection(23, "batmud.bat.org");
+        mud.setEncoding('latin1');
+        connected = true;
+
+        // listens batmud and sends to client
+        mud.addListener('data', (data) => {
+            socket.emit('message', createResponse('update', data));
+        });
+
+        // listens client and sends to batmud
+        socket.on('command', (data) => {
+            data = data + '\r\n';
+            mud.on('end', () => {
+                connected = false;
+            });
+            connected ? mud.write(data) : console.log('disconnected from mud, not sending');
+        });
+    } catch {
+        console.log('error connecting to batmud!');
+    }
 });
- 
-// If the connection are on "on handler"
-tSocket.on("data", function (buffer) {
-    return process.stdout.write(buffer.toString("utf8"));
+
+// Serve Socket.IO client library
+app.get('/socket.io/socket.io.js', (req, res) => {
+    res.sendFile(__dirname + '/node_modules/socket.io/client-dist/socket.io.js');
 });
- 
-// If the connection are occurred something "doing handler"
-tSocket.on("do", function (option) {
-    return tSocket.writeWont(option);
-});
- 
- 
-tSocket.on("will", function (option) {
-    return tSocket.writeDont(option);
-});
- 
-// If the connection are send the data "data handler"
-process.stdin.on("data", function (buffer) {
-    return tSocket.write(buffer.toString("utf8"));
+
+httpServer.listen(port, () => {
+    console.log(`Server is listening at http://localhost:${port}`);
 });
