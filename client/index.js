@@ -36,23 +36,6 @@ socket.on('message', (message) => {
   const data = message.data;
   const messut = document.getElementById('mudScreen');
 
-  /*
-  // experimental trigger
-  const triggers = [
-    'You are knocked',
-    'your mount throws'
-  ];
-
-  triggers.forEach( trig => {
-    const checkThis = data.includes(trig);
-    if (checkThis) { socket.emit('command', 'lead cersei'); }
-   });
-   */
-  /*
-    var str = "Hello world, welcome to the universe.";
-    var n = str.includes("world");
-    document.getElementById("demo").innerHTML = n;
-  */
   messut.innerHTML = messut.innerHTML += `${data}`;
   
   // remove extra lines
