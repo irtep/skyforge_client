@@ -14,14 +14,6 @@ document.getElementById('cLine').addEventListener("keydown", function (e) {
   }
 });
 
-// check if lots of text and destroy lines, to avoid lag
-function destroyLines() {
-  const msgs = document.getElementById('mudScreen');
-  if (msgs.innerHTML.length > 100000) {
-    msgs.innerHTML = '';
-  }
-}
-
 // send message to server by buttons
 function sendButtonMessage(clickedButton) {
   console.log('value= ', clickedButton.target.value);
@@ -61,9 +53,19 @@ socket.on('message', (message) => {
     var n = str.includes("world");
     document.getElementById("demo").innerHTML = n;
   */
-  messut.innerHTML = messut.innerHTML += `<li> ${data}`;
-  // destroy old data to avoid lag:
-  setInterval( () => { destroyLines(); },10000);
+  messut.innerHTML = messut.innerHTML += `${data}`;
+  
+  // remove extra lines
+  var rivit = messut.innerHTML.split('\n');
+  var maara = rivit.length - 250;
+  console.log('Maara: %d', maara);
+  if (maara > 0){
+    for (var loop = 0; loop < maara; loop++){
+      rivit.shift();      
+    }
+    messut.innerHTML = rivit.join('\n');
+  }
+  
   // scrolling to down
   messut.scrollTop = messut.scrollHeight;
 
