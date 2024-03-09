@@ -45,22 +45,21 @@ io.on('connection', (socket) => {
         // listens client and sends to batmud
         socket.on('command', (data) => {
 
-            //console.log('received: ', data);
-
             // seems that need this, to be executed in batmud
             data = data + '\r\n'; 
 
-            // Convert UTF-8 to Latin1
-            const latin1Buffer = Buffer.from(data, 'utf-8');
-            const latin1Text = latin1Buffer.toString('latin1');
+            const bufferedData = Buffer.from(data, 'latin1');
 
             mud.on('end', () => {
+
                 connected = false;
+
             });
             
             if (connected) {
-                //console.log('writing to mud: ', latin1Text);
-                mud.write(latin1Text)
+
+                mud.write(bufferedData);
+
             } else {
                 console.log('disconnected from mud, not sending');
             }
