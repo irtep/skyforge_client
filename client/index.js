@@ -1,24 +1,34 @@
-"use strict";
+import { addButton, addTrigger } from './functions.js';
+
 const socket = io();
 const commandButtons = document.getElementsByClassName('commandButtons');
 
-// Get the modal
-var modal = document.getElementById("myModal");
+// Get the modals
+var modal = document.getElementById("myModal"); // trigger editor
+const buttonModal = document.getElementById("buttonEditorModal"); // button editor
 
 // Get the button that opens the modal
-var btn = document.getElementById("myOpenBtn");
+var btn = document.getElementById("myOpenBtn"); // trigger editor
+const btnEditorOpener = document.getElementById("buttonEditorOpener"); // buttons editor
 
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
+const btnEditorCloseSpan = document.getElementsByClassName("closeButtonEditor")[0];
 
 // When the user clicks on the button, open the modal
-btn.onclick = function () {
+btn.onclick = function () { // trigger editor
   modal.style.display = "block";
+}
+btnEditorOpener.onclick = function () { // buttons editor
+  buttonModal.style.display = "block";
 }
 
 // When the user clicks on <span> (x), close the modal
-span.onclick = function () {
+span.onclick = function () { // trigger editor
   modal.style.display = "none";
+}
+btnEditorCloseSpan.onclick = function () { // buttons editor
+  buttonModal.style.display = "none";
 }
 
 // event listener for command buttons
@@ -34,28 +44,10 @@ document.getElementById('cLine').addEventListener("keydown", function (e) {
 });
 
 // event listener for save trigger button
-document.getElementById('saveTrigger').addEventListener("click", function addTrigger() {
-  console.log('addtrigger');
-  var selectList = document.getElementById("myList");
-  var newName = document.getElementById("myName").value;
-  if (newName != "") {
-    var newOption = document.createElement("option");
-    newOption.value = newName;
-    newOption.innerHTML = newName;
-    selectList.appendChild(newOption);
-  }
-  else {
-    window.alert("Name field cannot be empty!");
-  }
-});
+document.getElementById('saveTrigger').addEventListener("click", addTrigger);
 
-// send message to server by buttons
-function sendButtonMessage(clickedButton) {
-  console.log('value= ', clickedButton.target.value);
-  const data = clickedButton.target.value;
-  socket.emit('command', data);
-  document.getElementById('cLine').select();
-}
+// event listener for button button
+document.getElementById('saveButton').addEventListener("click", addButton);
 
 // send message to server
 function sendMessage() {
@@ -89,6 +81,10 @@ socket.on('message', (message) => {
 
 });
 window.onload = (() => {
+
   // focus on command line:
   document.getElementById('cLine').focus();
+
+  // fetch saved buttons from localStorage
+
 });
