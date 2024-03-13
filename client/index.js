@@ -2,6 +2,39 @@
 const socket = io();
 const commandButtons = document.getElementsByClassName('commandButtons');
 
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myOpenBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on the button, open the modal
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+function addTrigger() {
+  var selectList = document.getElementById("myList");
+  var newName = document.getElementById("myName").value;
+  if (newName != "") {
+    var newOption = document.createElement("option");
+    newOption.value = newName;
+    newOption.innerHTML = newName;
+    selectList.appendChild(newOption);
+  }
+  else {
+    window.alert("Name field cannot be empty!");
+  }
+}
+
 // event listener for command buttons
 for (var i = 0; i < commandButtons.length; i++) {
   commandButtons[i].addEventListener('click', sendButtonMessage, false);
