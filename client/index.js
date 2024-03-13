@@ -12,27 +12,13 @@ var btn = document.getElementById("myOpenBtn");
 var span = document.getElementsByClassName("close")[0];
 
 // When the user clicks on the button, open the modal
-btn.onclick = function() {
+btn.onclick = function () {
   modal.style.display = "block";
 }
 
 // When the user clicks on <span> (x), close the modal
-span.onclick = function() {
+span.onclick = function () {
   modal.style.display = "none";
-}
-
-function addTrigger() {
-  var selectList = document.getElementById("myList");
-  var newName = document.getElementById("myName").value;
-  if (newName != "") {
-    var newOption = document.createElement("option");
-    newOption.value = newName;
-    newOption.innerHTML = newName;
-    selectList.appendChild(newOption);
-  }
-  else {
-    window.alert("Name field cannot be empty!");
-  }
 }
 
 // event listener for command buttons
@@ -47,6 +33,22 @@ document.getElementById('cLine').addEventListener("keydown", function (e) {
   }
 });
 
+// event listener for save trigger button
+document.getElementById('saveTrigger').addEventListener("click", function addTrigger() {
+  console.log('addtrigger');
+  var selectList = document.getElementById("myList");
+  var newName = document.getElementById("myName").value;
+  if (newName != "") {
+    var newOption = document.createElement("option");
+    newOption.value = newName;
+    newOption.innerHTML = newName;
+    selectList.appendChild(newOption);
+  }
+  else {
+    window.alert("Name field cannot be empty!");
+  }
+});
+
 // send message to server by buttons
 function sendButtonMessage(clickedButton) {
   console.log('value= ', clickedButton.target.value);
@@ -56,7 +58,7 @@ function sendButtonMessage(clickedButton) {
 }
 
 // send message to server
-function sendMessage(){
+function sendMessage() {
   const data = document.getElementById('cLine').value;
   socket.emit('command', data);
   document.getElementById('cLine').select();
@@ -64,29 +66,29 @@ function sendMessage(){
 
 // Receive messages from server:
 socket.on('message', (message) => {
-  
+
   const command = message.command;
   const data = message.data;
   const messut = document.getElementById('mudScreen');
 
   messut.innerHTML = messut.innerHTML += `${data}`;
-  
+
   // remove extra lines
   var rivit = messut.innerHTML.split('\n');
   var maara = rivit.length - 250;
   console.log('Maara: %d', maara);
-  if (maara > 0){
-    for (var loop = 0; loop < maara; loop++){
-      rivit.shift();      
+  if (maara > 0) {
+    for (var loop = 0; loop < maara; loop++) {
+      rivit.shift();
     }
     messut.innerHTML = rivit.join('\n');
   }
-  
+
   // scrolling to down
   messut.scrollTop = messut.scrollHeight;
 
 });
-window.onload = ( () => {
+window.onload = (() => {
   // focus on command line:
   document.getElementById('cLine').focus();
 });
