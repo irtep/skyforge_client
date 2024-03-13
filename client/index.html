@@ -6,7 +6,29 @@
     <link rel="stylesheet" href="./style.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
   </head>
-  <body>
+  <body>    
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <table class="editorbase"> 
+          <tr>
+            <td><select id="myList" class="triggerlist"><option>None</option></select></td>
+          </tr>
+          <tr>
+            <td><h3>Name</h3><input type="text" id="myName" class="triggername" maxlength="40"></td>
+          </tr>
+          <tr>
+            <td><h3>Pattern</h3><input type="text" id="myPattern" class="triggerpattern"></td>
+          </tr>
+          <tr>
+            <td><h3>Action</h3><input type="text" id="myAction" class="triggeraction"></td>
+          </tr>
+          <tr>
+            <td><input type="button" class="saveBtn" value="Save changes" onclick="addTrigger();"><input type="button" class="removeBtn" value="Remove selected"></td>
+          </tr>
+        </table>
+      </div>
+    </div>
     <section id= "mudScreen"></section>
     <br>
     <input type= "button" class= "commandButtons" value= "pss"><input type= "button" class= "commandButtons" value= "1">
@@ -18,7 +40,7 @@
     <input type= "button" class= "commandButtons" value= "pa last"><input type= "button" class= "commandButtons" value= "cere">
     <input type= "button" class= "commandButtons" value= "fo"><input type= "button" class= "commandButtons" value= "hpr">
     <input type= "button" class= "commandButtons" value= "melee"><input type= "button" class= "commandButtons" value= "spr">
-    <input type= "button" class= "commandButtons" value= "int"><br>
+    <input type= "button" class= "commandButtons" value= "int"><button id="myOpenBtn">Open Editor</button><br>
     <section id= "commandConsole">
       <input type= "text" id= "cLine"/>
     </section>
