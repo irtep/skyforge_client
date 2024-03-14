@@ -1,12 +1,29 @@
 export function addTrigger() {
     console.log('addtrigger');
-    var selectList = document.getElementById("myList");
+    var indexi = -1;
+    var selectList = document.getElementById("myList");  
     var newName = document.getElementById("myName").value;
+    for (var i = 0; i < selectList.length; i++) {
+        if (selectList.options[i].value == newName) {
+        indexi = i;
+        }
+    }
+    // if name field is NOT empty do stuff, else show warning message
     if (newName != "") {
+        // if name not found in list THEN create new one
+        if (indexi == -1) {
         var newOption = document.createElement("option");
         newOption.value = newName;
         newOption.innerHTML = newName;
         selectList.appendChild(newOption);
+        } // if name exits and is selected THEN save changes
+        else if (selectList.selectedIndex == indexi) {
+            console.log('tallennus proseduuri koodi');
+        }
+        // if name exits and is not selected THEN show warning message
+        else if (selectList.selectedIndex != indexi && indexi > -1) {
+            window.alert("Name already exits!");
+        }
     }
     else {
         window.alert("Name field cannot be empty!");
