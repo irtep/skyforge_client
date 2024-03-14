@@ -1,24 +1,34 @@
-"use strict";
+import { addButton, addTrigger } from './functions.js';
+
 const socket = io();
 const commandButtons = document.getElementsByClassName('commandButtons');
 
-// Get the modal
-var modal = document.getElementById("myModal");
+// Get the modals
+var modal = document.getElementById("myModal"); // trigger editor
+const buttonModal = document.getElementById("buttonEditorModal"); // button editor
 
 // Get the button that opens the modal
-var btn = document.getElementById("myOpenBtn");
+var btn = document.getElementById("myOpenBtn"); // trigger editor
+const btnEditorOpener = document.getElementById("buttonEditorOpener"); // buttons editor
 
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
+const btnEditorCloseSpan = document.getElementsByClassName("closeButtonEditor")[0];
 
 // When the user clicks on the button, open the modal
-btn.onclick = function () {
+btn.onclick = function () { // trigger editor
   modal.style.display = "block";
+}
+btnEditorOpener.onclick = function () { // buttons editor
+  buttonModal.style.display = "block";
 }
 
 // When the user clicks on <span> (x), close the modal
-span.onclick = function () {
+span.onclick = function () { // trigger editor
   modal.style.display = "none";
+}
+btnEditorCloseSpan.onclick = function () { // buttons editor
+  buttonModal.style.display = "none";
 }
 
 // event listener for command buttons
@@ -34,45 +44,12 @@ document.getElementById('cLine').addEventListener("keydown", function (e) {
 });
 
 // event listener for save trigger button
-document.getElementById('saveTrigger').addEventListener("click", function addTrigger() {
-  console.log('addtrigger');
-  var indexi = -1;
-  var selectList = document.getElementById("myList");  
-  var newName = document.getElementById("myName").value;
-  for (var i = 0; i < selectList.length; i++) {
-    if (selectList.options[i].value == newName) {
-      indexi = i;
-    }
-  }
-  // if name field is NOT empty do stuff, else show warning message
-  if (newName != "") {
-    // if name not found in list THEN create new one
-    if (indexi == -1) {
-      var newOption = document.createElement("option");
-      newOption.value = newName;
-      newOption.innerHTML = newName;
-      selectList.appendChild(newOption);
-    } // if name exits and is selected THEN save changes
-    else if (selectList.selectedIndex == indexi) {
-      console.log('tallennus proseduuri koodi');
-    }
-    // if name exits and is not selected THEN show warning message
-    else if (selectList.selectedIndex != indexi && indexi > -1) {
-      window.alert("Name already exits!");
-    }
-  }
-  else {
-    window.alert("Name field cannot be empty!");
-  }
-});
 
-// send message to server by buttons
-function sendButtonMessage(clickedButton) {
-  console.log('value= ', clickedButton.target.value);
-  const data = clickedButton.target.value;
-  socket.emit('command', data);
-  document.getElementById('cLine').select();
-}
+document.getElementById('saveTrigger').addEventListener("click", addTrigger);
+
+
+// event listener for button button
+document.getElementById('saveButton').addEventListener("click", addButton);
 
 // send message to server
 function sendMessage() {
@@ -106,6 +83,10 @@ socket.on('message', (message) => {
 
 });
 window.onload = (() => {
+
   // focus on command line:
   document.getElementById('cLine').focus();
+
+  // fetch saved buttons from localStorage
+
 });
