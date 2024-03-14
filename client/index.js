@@ -44,7 +44,9 @@ document.getElementById('cLine').addEventListener("keydown", function (e) {
 });
 
 // event listener for save trigger button
+
 document.getElementById('saveTrigger').addEventListener("click", addTrigger);
+
 
 // event listener for button button
 document.getElementById('saveButton').addEventListener("click", addButton);
