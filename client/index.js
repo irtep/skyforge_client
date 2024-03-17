@@ -19,28 +19,30 @@ export const socket = io();
 const commandButtons = document.getElementsByClassName('commandButtons');
 
 // Get the modals
-var modal = document.getElementById("myModal"); // trigger editor
+const triggerModal = document.getElementById("TriggerEditorModal"); // trigger editor
 const buttonModal = document.getElementById("buttonEditorModal"); // button editor
 
 // Get the button that opens the modal
-var btn = document.getElementById("myOpenBtn"); // trigger editor
+const btnOpenTriggerEditor = document.getElementById("OpenTriggerEditorBtn"); // trigger editor
 const btnEditorOpener = document.getElementById("buttonEditorOpener"); // buttons editor
 
 // Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
+const spanCloseTriggerEditor = document.getElementsByClassName("closeTriggerEditor")[0];
 const btnEditorCloseSpan = document.getElementsByClassName("closeButtonEditor")[0];
 
 // When the user clicks on the button, open the modal
-btn.onclick = function () { // trigger editor
-  modal.style.display = "block";
+btnOpenTriggerEditor.onclick = function () { // trigger editor
+  triggerModal.style.display = "block";
+  // load triggers
+
 }
 btnEditorOpener.onclick = function () { // buttons editor
   buttonModal.style.display = "block";
 }
 
 // When the user clicks on <span> (x), close the modal
-span.onclick = function () { // trigger editor
-  modal.style.display = "none";
+spanCloseTriggerEditor.onclick = function () { // trigger editor
+  triggerModal.style.display = "none";
 }
 btnEditorCloseSpan.onclick = function () { // buttons editor
   buttonModal.style.display = "none";
@@ -69,7 +71,7 @@ document.getElementById('buttonList').addEventListener('change', function (e) {
 
 // event listener for save trigger button
 
-document.getElementById('saveTrigger').addEventListener("click", addTrigger);
+document.getElementById('SaveTrigger').addEventListener("click", addTrigger);
 
 
 // event listener for button button

@@ -11,34 +11,34 @@
 <body>
 
   <!-- Trigger editor-->
-  <div id="myModal" class="modal">
+  <div id="TriggerEditorModal" class="modal">
     <div class="modal-content">
 
-      <span class="close">&times;</span>
+      <span class="closeTriggerEditor">&times;</span>
 
       <table class="editorbase">
         <tr>
-          <td><select id="myList" class="triggerlist">
+          <td><select id="TriggerList" class="triggerlist">
               <option>None</option>
             </select></td>
         </tr>
         <tr>
           <td>
-            <h3>Name</h3><input type="text" id="myName" class="triggername" maxlength="40">
+            <h3>Name</h3><input type="text" id="TriggerName" class="triggername" maxlength="40">
           </td>
         </tr>
         <tr>
           <td>
-            <h3>Pattern</h3><input type="text" id="myPattern" class="triggerpattern">
+            <h3>Pattern</h3><input type="text" id="TriggerPattern" class="triggerpattern">
           </td>
         </tr>
         <tr>
           <td>
-            <h3>Action</h3><input type="text" id="myAction" class="triggeraction">
+            <h3>Action</h3><input type="text" id="TriggerAction" class="triggeraction">
           </td>
         </tr>
         <tr>
-          <td><input type="button" id="saveTrigger" class="saveBtn" value="Save changes"><input type="button"
+          <td><input type="button" id="SaveTrigger" class="saveBtn" value="Save changes"><input type="button"
               class="removeBtn" value="Remove selected"></td>
         </tr>
       </table>
@@ -85,7 +85,7 @@
   <section id="actionButtons"></section>
 
   <button id="buttonEditorOpener">Open Button Editor</button>
-  <button id="myOpenBtn">Open Trigger Editor</button><br>
+  <button id="OpenTriggerEditorBtn">Open Trigger Editor</button><br>
 
   <section id="commandConsole">
 
