@@ -24,7 +24,7 @@ function createResponse(type, data) {
 
 // Handle Socket.IO connection
 io.on('connection', (socket) => {
-    console.log('a user connected');
+    console.log('an user connected');
 
     try {
         // connect to batmud
