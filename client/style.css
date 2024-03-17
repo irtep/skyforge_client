@@ -38,15 +38,18 @@ body {
 }
 
 /* The Close Button */
-.close {
+.closeTriggerEditor,
+.closeButtonEditor {
   color: #aaa;
   float: right;
   font-size: 28px;
   font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
+.closeTriggerEditor:hover,
+.closeButtonEditor:hover,
+.closeTriggerEditor:focus,
+.closeButtonEditor:focus {
   color: black;
   text-decoration: none;
   cursor: pointer;
