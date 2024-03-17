@@ -1,6 +1,21 @@
-import { addButton, addTrigger } from './functions.js';
+import {
+  addTrigger
+} from './functions/triggerManager.js';
 
-const socket = io();
+import {
+  addButton,
+  fetchButtonsToHtml,
+  addButtonsToButtonsModal,
+  selectButtonToEdit
+} from './functions/buttonManager.js';
+
+export const socket = io();
+
+/***************************
+ *  Trigger editor and Button editor:
+ ***************************/
+
+// command buttons, that are user made buttons to send commands commands to game
 const commandButtons = document.getElementsByClassName('commandButtons');
 
 // Get the modals
@@ -31,6 +46,10 @@ btnEditorCloseSpan.onclick = function () { // buttons editor
   buttonModal.style.display = "none";
 }
 
+/***************************
+ *  Event listeners:
+ ***************************/
+
 // event listener for command buttons
 for (var i = 0; i < commandButtons.length; i++) {
   commandButtons[i].addEventListener('click', sendButtonMessage, false);
@@ -43,6 +62,11 @@ document.getElementById('cLine').addEventListener("keydown", function (e) {
   }
 });
 
+// event listener if in button list modal something changes
+document.getElementById('buttonList').addEventListener('change', function (e) {
+  selectButtonToEdit(e);
+});
+
 // event listener for save trigger button
 
 document.getElementById('saveTrigger').addEventListener("click", addTrigger);
@@ -50,6 +74,11 @@ document.getElementById('saveTrigger').addEventListener("click", addTrigger);
 
 // event listener for button button
 document.getElementById('saveButton').addEventListener("click", addButton);
+
+
+/***************************
+ *  Communication between client and server:
+ ***************************/
 
 // send message to server
 function sendMessage() {
@@ -70,7 +99,7 @@ socket.on('message', (message) => {
   // remove extra lines
   var rivit = messut.innerHTML.split('\n');
   var maara = rivit.length - 250;
-  console.log('Maara: %d', maara);
+  //console.log('Maara: %d', maara);
   if (maara > 0) {
     for (var loop = 0; loop < maara; loop++) {
       rivit.shift();
@@ -82,11 +111,21 @@ socket.on('message', (message) => {
   messut.scrollTop = messut.scrollHeight;
 
 });
+
+/***************************
+ *  When application starts:
+ ***************************/
+
 window.onload = (() => {
 
   // focus on command line:
   document.getElementById('cLine').focus();
 
-  // fetch saved buttons from localStorage
+  // fetch saved buttons from localStorage and make those to html
+  // creates saved buttons
+  fetchButtonsToHtml();
+
+  // adds saved buttons to button editor modal
+  addButtonsToButtonsModal();
 
 });
