@@ -11,6 +11,8 @@ import {
 
 export const socket = io();
 
+export var triggerit = [];
+
 /***************************
  *  Trigger editor and Button editor:
  ***************************/
@@ -33,8 +35,29 @@ const btnEditorCloseSpan = document.getElementsByClassName("closeButtonEditor")[
 // When the user clicks on the button, open the modal
 btnOpenTriggerEditor.onclick = function () { // trigger editor
   triggerModal.style.display = "block";
-  // load triggers
-
+  // push to 1st "create new trigger"
+  if (triggerit.length == 0) {
+    console.log('Luotu create new trigger...');
+    triggerit.push({name: "Creater New Trigger", pattern: "", action: ""});
+  }  
+  // check if any triggers exits
+  if (localStorage.getItem("skyforge client triggers")) {
+    // get triggers from storage
+    console.log('Triggereita loytyi...');
+    triggerit = JSON.parse(localStorage.getItem("skyforge client triggers"));
+  }  
+  // update triggerlist
+  var triggerilista = document.getElementById("TriggerList");
+  var optionit = null;
+  while (triggerilista.length > 0) {
+    triggerilista.remove(0);
+  }
+  for (var i = 0; i < triggerit.length; i++) {
+    optionit = document.createElement("option");
+    optionit.value = triggerit[i].name;
+    optionit.innerHTML = triggerit[i].name;
+    triggerilista.appendChild(optionit);
+  }
 }
 btnEditorOpener.onclick = function () { // buttons editor
   buttonModal.style.display = "block";
