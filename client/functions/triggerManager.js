@@ -60,7 +60,14 @@ export function loadTriggers() {
   if (localStorage.getItem("skyforge client triggers")) {
     // get triggers from storage
     console.log('Triggereita loytyi...');
-    triggerit = JSON.parse(localStorage.getItem("skyforge client triggers"));
+    
+    let triggersFromStorage = JSON.parse(localStorage.getItem("skyforge client triggers"));
+    
+    triggersFromStorage.forEach( (tr) => {
+      console.log('tr; ', tr);
+      triggerit.push(tr);
+    });
+    console.log('triggerit: ', triggerit);
   }  
   // update triggerlist
   var triggerilista = document.getElementById("TriggerList");
