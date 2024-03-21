@@ -1,6 +1,7 @@
 import {
   addTrigger,
-  loadTriggers
+  loadTriggers,
+  removeTrigger
 } from './functions/triggerManager.js';
 
 import {
@@ -11,8 +12,6 @@ import {
 } from './functions/buttonManager.js';
 
 export const socket = io();
-
-export var triggerit = [];
 
 /***************************
  *  Trigger editor and Button editor:
@@ -72,9 +71,10 @@ document.getElementById('buttonList').addEventListener('change', function (e) {
 });
 
 // event listener for save trigger button
-
 document.getElementById('SaveTrigger').addEventListener("click", addTrigger);
 
+// event listener for remove trigger button
+document.getElementById('RemoveTrigger').addEventListener("click", removeTrigger);
 
 // event listener for button button
 document.getElementById('saveButton').addEventListener("click", addButton);
