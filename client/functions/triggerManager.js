@@ -1,12 +1,11 @@
-import { triggerit } from '../index.js';
-
 const listbox = document.getElementById("TriggerList");
 const namefield = document.getElementById("TriggerName");
 const patternfield = document.getElementById("TriggerPattern");
 const actionfield = document.getElementById("TriggerAction");
 
+var triggerit = [];
+
 export function addTrigger() {
-  console.log('Funktion addtrigger kutsu...');
   var found = false;
   // check if name/pattern/action fields NOT empty
   if (namefield.value !== "" && patternfield.value !== "" && actionfield.value !== "") {
@@ -30,6 +29,11 @@ export function addTrigger() {
       while (listbox.length > 0) {
         listbox.remove(0);
       }
+      // add 'create new trigger' option
+      var optioni = document.createElement("option");
+      optioni.value = "Create New Trigger";
+      optioni.innerHTML = "Create New Trigger";
+      listbox.appendChild(optioni);
       // add updated array into listbox
       for (var i = 0; i < triggerit.length; i++) {
         var optionit = document.createElement("option");
@@ -42,7 +46,6 @@ export function addTrigger() {
       // show warning message IF name exits already
       window.alert("Name '" + namefield.value + "' already exits!");
     }
-    console.log('Triggeri array:', triggerit);
   }
   else {
     // show warning message IF textfields are empty
@@ -51,34 +54,60 @@ export function addTrigger() {
 }
 
 export function loadTriggers() {
-  // push to 1st "create new trigger"
-  if (triggerit.length == 0) {
-    console.log('Luotu create new trigger...');
-    triggerit.push({name: "Creater New Trigger", pattern: "", action: ""});
-  }  
   // check if any triggers exits
   if (localStorage.getItem("skyforge client triggers")) {
     // get triggers from storage
-    console.log('Triggereita loytyi...');
-    
-    let triggersFromStorage = JSON.parse(localStorage.getItem("skyforge client triggers"));
-    
+    var triggersFromStorage = JSON.parse(localStorage.getItem("skyforge client triggers"));
+    // push each trigger into array
     triggersFromStorage.forEach( (tr) => {
-      console.log('tr; ', tr);
       triggerit.push(tr);
     });
-    console.log('triggerit: ', triggerit);
   }  
-  // update triggerlist
-  var triggerilista = document.getElementById("TriggerList");
-  var optionit = null;
-  while (triggerilista.length > 0) {
-    triggerilista.remove(0);
+  // empty old triggerlist
+  while (listbox.length > 0) {
+    listbox.remove(0);
   }
+  // add 'create new trigger' option
+  var optioni = document.createElement("option");
+  optioni.value = "Create New Trigger";
+  optioni.innerHTML = "Create New Trigger";
+  listbox.appendChild(optioni);
+  // add trigger options from array
   for (var i = 0; i < triggerit.length; i++) {
-    optionit = document.createElement("option");
+    var optionit = document.createElement("option");
     optionit.value = triggerit[i].name;
     optionit.innerHTML = triggerit[i].name;
-    triggerilista.appendChild(optionit);
+    listbox.appendChild(optionit);
+  }
+}
+
+export function removeTrigger() {
+  // if selectedindex GREATER than zero
+  if (listbox.selectedIndex > 0) {
+    // take index from listbox and reduce by 1
+    const indexi = listbox.selectedIndex - 1;
+    triggerit.splice(indexi, 1);
+    // update storage
+    localStorage.setItem("skyforge client triggers", JSON.stringify(triggerit));
+    // empty old triggerlist
+    while (listbox.length > 0) {
+      listbox.remove(0);
+    }
+    // add 'create new trigger' option
+    var optioni = document.createElement("option");
+    optioni.value = "Create New Trigger";
+    optioni.innerHTML = "Create New Trigger";
+    listbox.appendChild(optioni);
+    // add trigger options from array
+    for (var i = 0; i < triggerit.length; i++) {
+      var optionit = document.createElement("option");
+      optionit.value = triggerit[i].name;
+      optionit.innerHTML = triggerit[i].name;
+      listbox.appendChild(optionit);
+    }
+    // empty textfields
+    namefield.value = "";
+    patternfield.value = "";
+    actionfield.value = "";
   }
 }
