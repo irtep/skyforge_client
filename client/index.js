@@ -1,7 +1,8 @@
 import {
   addTrigger,
   loadTriggers,
-  removeTrigger
+  removeTrigger,
+  getTrigger
 } from './functions/triggerManager.js';
 
 import {
@@ -20,6 +21,9 @@ export const socket = io();
 // command buttons, that are user made buttons to send commands commands to game
 const commandButtons = document.getElementsByClassName('commandButtons');
 
+// combobox triggerlist
+const comboboxTriggerList = document.getElementById("TriggerList");
+
 // Get the modals
 const triggerModal = document.getElementById("TriggerEditorModal"); // trigger editor
 const buttonModal = document.getElementById("buttonEditorModal"); // button editor
@@ -36,7 +40,12 @@ const btnEditorCloseSpan = document.getElementsByClassName("closeButtonEditor")[
 btnOpenTriggerEditor.onclick = function () { // trigger editor
   triggerModal.style.display = "block";  
 }
+// load triggers eventlistener
 btnOpenTriggerEditor.addEventListener("click", loadTriggers);
+// get trigger eventlistener
+comboboxTriggerList.addEventListener("change", getTrigger);
+
+// When the user clicks on the button, open the modal
 btnEditorOpener.onclick = function () { // buttons editor
   buttonModal.style.display = "block";
 }

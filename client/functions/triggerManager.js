@@ -111,3 +111,19 @@ export function removeTrigger() {
     actionfield.value = "";
   }
 }
+
+export function getTrigger() {
+  // get trigger data from array when index > 0
+  if (listbox.selectedIndex > 0) {
+    const indexi = listbox.selectedIndex - 1;
+    namefield.value = triggerit[indexi].name;
+    patternfield.value = triggerit[indexi].pattern;
+    actionfield.value = triggerit[indexi].action;
+  }
+  else {
+    // empty textfields
+    namefield.value = "";
+    patternfield.value = "";
+    actionfield.value = "";
+  }
+}
