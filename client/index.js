@@ -1,5 +1,5 @@
 import {
-  addTrigger,
+  saveTrigger,
   loadTriggers,
   removeTrigger,
   getTrigger
@@ -80,7 +80,7 @@ document.getElementById('buttonList').addEventListener('change', function (e) {
 });
 
 // event listener for save trigger button
-document.getElementById('SaveTrigger').addEventListener("click", addTrigger);
+document.getElementById('SaveTrigger').addEventListener("click", saveTrigger);
 
 // event listener for remove trigger button
 document.getElementById('RemoveTrigger').addEventListener("click", removeTrigger);
