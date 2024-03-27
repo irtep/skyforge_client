@@ -5,7 +5,7 @@ const actionfield = document.getElementById("TriggerAction");
 
 var triggerit = [];
 
-export function addTrigger() {
+export function saveTrigger() {
   var found = false;
   // check if name/pattern/action fields NOT empty
   if (namefield.value !== "" && patternfield.value !== "" && actionfield.value !== "") {
@@ -46,6 +46,14 @@ export function addTrigger() {
       // show warning message IF name exits already
       window.alert("Name '" + namefield.value + "' already exits!");
     }
+    else if (listbox.selectedIndex > 0) {
+      // set new data into variable
+      var uusidata = {name: namefield.value, pattern: patternfield.value, action: actionfield.value};
+      // replaces data new data if name stays unchanged
+      triggerit = triggerit.map(t => t.name !== uusidata.name ? t : uusidata);
+      // updates storage
+      localStorage.setItem("skyforge client triggers", JSON.stringify(triggerit));
+    }
   }
   else {
     // show warning message IF textfields are empty
@@ -58,6 +66,8 @@ export function loadTriggers() {
   if (localStorage.getItem("skyforge client triggers")) {
     // get triggers from storage
     var triggersFromStorage = JSON.parse(localStorage.getItem("skyforge client triggers"));
+    // empty array
+    triggerit = [];
     // push each trigger into array
     triggersFromStorage.forEach( (tr) => {
       triggerit.push(tr);
@@ -109,6 +119,8 @@ export function removeTrigger() {
     namefield.value = "";
     patternfield.value = "";
     actionfield.value = "";
+    // enables namefield
+    namefield.disabled = false;
   }
 }
 
@@ -119,11 +131,15 @@ export function getTrigger() {
     namefield.value = triggerit[indexi].name;
     patternfield.value = triggerit[indexi].pattern;
     actionfield.value = triggerit[indexi].action;
+    // disables name field
+    namefield.disabled = true;
   }
   else {
     // empty textfields
     namefield.value = "";
     patternfield.value = "";
     actionfield.value = "";
+    // enables name field
+    namefield.disabled = false;
   }
 }
