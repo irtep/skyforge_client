@@ -9,7 +9,8 @@ import {
   addButton,
   fetchButtonsToHtml,
   addButtonsToButtonsModal,
-  selectButtonToEdit
+  selectButtonToEdit,
+  deleteSelectedButton
 } from './functions/buttonManager.js';
 
 export const socket = io();
@@ -85,8 +86,11 @@ document.getElementById('SaveTrigger').addEventListener("click", saveTrigger);
 // event listener for remove trigger button
 document.getElementById('RemoveTrigger').addEventListener("click", removeTrigger);
 
-// event listener for button button
+// event listener for save a new button
 document.getElementById('saveButton').addEventListener("click", addButton);
+
+// event listener for remove selected button
+document.getElementById('removeSelectedButton').addEventListener("click", deleteSelectedButton);
 
 
 /***************************
