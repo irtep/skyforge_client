@@ -38,7 +38,7 @@ export const saveNewButton = (newButton) => {
 
 // send message to server by buttons
 export const sendButtonMessage = (clickedButton) => {
-    
+
     //const data = clickedButton.target.value;
     socket.emit('command', clickedButton);
     document.getElementById('cLine').select();
@@ -74,17 +74,23 @@ export const fetchButtonsToHtml = () => {
 };
 
 export const selectButtonToEdit = (e) => {
-
+    console.log('e ', e.target.value);
     let nameInput = document.getElementById("nameOfButton");
     let actionInput = document.getElementById("actionOfButton");
-    // get buttons from localStorage
-    const buttons = JSON.parse(localStorage.getItem("buttons"));
-    const selectedButton = buttons.filter((b) => b.name === e.target.value);
-    console.log('selected: ', selectedButton[0]);
 
-    nameInput.value = selectedButton[0].name;
-    actionInput.value = selectedButton[0].action;
+    if (e.target.value !== 'None') {
 
+        // get buttons from localStorage
+        const buttons = JSON.parse(localStorage.getItem("buttons"));
+        const selectedButton = buttons.filter((b) => b.name === e.target.value);
+        console.log('selected: ', selectedButton[0]);
+
+        nameInput.value = selectedButton[0].name;
+        actionInput.value = selectedButton[0].action;
+    } else {
+        nameInput.value = '';
+        actionInput.value = '';
+    }
 }
 
 export const addButtonsToButtonsModal = () => {
@@ -113,7 +119,7 @@ export const addButtonsToButtonsModal = () => {
 
 // adds or edits button
 export const addButton = () => {
-
+    const bList = document.getElementById('buttonList');
     const newName = document.getElementById("nameOfButton").value;
     const newAction = document.getElementById("actionOfButton").value;
     const newButton = { name: newName, action: newAction };
@@ -158,20 +164,13 @@ export const addButton = () => {
         }
 
         // Save the updated array back to localStorage
-        localStorage.setItem("buttons", JSON.stringify(buttons));/////
-
-
-
-
-
-        // Push the new button object into the array
-        //buttons.push({ name: newName, action: newAction });
-
-        // Save the updated array back to localStorage
         localStorage.setItem("buttons", JSON.stringify(buttons));
-        
+
         // refresh to html
         fetchButtonsToHtml();
+
+        // select this new to selected
+        bList.value = newButton.name;
 
     }
 
@@ -180,3 +179,41 @@ export const addButton = () => {
     }
 
 }
+
+export const deleteSelectedButton = () => {
+    const bList = document.getElementById('buttonList');
+
+    if (bList.value !== 'None') {
+
+        let buttons = [];
+        console.log(
+            'delete',
+            bList.value
+        );
+
+        // fill from localstorage, if any
+        if (localStorage.getItem("buttons")) {
+            // If it exists, parse the JSON data into an array
+            buttons = JSON.parse(localStorage.getItem("buttons")).filter(
+                (b) => b.name !== bList.value
+            );
+        }
+
+        // Save the updated array back to localStorage
+        localStorage.setItem("buttons", JSON.stringify(buttons));
+
+
+        // Clear the existing buttons
+        actionButtonsSection.innerHTML = "";
+        
+        // refresh to html
+        fetchButtonsToHtml();
+
+        // select None to selected value
+        bList.value = 'None';
+
+    } else {
+        console.log('delete request with none value');
+    }
+
+};
