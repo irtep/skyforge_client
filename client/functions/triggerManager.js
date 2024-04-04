@@ -3,7 +3,7 @@ const namefield = document.getElementById("TriggerName");
 const patternfield = document.getElementById("TriggerPattern");
 const actionfield = document.getElementById("TriggerAction");
 
-var triggerit = [];
+export var triggerit = [];
 
 export function saveTrigger() {
   var found = false;

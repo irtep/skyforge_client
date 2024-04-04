@@ -2,7 +2,8 @@ import {
   saveTrigger,
   loadTriggers,
   removeTrigger,
-  getTrigger
+  getTrigger,
+  triggerit
 } from './functions/triggerManager.js';
 
 import {
@@ -113,6 +114,16 @@ socket.on('message', (message) => {
 
   messut.innerHTML = messut.innerHTML += `${data}`;
 
+  // match triggers
+  if (triggerit.length > 0) {
+    triggerit.forEach( trig => {
+      const checkThis = data.includes(trig.pattern);
+      if (checkThis) {
+        socket.emit('command', trig.action);
+      }
+    });
+  }
+
   // remove extra lines
   var rivit = messut.innerHTML.split('\n');
   var maara = rivit.length - 250;
@@ -144,5 +155,8 @@ window.onload = (() => {
 
   // adds saved buttons to button editor modal
   addButtonsToButtonsModal();
+
+  // load triggers
+  loadTriggers();
 
 });
