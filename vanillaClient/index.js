@@ -107,7 +107,7 @@ function sendMessage() {
 
 // Receive messages from server:
 socket.on('message', (message) => {
-
+  
   const command = message.command;
   const data = message.data;
   const messut = document.getElementById('mudScreen');
