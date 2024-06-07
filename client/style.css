@@ -1,6 +1,6 @@
 body {
   background: black;
-  color: lightGreen;
+  color: rgb(180,180,180);
 }
 
 /* The Modal (background) */
@@ -103,8 +103,7 @@ body {
   font-family: 'Roboto Mono', monospace;
   font-size: 12px;
   white-space: pre-wrap;
-  color: lightGreen;
-  /*color: rgb(205,205,205); */
+  color: rgb(205,205,205);
   background: linear-gradient(navy, darkblue, black, black, black);
 }
 

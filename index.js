@@ -7,14 +7,17 @@ import { Buffer } from 'buffer';
 
 const app = express();
 const port = 3333;
-let connected = false;
 
 const httpServer = http.createServer(app);
-const io = new Server(httpServer);
+const io = new Server(httpServer, {
+    cors: {
+        origin: "*",  // allow requests from any origin
+        methods: ["GET", "POST"]
+    }
+});
 
 app.use(express.static('client'));
 
-// Define createResponse function
 function createResponse(type, data) {
     return {
         type: type,
@@ -22,57 +25,46 @@ function createResponse(type, data) {
     };
 }
 
-// Handle Socket.IO connection
 io.on('connection', (socket) => {
-    console.log('an user connected');
+    console.log('A user connected');
 
-    try {
-        // connect to batmud
-        const mud = net.createConnection(23, "batmud.bat.org");
+    const mud = net.createConnection(23, "batmud.bat.org", () => {
+        console.log('Connected to BatMUD');
+    });
 
-        // iso-8859-1 aka latin1 is what this mud uses
-        mud.setEncoding('latin1');
-        connected = true;
+    mud.setEncoding('latin1');
 
-        // listens batmud and sends to client
-        mud.addListener('data', (data) => {
-            // data = data + '\r\n';
-            const converted = convert(data);
-            //console.log(converted);
-            socket.emit('message', createResponse('update', converted));
-        });
+    mud.on('data', (data) => {
+        const converted = convert(data);
+        socket.emit('message', createResponse('update', converted));
+    });
 
-        // listens client and sends to batmud
-        socket.on('command', (data) => {
+    mud.on('end', () => {
+        console.log('Disconnected from BatMUD');
+        socket.emit('message', createResponse('disconnect', 'Disconnected from BatMUD'));
+    });
 
-            // seems that need this, to be executed in batmud
-            data = data + '\r\n'; 
+    mud.on('error', (err) => {
+        console.error('Error:', err.message);
+        socket.emit('message', createResponse('error', 'Error connecting to BatMUD'));
+    });
 
-            const bufferedData = Buffer.from(data, 'latin1');
+    socket.on('command', (data) => {
+        if (mud.destroyed) {
+            console.log('Not connected to BatMUD, command not sent');
+            return;
+        }
+        
+        const bufferedData = Buffer.from(data + '\r\n', 'latin1');
+        mud.write(bufferedData);
+    });
 
-            mud.on('end', () => {
-
-                connected = false;
-
-            });
-            
-            if (connected) {
-
-                mud.write(bufferedData);
-
-            } else {
-                console.log('disconnected from mud, not sending');
-            }
-
-        });
-    } catch {
-        console.log('error connecting to batmud!');
-    }
-});
-
-// Serve Socket.IO client library
-app.get('/socket.io/socket.io.js', (req, res) => {
-    res.sendFile(__dirname + '/node_modules/socket.io/client-dist/socket.io.js');
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+        if (!mud.destroyed) {
+            mud.end();
+        }
+    });
 });
 
 httpServer.listen(port, () => {
