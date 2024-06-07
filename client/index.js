@@ -116,6 +116,7 @@ socket.on('message', (message) => {
 
   // match triggers
   if (triggerit.length > 0) {
+
     triggerit.forEach( trig => {
       const checkThis = data.includes(trig.pattern);
       if (checkThis) {
