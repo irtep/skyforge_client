@@ -1,9 +1,12 @@
 import { Button, Container, Dialog, DialogTitle, Select, TextField } from '@mui/material';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
+import { Trigger } from '../App';
 
 interface NewTriggerProps {
     triggerDialogOpen: boolean;
     setTriggerDialogOpen: Dispatch<SetStateAction<boolean>>;
+    triggers: Trigger[];
+    setTriggers: Dispatch<SetStateAction<Trigger[]>>;
 }
 
 interface Errors {
@@ -16,23 +19,31 @@ const NewTrigger: React.FC<NewTriggerProps> = (props: NewTriggerProps): React.Re
 
     const [errors, setErrors] = useState<Errors>({ name: '', pattern: '', action: '' });
 
-    const saveNewTrigger = (NewTrigger: any) => {
-        // fetch all
-        let triggers: string[] = [];
+    const formRef: any = useRef<HTMLFormElement>();
 
-        if (localStorage.getItem("triggers")) {
+    const saveNewTrigger = () => {
+        // fetch all
+        let triggers: Trigger[] = [];
+
+        const storedTriggers = localStorage.getItem("triggers");
+
+        if (storedTriggers) {
             // If it exists, parse the JSON data into an array
-            triggers = JSON.parse(localStorage.getItem("triggers"));
+            triggers = JSON.parse(storedTriggers);
         }
 
         // check if one with this name already exists
-        const filtered = triggers.filter((t) => t.name === newTrigger.name);
+        const filtered = triggers.filter((t: any) => t.name === String(formRef.current?.nameOfTrigger.value));
 
         // if yes, replace it
         if (filtered.length > 0) {
-            triggers = triggers.map((t) => {
-                if (t.name === newTrigger.name) {
-                    return newTrigger;
+            triggers = triggers.map((t: any) => {
+                if (t.name === formRef.current?.nameOfTrigger.value) {
+                    return {
+                        name: formRef.current?.nameOfTrigger.value,
+                        pattern: formRef.current?.patternOfTrigger.value,
+                        action: formRef.current?.actionOfTrigger.value
+                    };
                 } else {
                     return t;
                 }
@@ -41,12 +52,17 @@ const NewTrigger: React.FC<NewTriggerProps> = (props: NewTriggerProps): React.Re
         } else {
             triggers = [
                 ...triggers,
-                newTrigger
+                {
+                    name: formRef.current?.nameOfTrigger.value,
+                    pattern: formRef.current?.patternOfTrigger.value,
+                    action: formRef.current?.actionOfTrigger.value
+                }
             ];
         }
 
         // Save the updated array back to localStorage
         localStorage.setItem("triggers", JSON.stringify(triggers));
+        props.setTriggers(triggers);
     }
 
     const cancelSend = (): void => {
@@ -61,6 +77,8 @@ const NewTrigger: React.FC<NewTriggerProps> = (props: NewTriggerProps): React.Re
             fullWidth={true}
             open={props.triggerDialogOpen}
             onClose={cancelSend}
+            ref={formRef}
+            onSubmit={saveNewTrigger}
         >
 
             <DialogTitle>create or edit trigger</DialogTitle>

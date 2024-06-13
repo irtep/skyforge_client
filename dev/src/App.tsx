@@ -9,18 +9,22 @@ interface MessageResponse {
   data: string;
 }
 
+export interface Trigger {
+  name: string;
+  pattern: string;
+  action: string;
+}
+
 const App: React.FC = (): React.ReactElement => {
   const [messages, setMessages] = useState<string[]>([]);
   const [command, setCommand] = useState<string>('');
   const [socket, setSocket] = useState<Socket | null>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
   const [showProts, setShowProts] = useState<boolean>(false);
-
   const [showButtons, setShowButtons] = useState<boolean>(false);
-
   const [partyProts, setPartyProts] = useState<string>('');
+  const [triggers, setTriggers] = useState<Trigger[]>([]);
 
   useEffect(() => {
     if (!socket) {
@@ -88,6 +92,8 @@ const App: React.FC = (): React.ReactElement => {
               showButtons={showButtons}
               setShowButtons={setShowButtons}
               partyProts={partyProts}
+              triggers={triggers}
+              setTriggers={setTriggers}
           />
         </Grid>
       </Grid>

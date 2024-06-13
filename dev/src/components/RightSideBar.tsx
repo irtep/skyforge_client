@@ -2,6 +2,7 @@ import { Box, Button, Container, Switch } from '@mui/material';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import ProtsBox from './ProtsBox';
 import NewTrigger from './NewTrigger';
+import { Trigger } from '../App';
 
 interface SideBarProps {
     showProts: boolean;
@@ -9,6 +10,8 @@ interface SideBarProps {
     showButtons: boolean;
     setShowButtons: Dispatch<SetStateAction<boolean>>;
     partyProts: string;
+    triggers: Trigger[];
+    setTriggers: Dispatch<SetStateAction<Trigger[]>>;
 }
 
 const RightSideBar: React.FC<SideBarProps> = (props: SideBarProps): React.ReactElement => {
@@ -64,6 +67,8 @@ const RightSideBar: React.FC<SideBarProps> = (props: SideBarProps): React.ReactE
                         <NewTrigger
                             triggerDialogOpen={triggerDialogOpen}
                             setTriggerDialogOpen={setTriggerDialogOpen}
+                            triggers={props.triggers}
+                            setTriggers={props.setTriggers}
                         />
 
                     </Container> : <></>
