@@ -3,6 +3,7 @@ import React, { Dispatch, RefObject, SetStateAction, useEffect, useState } from 
 import { Socket } from 'socket.io-client';
 import '../css/colors.css';
 import DOMPurify from 'dompurify';
+import ButtonsBar from './ButtonsBar';
 
 interface MudScreenProps {
     messages: string[];
@@ -11,6 +12,7 @@ interface MudScreenProps {
     socket: Socket | null;
     messagesContainerRef: RefObject<HTMLDivElement>
     inputRef: RefObject<HTMLInputElement>
+    showButtons: boolean;
 }
 
 const MudScreen: React.FC<MudScreenProps> = (props: MudScreenProps) => {

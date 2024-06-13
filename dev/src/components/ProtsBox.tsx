@@ -1,4 +1,4 @@
-import { Container, PortalProps } from '@mui/material';
+import { Container } from '@mui/material';
 import React from 'react';
 
 interface ProtsProps {
