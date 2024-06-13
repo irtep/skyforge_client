@@ -1,22 +1,30 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import MudScreen from './components/MudScreen';
-import { Box, Grid, Switch } from '@mui/material';
-import ProtsBox from './components/ProtsBox';
+import { Box, Grid } from '@mui/material';
+import RightSideBar from './components/RightSideBar';
 
 interface MessageResponse {
   type: string;
   data: string;
 }
 
-const App: React.FC = () => {
+export interface Trigger {
+  name: string;
+  pattern: string;
+  action: string;
+}
+
+const App: React.FC = (): React.ReactElement => {
   const [messages, setMessages] = useState<string[]>([]);
   const [command, setCommand] = useState<string>('');
   const [socket, setSocket] = useState<Socket | null>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [showProts, setShowProts] = useState<boolean>(false);
+  const [showButtons, setShowButtons] = useState<boolean>(false);
   const [partyProts, setPartyProts] = useState<string>('');
+  const [triggers, setTriggers] = useState<Trigger[]>([]);
 
   useEffect(() => {
     if (!socket) {
@@ -35,10 +43,15 @@ const App: React.FC = () => {
 
   // Scroll to bottom on component mount or when messages change
   useEffect(() => {
-    if (messages.length > 250) {
-      console.log('bigger than 250');
-    } else {
-      console.log('smaller than 250: ', messages.length);
+
+    if (messages.length > 100) {
+      let shortenedMessages = messages;
+
+      for (; shortenedMessages?.length > 90;) {
+        shortenedMessages.shift();
+      }
+
+      setMessages(shortenedMessages);
     }
     scrollToBottom();
   }, [messages]);
@@ -66,36 +79,22 @@ const App: React.FC = () => {
               socket={socket}
               messagesContainerRef={messagesContainerRef}
               inputRef={inputRef}
+              showButtons={showButtons}
             />
 
           </Box>
         </Grid>
 
         <Grid item xs={12} sm={4} md={5} sx={{ flexBasis: '40%' }}>
-          <Box sx={{ background: 'white', height: '100%', padding: 2 }}>
-
-            Show prots box:
-
-            <Switch
-              checked={showProts}
-              onChange={(e) => {
-                setShowProts(e.target.checked);
-              }}
-              inputProps={{ 'aria-label': 'controlled' }}
-            />
-
-            {
-              showProts ?
-              <>
-
-                <ProtsBox
-                  partyProts={partyProts}
-                />
-
-              </>:<></>
-            }
-
-          </Box>
+          <RightSideBar
+              showProts={showProts}
+              setShowProts={setShowProts}
+              showButtons={showButtons}
+              setShowButtons={setShowButtons}
+              partyProts={partyProts}
+              triggers={triggers}
+              setTriggers={setTriggers}
+          />
         </Grid>
       </Grid>
     </Box>
