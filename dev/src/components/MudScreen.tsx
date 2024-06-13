@@ -4,7 +4,7 @@ import { Socket } from 'socket.io-client';
 import '../css/colors.css';
 import DOMPurify from 'dompurify';
 
-interface Props {
+interface MudScreenProps {
     messages: string[];
     command: string;
     setCommand: Dispatch<SetStateAction<string>>;
@@ -13,7 +13,7 @@ interface Props {
     inputRef: RefObject<HTMLInputElement>
 }
 
-const MudScreen: React.FC<Props> = (props: Props) => {
+const MudScreen: React.FC<MudScreenProps> = (props: MudScreenProps) => {
 
     const sendCommand = () => {
         if (props.socket) {
@@ -69,6 +69,7 @@ const MudScreen: React.FC<Props> = (props: Props) => {
                 onChange={(e) => props.setCommand(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Enter command"
+                sx={{background: 'lightGreen'}}
             />
             <Button onClick={sendCommand}>Send</Button>
 
