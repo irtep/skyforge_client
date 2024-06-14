@@ -15,7 +15,7 @@ interface SideBarProps {
 }
 
 const RightSideBar: React.FC<SideBarProps> = (props: SideBarProps): React.ReactElement => {
-    const [triggerDialogOpen, setTriggerDialogOpen] = useState<boolean>(false);
+    const [newTriggerDialogOpen, setNewTriggerDialogOpen] = useState<boolean>(false);
     return (
         <Box sx={{ background: 'white', height: '100%', padding: 2 }}>
 
@@ -55,18 +55,18 @@ const RightSideBar: React.FC<SideBarProps> = (props: SideBarProps): React.ReactE
                     <Container>
 
                         <Button
-                            onClick={ () => { setTriggerDialogOpen(true) }}
+                            onClick={ () => { setNewTriggerDialogOpen(true) }}
                         >
-                            Open Button Editor
+                            Edit old trigger
                         </Button>
 
                         <Button
-                            onClick={ () => { setTriggerDialogOpen(true) }}
-                        >Open Trigger Editor</Button><br />
+                            onClick={ () => { setNewTriggerDialogOpen(true) }}
+                        >Create new trigger</Button><br />
 
                         <NewTrigger
-                            triggerDialogOpen={triggerDialogOpen}
-                            setTriggerDialogOpen={setTriggerDialogOpen}
+                            newTriggerDialogOpen={newTriggerDialogOpen}
+                            setNewTriggerDialogOpen={setNewTriggerDialogOpen}
                             triggers={props.triggers}
                             setTriggers={props.setTriggers}
                         />
