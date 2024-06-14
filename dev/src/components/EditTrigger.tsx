@@ -2,24 +2,38 @@ import { Button, Dialog, DialogTitle, Select, SelectChangeEvent, Stack, TextFiel
 import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { Trigger } from '../App';
 
-interface NewTriggerProps {
-    newTriggerDialogOpen: boolean;
-    setNewTriggerDialogOpen: Dispatch<SetStateAction<boolean>>;
+interface EditTriggerProps {
+    EditTriggerDialogOpen: boolean;
+    setEditTriggerDialogOpen: Dispatch<SetStateAction<boolean>>;
     triggers: Trigger[];
     setTriggers: Dispatch<SetStateAction<Trigger[]>>;
 }
 
-const NewTrigger: React.FC<NewTriggerProps> = (props: NewTriggerProps): React.ReactElement => {
+const EditTrigger: React.FC<EditTriggerProps> = (props: EditTriggerProps): React.ReactElement => {
     const [selectedTrigger, setSelectedTrigger] = useState<Trigger>({
         name: '',
         pattern: '',
         action: ''
     });
+    const [name, setName] = useState<string>('');
+    const [pattern, setPattern] = useState<string>('');
+    const [action, setAction] = useState<string>('');
+
+    //const [errors, setErrors] = useState<Errors>({ name: '', pattern: '', action: '' });
 
     const formRef: any = useRef<HTMLFormElement>();
 
+    const handleSelectChange = (event: SelectChangeEvent<string>) => {
+        console.log('value: ', event.target.value);
+        //const selectedId = parseInt(event.target.value, 10);
+        const foundTrigger = props.triggers.find(t => t.name === event.target.value) || null;
+        //setSelectedTrigger(trigger);
+        console.log('found trig: ', foundTrigger);
+      };
+
     const save = (e: React.FormEvent): void => {
         e.preventDefault();
+        //console.log('click', formRef.current.nameOfTrigger);
 
         let triggers: Trigger[] = [];
 
@@ -31,26 +45,42 @@ const NewTrigger: React.FC<NewTriggerProps> = (props: NewTriggerProps): React.Re
         }
 
         // check if one with this name already exists
-        //const filtered = triggers.filter((t: any) => t.name === String(formRef.current?.nameOfTrigger.value));
+        const filtered = triggers.filter((t: any) => t.name === String(formRef.current?.nameOfTrigger.value));
 
-        triggers = [
-            ...triggers,
-            {
-                name: formRef.current?.nameOfTrigger.value,
-                pattern: formRef.current?.patternOfTrigger.value,
-                action: formRef.current?.actionOfTrigger.value
-            }
-        ];
+        // if yes, replace it
+        if (filtered.length > 0) {
+            triggers = triggers.map((t: any) => {
+                if (t.name === formRef.current?.nameOfTrigger.value) {
+                    return {
+                        name: formRef.current?.nameOfTrigger.value,
+                        pattern: formRef.current?.patternOfTrigger.value,
+                        action: formRef.current?.actionOfTrigger.value
+                    };
+                } else {
+                    return t;
+                }
+            });
+            // if no, create new
+        } else {
+            triggers = [
+                ...triggers,
+                {
+                    name: formRef.current?.nameOfTrigger.value,
+                    pattern: formRef.current?.patternOfTrigger.value,
+                    action: formRef.current?.actionOfTrigger.value
+                }
+            ];
+        }
 
         // Save the updated array back to localStorage
         localStorage.setItem("triggers", JSON.stringify(triggers));
         props.setTriggers(triggers);
-        props.setNewTriggerDialogOpen(false);
+
     }
 
     const cancelSend = (): void => {
 
-        props.setNewTriggerDialogOpen(false);
+        props.setEditTriggerDialogOpen(false);
 
     }
 
@@ -62,7 +92,7 @@ const NewTrigger: React.FC<NewTriggerProps> = (props: NewTriggerProps): React.Re
         <Dialog
             maxWidth="lg"
             fullWidth={true}
-            open={props.newTriggerDialogOpen}
+            open={props.EditTriggerDialogOpen}
             onClose={cancelSend}
         >
 
@@ -74,6 +104,14 @@ const NewTrigger: React.FC<NewTriggerProps> = (props: NewTriggerProps): React.Re
                 onSubmit={save}
                 ref={formRef}
             >
+                <Select onChange={handleSelectChange}>
+                    {props.triggers.map((trigger: Trigger, i: number) => (
+                        <option key={i} value={trigger.name}>
+                            {trigger.name}
+                        </option>
+                    ))}
+
+                </Select>
 
                 <TextField
                     required
@@ -113,4 +151,4 @@ const NewTrigger: React.FC<NewTriggerProps> = (props: NewTriggerProps): React.Re
     );
 };
 
-export default NewTrigger;
+export default EditTrigger;
