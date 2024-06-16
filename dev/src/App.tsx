@@ -15,6 +15,11 @@ export interface Trigger {
   action: string;
 }
 
+export interface ButtonItem {
+  name: string;
+  action: string;
+}
+
 const App: React.FC = (): React.ReactElement => {
   const [messages, setMessages] = useState<string[]>([]);
   const [command, setCommand] = useState<string>('');
@@ -27,6 +32,7 @@ const App: React.FC = (): React.ReactElement => {
   const [partyProts, setPartyProts] = useState<string>('');
   const [triggers, setTriggers] = useState<Trigger[]>([]);
   const [fontSize, setFontSize] = useState(12);
+  const [savedButtons, setSavedButtons] = useState<ButtonItem[]>([]);
 
   useEffect(() => {
     if (!socket) {
@@ -97,7 +103,7 @@ const App: React.FC = (): React.ReactElement => {
   }, []);
 
   useEffect(() => {
-    console.log('triggers:', triggers);
+    console.log('btnss:', savedButtons);
   })
 
   return (
@@ -133,6 +139,8 @@ const App: React.FC = (): React.ReactElement => {
             fontSize={fontSize}
             showSettings={showSettings}
             setShowSettings={setShowSettings}
+            savedButtons={savedButtons}
+            setSavedButtons={setSavedButtons}
           />
         </Grid>
       </Grid>

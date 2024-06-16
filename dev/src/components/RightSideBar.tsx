@@ -2,9 +2,11 @@ import { Box, Button, Container, Switch } from '@mui/material';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import ProtsBox from './ProtsBox';
 import NewTrigger from './NewTrigger';
-import { Trigger } from '../App';
+import { Trigger, ButtonItem } from '../App';
 import FontSizeSlider from './FontSizeSlider';
 import EditTrigger from './EditTrigger';
+import EditButton from './EditButton';
+import NewButton from './NewButton';
 
 interface SideBarProps {
     showProts: boolean;
@@ -18,11 +20,15 @@ interface SideBarProps {
     setFontSize: Dispatch<SetStateAction<number>>;
     showSettings: boolean;
     setShowSettings: Dispatch<SetStateAction<boolean>>;
+    savedButtons: ButtonItem[];
+    setSavedButtons: Dispatch<SetStateAction<ButtonItem[]>>;
 }
 
 const RightSideBar: React.FC<SideBarProps> = (props: SideBarProps): React.ReactElement => {
     const [newTriggerDialogOpen, setNewTriggerDialogOpen] = useState<boolean>(false);
     const [editTriggerDialogOpen, setEditTriggerDialogOpen] = useState<boolean>(false);
+    const [newButtonDialogOpen, setNewButtonDialogOpen] = useState<boolean>(false);
+    const [editButtonDialogOpen, setEditButtonDialogOpen] = useState<boolean>(false);
 
     return (
         <Box sx={{ background: 'white', height: '100%', padding: 2 }}>
@@ -60,25 +66,25 @@ const RightSideBar: React.FC<SideBarProps> = (props: SideBarProps): React.ReactE
 
             {
                 props.showSettings ?
-                    <>
+                    <Container>
                         Font size:
                         <FontSizeSlider
                             setFontSize={props.setFontSize}
                             fontSize={props.fontSize}
                         />
                         Show settings:
-                    </> : <></>
+                    </Container> : <></>
             }
 
             {
                 props.showProts ?
-                    <>
+                    <Container>
 
                         <ProtsBox
                             partyProts={props.partyProts}
                         />
 
-                    </> : <></>
+                    </Container> : <></>
             }
 
             {
@@ -108,6 +114,29 @@ const RightSideBar: React.FC<SideBarProps> = (props: SideBarProps): React.ReactE
                             triggers={props.triggers}
                             setTriggers={props.setTriggers}
                         />
+                                               <Button
+                            onClick={() => { setEditTriggerDialogOpen(true) }}
+                        >
+                            Edit old button
+                        </Button>
+
+                        <Button
+                            onClick={() => { setNewTriggerDialogOpen(true) }}
+                        >Create new button</Button><br />
+
+                        <EditButton
+                            editButtonDialogOpen={editButtonDialogOpen}
+                            setEditbuttonDialogOpen={setEditButtonDialogOpen}
+                            savedButtons={props.savedButtons}
+                            setSavedButtons={props.setSavedButtons}
+                        />
+
+                        <NewButton
+                            newButtonDialogOpen={newButtonDialogOpen}
+                            setNewButtonDialogOpen={setNewButtonDialogOpen}
+                            savedButtons={props.savedButtons}
+                            setSavedButtons={props.setSavedButtons}
+                        /> 
 
                     </Container> : <></>
             }
