@@ -1,138 +1,118 @@
-import { Button, Dialog, DialogTitle, Select, SelectChangeEvent, Stack, TextField } from '@mui/material';
+import { Button, Dialog, DialogTitle, MenuItem, Select, SelectChangeEvent, Stack, TextField } from '@mui/material';
 import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { Trigger } from '../App';
 
 interface EditTriggerProps {
-    EditTriggerDialogOpen: boolean;
+    editTriggerDialogOpen: boolean;
     setEditTriggerDialogOpen: Dispatch<SetStateAction<boolean>>;
     triggers: Trigger[];
     setTriggers: Dispatch<SetStateAction<Trigger[]>>;
 }
 
 const EditTrigger: React.FC<EditTriggerProps> = (props: EditTriggerProps): React.ReactElement => {
-    const [selectedTrigger, setSelectedTrigger] = useState<Trigger>({
-        name: '',
-        pattern: '',
-        action: ''
-    });
+    const [selectedTrigger, setSelectedTrigger] = useState<Trigger | null>(null);
     const [name, setName] = useState<string>('');
     const [pattern, setPattern] = useState<string>('');
     const [action, setAction] = useState<string>('');
 
-    //const [errors, setErrors] = useState<Errors>({ name: '', pattern: '', action: '' });
-
-    const formRef: any = useRef<HTMLFormElement>();
+    const formRef = useRef<HTMLFormElement>(null);
 
     const handleSelectChange = (event: SelectChangeEvent<string>) => {
-        console.log('value: ', event.target.value);
-        //const selectedId = parseInt(event.target.value, 10);
         const foundTrigger = props.triggers.find(t => t.name === event.target.value) || null;
-        //setSelectedTrigger(trigger);
-        console.log('found trig: ', foundTrigger);
-      };
+        if (foundTrigger) {
+            setSelectedTrigger(foundTrigger);
+            setName(foundTrigger.name);
+            setPattern(foundTrigger.pattern);
+            setAction(foundTrigger.action);
+        } else {
+            setSelectedTrigger(null);
+            setName('');
+            setPattern('');
+            setAction('');
+        }
+    };
 
     const save = (e: React.FormEvent): void => {
         e.preventDefault();
-        //console.log('click', formRef.current.nameOfTrigger);
 
-        let triggers: Trigger[] = [];
+        const updatedTriggers = props.triggers.map(t => 
+            t.name === selectedTrigger?.name 
+            ? { name, pattern, action }
+            : t
+        );
 
-        const storedTriggers = localStorage.getItem("triggers");
-
-        if (storedTriggers) {
-            // If it exists, parse the JSON data into an array
-            triggers = JSON.parse(storedTriggers);
-        }
-
-        // check if one with this name already exists
-        const filtered = triggers.filter((t: any) => t.name === String(formRef.current?.nameOfTrigger.value));
-
-        // if yes, replace it
-        if (filtered.length > 0) {
-            triggers = triggers.map((t: any) => {
-                if (t.name === formRef.current?.nameOfTrigger.value) {
-                    return {
-                        name: formRef.current?.nameOfTrigger.value,
-                        pattern: formRef.current?.patternOfTrigger.value,
-                        action: formRef.current?.actionOfTrigger.value
-                    };
-                } else {
-                    return t;
-                }
-            });
-            // if no, create new
-        } else {
-            triggers = [
-                ...triggers,
-                {
-                    name: formRef.current?.nameOfTrigger.value,
-                    pattern: formRef.current?.patternOfTrigger.value,
-                    action: formRef.current?.actionOfTrigger.value
-                }
-            ];
-        }
-
-        // Save the updated array back to localStorage
-        localStorage.setItem("triggers", JSON.stringify(triggers));
-        props.setTriggers(triggers);
-
-    }
+        localStorage.setItem("triggers", JSON.stringify(updatedTriggers));
+        props.setTriggers(updatedTriggers);
+        props.setEditTriggerDialogOpen(false);
+    };
 
     const cancelSend = (): void => {
-
         props.setEditTriggerDialogOpen(false);
-
-    }
+    };
 
     useEffect(() => {
-        // fill the select
-    }, [props.triggers]);
+        // Reset form when the dialog opens
+        if (!props.editTriggerDialogOpen) {
+            setSelectedTrigger(null);
+            setName('');
+            setPattern('');
+            setAction('');
+        }
+    }, [props.editTriggerDialogOpen]);
 
     return (
         <Dialog
             maxWidth="lg"
             fullWidth={true}
-            open={props.EditTriggerDialogOpen}
+            open={props.editTriggerDialogOpen}
             onClose={cancelSend}
         >
-
-            <DialogTitle>create a trigger</DialogTitle>
-
+            <DialogTitle>Edit a Trigger</DialogTitle>
             <Stack
-                spacing={1}
+                spacing={2}
                 component="form"
                 onSubmit={save}
                 ref={formRef}
             >
-                <Select onChange={handleSelectChange}>
+                <Select
+                    value={selectedTrigger?.name || ''}
+                    onChange={handleSelectChange}
+                    displayEmpty
+                >
+                    <MenuItem value="" disabled>Select a trigger</MenuItem>
                     {props.triggers.map((trigger: Trigger, i: number) => (
-                        <option key={i} value={trigger.name}>
+                        <MenuItem key={i} value={trigger.name}>
                             {trigger.name}
-                        </option>
+                        </MenuItem>
                     ))}
-
                 </Select>
 
                 <TextField
                     required
                     name="nameOfTrigger"
-                    label="name of trigger"
+                    label="Name of Trigger"
                     fullWidth
                     variant="outlined"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                 />
                 <TextField
                     required
                     name="patternOfTrigger"
-                    label="pattern of trigger"
+                    label="Pattern of Trigger"
                     fullWidth
                     variant="outlined"
+                    value={pattern}
+                    onChange={(e) => setPattern(e.target.value)}
                 />
                 <TextField
                     required
                     name="actionOfTrigger"
-                    label="action of trigger"
+                    label="Action of Trigger"
                     fullWidth
                     variant="outlined"
+                    value={action}
+                    onChange={(e) => setAction(e.target.value)}
                 />
                 <Button
                     variant="contained"

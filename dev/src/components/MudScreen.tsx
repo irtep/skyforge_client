@@ -13,6 +13,7 @@ interface MudScreenProps {
     messagesContainerRef: RefObject<HTMLDivElement>
     inputRef: RefObject<HTMLInputElement>
     showButtons: boolean;
+    fontSize: number;
 }
 
 const MudScreen: React.FC<MudScreenProps> = (props: MudScreenProps) => {
@@ -54,7 +55,7 @@ const MudScreen: React.FC<MudScreenProps> = (props: MudScreenProps) => {
                     overflowX: 'hidden',
                     overflowY: 'scroll',
                     fontFamily: '"Roboto Mono", monospace',
-                    fontSize: '12px',
+                    fontSize: `${props.fontSize}px`,
                     whiteSpace: 'pre-wrap',
                     padding: 5
                 }}
