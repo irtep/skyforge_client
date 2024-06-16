@@ -13,7 +13,7 @@ const FontSizeSlider: React.FC<FontSizeSliderProps> = ({ fontSize, setFontSize }
   return (
     <div>
       <input
-        type="range"
+        type="number"
         min="10"
         max="100"
         value={fontSize}

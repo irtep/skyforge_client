@@ -20,6 +20,11 @@ export interface ButtonItem {
   action: string;
 }
 
+export interface Widths {
+  mudScreen: number;
+  sideBar: number;
+}
+
 const App: React.FC = (): React.ReactElement => {
   const [messages, setMessages] = useState<string[]>([]);
   const [command, setCommand] = useState<string>('');
@@ -33,6 +38,10 @@ const App: React.FC = (): React.ReactElement => {
   const [triggers, setTriggers] = useState<Trigger[]>([]);
   const [fontSize, setFontSize] = useState(12);
   const [savedButtons, setSavedButtons] = useState<ButtonItem[]>([]);
+  const [widths, setWidths] = useState<Widths>({
+    mudScreen: 10,
+    sideBar: 2
+  });
 
   useEffect(() => {
     if (!socket) {
@@ -76,7 +85,7 @@ const App: React.FC = (): React.ReactElement => {
     if (triggers.length > 0) {
       //console.log('checking triggerst');
       triggers.forEach((trig: Trigger) => {
-        const checkThis = messages[messages.length-1].includes(trig.pattern);
+        const checkThis = messages[messages.length - 1].includes(trig.pattern);
         //console.log('cheking for :', trig.pattern);
         if (checkThis && socket) {
           socket.emit('command', trig.action);
@@ -91,7 +100,12 @@ const App: React.FC = (): React.ReactElement => {
   useEffect(() => {
 
     // create buttons, that are saved to localStorage
-
+    const storedbuttons = localStorage.getItem("buttons");
+    if (storedbuttons) {
+      // If it exists, parse the JSON data into an array
+      let parsedBtns: ButtonItem[] = JSON.parse(storedbuttons);
+      setSavedButtons(parsedBtns);
+    }
     // fetch triggers from localSession
     const storedTriggers = localStorage.getItem("triggers");
     if (storedTriggers) {
@@ -103,13 +117,15 @@ const App: React.FC = (): React.ReactElement => {
   }, []);
 /*
   useEffect(() => {
-    console.log('btnss:', savedButtons);
+    console.log('btnss:', widths);
   })
 */
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={8} md={7} sx={{ flexBasis: '60%' }}>
+      <Grid container spacing={0}>
+      <Grid item xs={widths.mudScreen} sx={{ 
+        margin: 0
+        }}>
           <Box sx={{ height: '100%' }}>
 
             <MudScreen
@@ -126,7 +142,8 @@ const App: React.FC = (): React.ReactElement => {
           </Box>
         </Grid>
 
-        <Grid item xs={12} sm={4} md={5} sx={{ flexBasis: '40%' }}>
+        <Grid item xs={widths.sideBar} sx={{margin: 0}}>
+
           <RightSideBar
             showProts={showProts}
             setShowProts={setShowProts}
@@ -142,6 +159,8 @@ const App: React.FC = (): React.ReactElement => {
             savedButtons={savedButtons}
             setSavedButtons={setSavedButtons}
             socket={socket}
+            widths={widths}
+            setWidths={setWidths}
           />
         </Grid>
       </Grid>

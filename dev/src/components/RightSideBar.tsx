@@ -2,12 +2,13 @@ import { Box, Button, Container, Switch } from '@mui/material';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import ProtsBox from './ProtsBox';
 import NewTrigger from './NewTrigger';
-import { Trigger, ButtonItem } from '../App';
+import { Trigger, ButtonItem, Widths } from '../App';
 import FontSizeSlider from './FontSizeSlider';
 import EditTrigger from './EditTrigger';
 import EditButton from './EditButton';
 import NewButton from './NewButton';
 import { Socket } from 'socket.io-client';
+import WidthSlider from './WidthSlider';
 
 interface SideBarProps {
     showProts: boolean;
@@ -24,6 +25,8 @@ interface SideBarProps {
     savedButtons: ButtonItem[];
     setSavedButtons: Dispatch<SetStateAction<ButtonItem[]>>;
     socket: Socket | null;
+    widths: Widths;
+    setWidths: Dispatch<SetStateAction<Widths>>;
 }
 
 const RightSideBar: React.FC<SideBarProps> = (props: SideBarProps): React.ReactElement => {
@@ -39,7 +42,13 @@ const RightSideBar: React.FC<SideBarProps> = (props: SideBarProps): React.ReactE
     };
 
     return (
-        <Box sx={{ background: 'white', height: '100%', padding: 2 }}>
+        <Box sx={{
+            background: 'darkGreen', 
+            height: '100%', 
+            padding: 2,
+            borderRadius: 5,
+            color: 'rgb(200,200,200)'
+            }}>
 
             Show settings
             <Switch
@@ -79,6 +88,11 @@ const RightSideBar: React.FC<SideBarProps> = (props: SideBarProps): React.ReactE
                         <FontSizeSlider
                             setFontSize={props.setFontSize}
                             fontSize={props.fontSize}
+                        />
+                        Side bar size
+                        <WidthSlider
+                            setWidths={props.setWidths}
+                            widths={props.widths}
                         />
                         <Button
                             onClick={() => { setEditTriggerDialogOpen(true) }}

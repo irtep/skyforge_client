@@ -3,7 +3,6 @@ import React, { Dispatch, RefObject, SetStateAction, useEffect, useState } from 
 import { Socket } from 'socket.io-client';
 import '../css/colors.css';
 import DOMPurify from 'dompurify';
-import ButtonsBar from './ButtonsBar';
 
 interface MudScreenProps {
     messages: string[];
@@ -50,14 +49,14 @@ const MudScreen: React.FC<MudScreenProps> = (props: MudScreenProps) => {
                 sx={{
                     background: 'black',
                     color: 'rgb(180,180,180)',
-                    width: '100vw',
+                    width: '100%',
                     height: '90vh',
                     overflowX: 'hidden',
                     overflowY: 'scroll',
                     fontFamily: '"Roboto Mono", monospace',
                     fontSize: `${props.fontSize}px`,
                     whiteSpace: 'pre-wrap',
-                    padding: 5
+                    paddingBottom: 5
                 }}
             >
                 {props.messages.map((message: any, index: number) => (
