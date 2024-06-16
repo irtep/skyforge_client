@@ -7,6 +7,7 @@ import FontSizeSlider from './FontSizeSlider';
 import EditTrigger from './EditTrigger';
 import EditButton from './EditButton';
 import NewButton from './NewButton';
+import { Socket } from 'socket.io-client';
 
 interface SideBarProps {
     showProts: boolean;
@@ -22,6 +23,7 @@ interface SideBarProps {
     setShowSettings: Dispatch<SetStateAction<boolean>>;
     savedButtons: ButtonItem[];
     setSavedButtons: Dispatch<SetStateAction<ButtonItem[]>>;
+    socket: Socket | null;
 }
 
 const RightSideBar: React.FC<SideBarProps> = (props: SideBarProps): React.ReactElement => {
@@ -29,6 +31,12 @@ const RightSideBar: React.FC<SideBarProps> = (props: SideBarProps): React.ReactE
     const [editTriggerDialogOpen, setEditTriggerDialogOpen] = useState<boolean>(false);
     const [newButtonDialogOpen, setNewButtonDialogOpen] = useState<boolean>(false);
     const [editButtonDialogOpen, setEditButtonDialogOpen] = useState<boolean>(false);
+
+    const sendCommand = (cmd: string) => {
+        if (props.socket) {
+            props.socket.emit('command', cmd);
+        }
+    };
 
     return (
         <Box sx={{ background: 'white', height: '100%', padding: 2 }}>
@@ -72,7 +80,50 @@ const RightSideBar: React.FC<SideBarProps> = (props: SideBarProps): React.ReactE
                             setFontSize={props.setFontSize}
                             fontSize={props.fontSize}
                         />
-                        Show settings:
+                        <Button
+                            onClick={() => { setEditTriggerDialogOpen(true) }}
+                        >Edit old trigger
+                        </Button>
+
+                        <Button
+                            onClick={() => { setNewTriggerDialogOpen(true) }}
+                        >Create new trigger</Button><br />
+                        <Button
+                            onClick={() => { setEditButtonDialogOpen(true) }}
+                        >
+                            Edit old button
+                        </Button>
+
+                        <Button
+                            onClick={() => { setNewButtonDialogOpen(true) }}
+                        >Create new button</Button><br />
+                        <EditTrigger
+                            editTriggerDialogOpen={editTriggerDialogOpen}
+                            setEditTriggerDialogOpen={setEditTriggerDialogOpen}
+                            triggers={props.triggers}
+                            setTriggers={props.setTriggers}
+                        />
+
+                        <NewTrigger
+                            newTriggerDialogOpen={newTriggerDialogOpen}
+                            setNewTriggerDialogOpen={setNewTriggerDialogOpen}
+                            triggers={props.triggers}
+                            setTriggers={props.setTriggers}
+                        />
+
+                        <EditButton
+                            editButtonDialogOpen={editButtonDialogOpen}
+                            setEditButtonDialogOpen={setEditButtonDialogOpen}
+                            savedButtons={props.savedButtons}
+                            setSavedButtons={props.setSavedButtons}
+                        />
+
+                        <NewButton
+                            newButtonDialogOpen={newButtonDialogOpen}
+                            setNewButtonDialogOpen={setNewButtonDialogOpen}
+                            savedButtons={props.savedButtons}
+                            setSavedButtons={props.setSavedButtons}
+                        />
                     </Container> : <></>
             }
 
@@ -90,54 +141,20 @@ const RightSideBar: React.FC<SideBarProps> = (props: SideBarProps): React.ReactE
             {
                 props.showButtons ?
                     <Container>
-
-                        <Button
-                            onClick={() => { setEditTriggerDialogOpen(true) }}
-                        >
-                            Edit old trigger
-                        </Button>
-
-                        <Button
-                            onClick={() => { setNewTriggerDialogOpen(true) }}
-                        >Create new trigger</Button><br />
-
-                        <EditTrigger
-                            editTriggerDialogOpen={editTriggerDialogOpen}
-                            setEditTriggerDialogOpen={setEditTriggerDialogOpen}
-                            triggers={props.triggers}
-                            setTriggers={props.setTriggers}
-                        />
-
-                        <NewTrigger
-                            newTriggerDialogOpen={newTriggerDialogOpen}
-                            setNewTriggerDialogOpen={setNewTriggerDialogOpen}
-                            triggers={props.triggers}
-                            setTriggers={props.setTriggers}
-                        />
-                                               <Button
-                            onClick={() => { setEditTriggerDialogOpen(true) }}
-                        >
-                            Edit old button
-                        </Button>
-
-                        <Button
-                            onClick={() => { setNewTriggerDialogOpen(true) }}
-                        >Create new button</Button><br />
-
-                        <EditButton
-                            editButtonDialogOpen={editButtonDialogOpen}
-                            setEditbuttonDialogOpen={setEditButtonDialogOpen}
-                            savedButtons={props.savedButtons}
-                            setSavedButtons={props.setSavedButtons}
-                        />
-
-                        <NewButton
-                            newButtonDialogOpen={newButtonDialogOpen}
-                            setNewButtonDialogOpen={setNewButtonDialogOpen}
-                            savedButtons={props.savedButtons}
-                            setSavedButtons={props.setSavedButtons}
-                        /> 
-
+                        {
+                            props.savedButtons.map((b: ButtonItem, ix: number) => {
+                                return (
+                                    <span key={`button: ${ix}`}>
+                                        <Button
+                                            value={b.action}
+                                            onClick={() => {
+                                                sendCommand(b.action);
+                                            }}
+                                        >{b.name}</Button>
+                                    </span>
+                                )
+                            })
+                        }
                     </Container> : <></>
             }
 

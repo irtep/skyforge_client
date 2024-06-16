@@ -10,11 +10,6 @@ interface NewTriggerProps {
 }
 
 const NewTrigger: React.FC<NewTriggerProps> = (props: NewTriggerProps): React.ReactElement => {
-    const [selectedTrigger, setSelectedTrigger] = useState<Trigger>({
-        name: '',
-        pattern: '',
-        action: ''
-    });
 
     const formRef: any = useRef<HTMLFormElement>();
 

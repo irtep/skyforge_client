@@ -101,11 +101,11 @@ const App: React.FC = (): React.ReactElement => {
     }
 
   }, []);
-
+/*
   useEffect(() => {
     console.log('btnss:', savedButtons);
   })
-
+*/
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2}>
@@ -141,6 +141,7 @@ const App: React.FC = (): React.ReactElement => {
             setShowSettings={setShowSettings}
             savedButtons={savedButtons}
             setSavedButtons={setSavedButtons}
+            socket={socket}
           />
         </Grid>
       </Grid>
