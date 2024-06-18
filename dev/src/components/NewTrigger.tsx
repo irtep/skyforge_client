@@ -1,16 +1,17 @@
 import { Button, Dialog, DialogTitle, Stack, TextField } from '@mui/material';
-import React, { Dispatch, SetStateAction, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { Trigger } from '../App';
+import { SkyContext } from '../context/skyContext';
 
-interface NewTriggerProps {
-    newTriggerDialogOpen: boolean;
-    setNewTriggerDialogOpen: Dispatch<SetStateAction<boolean>>;
-    triggers: Trigger[];
-    setTriggers: Dispatch<SetStateAction<Trigger[]>>;
-}
+const NewTrigger: React.FC = (): React.ReactElement => {
 
-const NewTrigger: React.FC<NewTriggerProps> = (props: NewTriggerProps): React.ReactElement => {
-
+    const { 
+        setTriggers,
+        setNewTriggerDialogOpen,
+        triggers,
+        newTriggerDialogOpen
+      } = useContext(SkyContext);
+      
     const formRef: any = useRef<HTMLFormElement>();
 
     const save = (e: React.FormEvent): void => {
@@ -39,25 +40,25 @@ const NewTrigger: React.FC<NewTriggerProps> = (props: NewTriggerProps): React.Re
 
         // Save the updated array back to localStorage
         localStorage.setItem("triggers", JSON.stringify(triggers));
-        props.setTriggers(triggers);
-        props.setNewTriggerDialogOpen(false);
+        setTriggers(triggers);
+        setNewTriggerDialogOpen(false);
     }
 
     const cancelSend = (): void => {
 
-        props.setNewTriggerDialogOpen(false);
+        setNewTriggerDialogOpen(false);
 
     }
 
     useEffect(() => {
         // fill the select
-    }, [props.triggers]);
+    }, [triggers]);
 
     return (
         <Dialog
             maxWidth="lg"
             fullWidth={true}
-            open={props.newTriggerDialogOpen}
+            open={newTriggerDialogOpen}
             onClose={cancelSend}
         >
 

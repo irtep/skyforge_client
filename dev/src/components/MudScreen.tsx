@@ -1,5 +1,5 @@
 import { Button, Container, Input } from '@mui/material';
-import React, { Dispatch, RefObject, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, RefObject, SetStateAction, useEffect } from 'react';
 import { Socket } from 'socket.io-client';
 import '../css/colors.css';
 import DOMPurify from 'dompurify';

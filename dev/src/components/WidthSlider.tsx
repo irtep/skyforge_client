@@ -1,14 +1,14 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import { Widths } from '../App';
+import React, { useContext } from 'react';
+import { SkyContext } from '../context/skyContext';
 
-interface WidthSliderProps {
-  widths: Widths;
-  setWidths: Dispatch<SetStateAction<Widths>>;
-}
+const WidthSlider: React.FC = () => {
 
-const WidthSlider: React.FC<WidthSliderProps> = ({ widths, setWidths }) => {
+  const { 
+    widths, setWidths
+  } = useContext(SkyContext);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+
     const newMudScreenWidth = 12 - Number(event.target.value);
     setWidths({
         sideBar: Number(event.target.value),

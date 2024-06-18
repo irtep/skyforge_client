@@ -90,10 +90,7 @@ const RightSideBar: React.FC<SideBarProps> = (props: SideBarProps): React.ReactE
                             fontSize={props.fontSize}
                         />
                         Side bar size
-                        <WidthSlider
-                            setWidths={props.setWidths}
-                            widths={props.widths}
-                        />
+                        <WidthSlider/>
                         <Button
                             onClick={() => { setEditTriggerDialogOpen(true) }}
                         >Edit old trigger
@@ -118,12 +115,7 @@ const RightSideBar: React.FC<SideBarProps> = (props: SideBarProps): React.ReactE
                             setTriggers={props.setTriggers}
                         />
 
-                        <NewTrigger
-                            newTriggerDialogOpen={newTriggerDialogOpen}
-                            setNewTriggerDialogOpen={setNewTriggerDialogOpen}
-                            triggers={props.triggers}
-                            setTriggers={props.setTriggers}
-                        />
+                        <NewTrigger/>
 
                         <EditButton
                             editButtonDialogOpen={editButtonDialogOpen}

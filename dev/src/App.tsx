@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import MudScreen from './components/MudScreen';
 import { Box, Grid } from '@mui/material';
 import RightSideBar from './components/RightSideBar';
+import { SkyContext } from './context/skyContext';
 
 interface MessageResponse {
   type: string;
@@ -26,22 +27,23 @@ export interface Widths {
 }
 
 const App: React.FC = (): React.ReactElement => {
-  const [messages, setMessages] = useState<string[]>([]);
-  const [command, setCommand] = useState<string>('');
-  const [socket, setSocket] = useState<Socket | null>(null);
+
+  const { 
+    messages, setMessages,
+    command, setCommand,
+    socket, setSocket,
+    showProts, setShowProts,
+    showButtons, setShowButtons,
+    showSettings, setShowSettings,
+    partyProts, setPartyProts,
+    triggers, setTriggers,
+    fontSize, setFontSize,
+    savedButtons, setSavedButtons,
+    widths, setWidths
+  } = useContext(SkyContext);
+
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [showProts, setShowProts] = useState<boolean>(false);
-  const [showButtons, setShowButtons] = useState<boolean>(false);
-  const [showSettings, setShowSettings] = useState<boolean>(false);
-  const [partyProts, setPartyProts] = useState<string>('');
-  const [triggers, setTriggers] = useState<Trigger[]>([]);
-  const [fontSize, setFontSize] = useState(12);
-  const [savedButtons, setSavedButtons] = useState<ButtonItem[]>([]);
-  const [widths, setWidths] = useState<Widths>({
-    mudScreen: 10,
-    sideBar: 2
-  });
 
   useEffect(() => {
     if (!socket) {
@@ -51,7 +53,7 @@ const App: React.FC = (): React.ReactElement => {
 
       // input from batmud comes here
       newSocket.on('message', (response: MessageResponse) => {
-        setMessages((prevMessages) => [...prevMessages, response.data]);
+        setMessages((prevMessages: string[]) => [...prevMessages, response.data]);
         scrollToBottom();
       });
     }
@@ -115,16 +117,16 @@ const App: React.FC = (): React.ReactElement => {
     }
 
   }, []);
-/*
-  useEffect(() => {
-    console.log('btnss:', widths);
-  })
-*/
+  /*
+    useEffect(() => {
+      console.log('btnss:', widths);
+    })
+  */
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={0}>
-      <Grid item xs={widths.mudScreen} sx={{ 
-        margin: 0
+        <Grid item xs={widths.mudScreen} sx={{
+          margin: 0
         }}>
           <Box sx={{ height: '100%' }}>
 
@@ -142,7 +144,7 @@ const App: React.FC = (): React.ReactElement => {
           </Box>
         </Grid>
 
-        <Grid item xs={widths.sideBar} sx={{margin: 0}}>
+        <Grid item xs={widths.sideBar} sx={{ margin: 0 }}>
 
           <RightSideBar
             showProts={showProts}
