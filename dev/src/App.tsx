@@ -37,7 +37,7 @@ const App: React.FC = (): React.ReactElement => {
     setTriggers,
     setSavedButtons,
     widths,
-    partyProts
+    showProts
   } = useContext(SkyContext);
 
   const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -114,10 +114,10 @@ const App: React.FC = (): React.ReactElement => {
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
-    console.log('effect for partyProts', partyProts);
-    if (partyProts) {
+    
+    if (showProts) {
       interval = setInterval(() => {
-        console.log('now');
+        console.log('tikker');
       }, 1000);
     }
 
@@ -126,7 +126,7 @@ const App: React.FC = (): React.ReactElement => {
         clearInterval(interval);
       }
     };
-  }, [partyProts]);
+  }, [showProts]);
   /*
     useEffect(() => {
       console.log('btnss:', widths);
