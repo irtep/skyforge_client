@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { io, Socket } from 'socket.io-client';
+import React, { useContext, useEffect, useRef } from 'react';
+import { io } from 'socket.io-client';
 import MudScreen from './components/MudScreen';
 import { Box, Grid } from '@mui/material';
 import RightSideBar from './components/RightSideBar';
@@ -28,22 +28,19 @@ export interface Widths {
 
 const App: React.FC = (): React.ReactElement => {
 
-  const { 
-    messages, setMessages,
-    command, setCommand,
-    socket, setSocket,
-    showProts, setShowProts,
-    showButtons, setShowButtons,
-    showSettings, setShowSettings,
-    partyProts, setPartyProts,
-    triggers, setTriggers,
-    fontSize, setFontSize,
-    savedButtons, setSavedButtons,
-    widths, setWidths
+  const {
+    messages,
+    setMessages,
+    socket,
+    setSocket,
+    triggers,
+    setTriggers,
+    setSavedButtons,
+    widths,
+    partyProts
   } = useContext(SkyContext);
 
   const messagesContainerRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!socket) {
@@ -81,14 +78,11 @@ const App: React.FC = (): React.ReactElement => {
       setMessages(shortenedMessages);
     }
 
-    // check if triggers match
     // match triggers
-    //console.log('trigger.length', triggers.length);
     if (triggers.length > 0) {
-      //console.log('checking triggerst');
       triggers.forEach((trig: Trigger) => {
         const checkThis = messages[messages.length - 1].includes(trig.pattern);
-        //console.log('cheking for :', trig.pattern);
+
         if (checkThis && socket) {
           socket.emit('command', trig.action);
         }
@@ -117,6 +111,22 @@ const App: React.FC = (): React.ReactElement => {
     }
 
   }, []);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+    console.log('effect for partyProts', partyProts);
+    if (partyProts) {
+      interval = setInterval(() => {
+        console.log('now');
+      }, 1000);
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [partyProts]);
   /*
     useEffect(() => {
       console.log('btnss:', widths);
@@ -129,41 +139,14 @@ const App: React.FC = (): React.ReactElement => {
           margin: 0
         }}>
           <Box sx={{ height: '100%' }}>
-
             <MudScreen
-              messages={messages}
-              setCommand={setCommand}
-              command={command}
-              socket={socket}
               messagesContainerRef={messagesContainerRef}
-              inputRef={inputRef}
-              showButtons={showButtons}
-              fontSize={fontSize}
             />
-
           </Box>
         </Grid>
 
         <Grid item xs={widths.sideBar} sx={{ margin: 0 }}>
-
-          <RightSideBar
-            showProts={showProts}
-            setShowProts={setShowProts}
-            showButtons={showButtons}
-            setShowButtons={setShowButtons}
-            partyProts={partyProts}
-            triggers={triggers}
-            setTriggers={setTriggers}
-            setFontSize={setFontSize}
-            fontSize={fontSize}
-            showSettings={showSettings}
-            setShowSettings={setShowSettings}
-            savedButtons={savedButtons}
-            setSavedButtons={setSavedButtons}
-            socket={socket}
-            widths={widths}
-            setWidths={setWidths}
-          />
+          <RightSideBar />
         </Grid>
       </Grid>
     </Box>

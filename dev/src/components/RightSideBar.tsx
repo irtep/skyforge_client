@@ -1,60 +1,60 @@
 import { Box, Button, Container, Switch } from '@mui/material';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import ProtsBox from './ProtsBox';
 import NewTrigger from './NewTrigger';
-import { Trigger, ButtonItem, Widths } from '../App';
+import {  ButtonItem } from '../App';
 import FontSizeSlider from './FontSizeSlider';
 import EditTrigger from './EditTrigger';
 import EditButton from './EditButton';
 import NewButton from './NewButton';
-import { Socket } from 'socket.io-client';
 import WidthSlider from './WidthSlider';
+import { SkyContext } from '../context/skyContext';
 
-interface SideBarProps {
-    showProts: boolean;
-    setShowProts: Dispatch<SetStateAction<boolean>>;
-    showButtons: boolean;
-    setShowButtons: Dispatch<SetStateAction<boolean>>;
-    partyProts: string;
-    triggers: Trigger[];
-    setTriggers: Dispatch<SetStateAction<Trigger[]>>;
-    fontSize: number;
-    setFontSize: Dispatch<SetStateAction<number>>;
-    showSettings: boolean;
-    setShowSettings: Dispatch<SetStateAction<boolean>>;
-    savedButtons: ButtonItem[];
-    setSavedButtons: Dispatch<SetStateAction<ButtonItem[]>>;
-    socket: Socket | null;
-    widths: Widths;
-    setWidths: Dispatch<SetStateAction<Widths>>;
-}
+const RightSideBar: React.FC = (): React.ReactElement => {
 
-const RightSideBar: React.FC<SideBarProps> = (props: SideBarProps): React.ReactElement => {
+    const {
+        showProts,
+        setShowProts,
+        showButtons,
+        setShowButtons,
+        triggers,
+        setTriggers,
+        setFontSize,
+        fontSize,
+        showSettings,
+        setShowSettings,
+        savedButtons,
+        setSavedButtons,
+        socket,
+        widths,
+        setWidths
+    } = useContext(SkyContext);
+
     const [newTriggerDialogOpen, setNewTriggerDialogOpen] = useState<boolean>(false);
     const [editTriggerDialogOpen, setEditTriggerDialogOpen] = useState<boolean>(false);
     const [newButtonDialogOpen, setNewButtonDialogOpen] = useState<boolean>(false);
     const [editButtonDialogOpen, setEditButtonDialogOpen] = useState<boolean>(false);
 
     const sendCommand = (cmd: string) => {
-        if (props.socket) {
-            props.socket.emit('command', cmd);
+        if (socket) {
+            socket.emit('command', cmd);
         }
     };
 
     return (
         <Box sx={{
-            background: 'darkGreen', 
-            height: '100%', 
+            background: 'darkGreen',
+            height: '100%',
             padding: 2,
             borderRadius: 5,
             color: 'rgb(200,200,200)'
-            }}>
+        }}>
 
             Show settings
             <Switch
-                checked={props.showSettings}
+                checked={showSettings}
                 onChange={(e) => {
-                    props.setShowSettings(e.target.checked);
+                    setShowSettings(e.target.checked);
                 }}
                 inputProps={{ 'aria-label': 'controlled' }}
             />
@@ -63,9 +63,9 @@ const RightSideBar: React.FC<SideBarProps> = (props: SideBarProps): React.ReactE
 
             Show prots box:
             <Switch
-                checked={props.showProts}
+                checked={showProts}
                 onChange={(e) => {
-                    props.setShowProts(e.target.checked);
+                    setShowProts(e.target.checked);
                 }}
                 inputProps={{ 'aria-label': 'controlled' }}
             />
@@ -74,23 +74,23 @@ const RightSideBar: React.FC<SideBarProps> = (props: SideBarProps): React.ReactE
 
             Show buttons:
             <Switch
-                checked={props.showButtons}
+                checked={showButtons}
                 onChange={(e) => {
-                    props.setShowButtons(e.target.checked);
+                    setShowButtons(e.target.checked);
                 }}
                 inputProps={{ 'aria-label': 'controlled' }}
             />
 
             {
-                props.showSettings ?
+                showSettings ?
                     <Container>
                         Font size:
                         <FontSizeSlider
-                            setFontSize={props.setFontSize}
-                            fontSize={props.fontSize}
+                            setFontSize={setFontSize}
+                            fontSize={fontSize}
                         />
                         Side bar size
-                        <WidthSlider/>
+                        <WidthSlider />
                         <Button
                             onClick={() => { setEditTriggerDialogOpen(true) }}
                         >Edit old trigger
@@ -111,44 +111,40 @@ const RightSideBar: React.FC<SideBarProps> = (props: SideBarProps): React.ReactE
                         <EditTrigger
                             editTriggerDialogOpen={editTriggerDialogOpen}
                             setEditTriggerDialogOpen={setEditTriggerDialogOpen}
-                            triggers={props.triggers}
-                            setTriggers={props.setTriggers}
+                            triggers={triggers}
+                            setTriggers={setTriggers}
                         />
 
-                        <NewTrigger/>
+                        <NewTrigger />
 
                         <EditButton
                             editButtonDialogOpen={editButtonDialogOpen}
                             setEditButtonDialogOpen={setEditButtonDialogOpen}
-                            savedButtons={props.savedButtons}
-                            setSavedButtons={props.setSavedButtons}
+                            savedButtons={savedButtons}
+                            setSavedButtons={setSavedButtons}
                         />
 
                         <NewButton
                             newButtonDialogOpen={newButtonDialogOpen}
                             setNewButtonDialogOpen={setNewButtonDialogOpen}
-                            savedButtons={props.savedButtons}
-                            setSavedButtons={props.setSavedButtons}
+                            savedButtons={savedButtons}
+                            setSavedButtons={setSavedButtons}
                         />
                     </Container> : <></>
             }
 
             {
-                props.showProts ?
+                showProts ?
                     <Container>
-
-                        <ProtsBox
-                            partyProts={props.partyProts}
-                        />
-
+                        <ProtsBox />
                     </Container> : <></>
             }
 
             {
-                props.showButtons ?
+                showButtons ?
                     <Container>
                         {
-                            props.savedButtons.map((b: ButtonItem, ix: number) => {
+                            savedButtons.map((b: ButtonItem, ix: number) => {
                                 return (
                                     <span key={`button: ${ix}`}>
                                         <Button
