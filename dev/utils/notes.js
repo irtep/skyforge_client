@@ -12,4 +12,9 @@ The connection between you and your blade fades away.
 ********************** Round
 
 There are no magical effects on the party members around you.
+rapier spessut:
+Smiling coldly, you stick Fungus in the groin!
+With a sudden move, you puncture Hound in the stomach.
+Scornfully, you swing the rapier teasingly and stick Giant in the throat.
+With a sudden move, you puncture Lich in the stomach.
 */

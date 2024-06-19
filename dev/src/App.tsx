@@ -106,13 +106,19 @@ const App: React.FC = (): React.ReactElement => {
       messages.length > 0 &&
       messages[messages.length - 1].includes('********************** Round')
     ) {
+
       const lines = messages[messages.length - 1].split('\n');
+
       const updatedStats = hitCalculator.characterStats.map((char: CharacterStats) => {
         const hits: any = { ...char.hits };
 
+        //console.log('lines: ', lines);
+
         lines.forEach((line: string) => {
           let hitFound: boolean = false;
-          if (line.startsWith(`${char.name} `) || line.startsWith(`Grinning diabolically `)) {
+
+          if (line.startsWith(`${char.name} `) ||
+            line.startsWith(`Grinning diabolically `)) {
 
             hitMessages.forEach((hitMsg) => {
               const regex = new RegExp(`\\b${char.name}\\s${hitMsg.msg}\\b`);
@@ -127,12 +133,26 @@ const App: React.FC = (): React.ReactElement => {
                 hitFound = true;
               }
             });
+            // votk rapier specials
+          } else if (line.startsWith(`Smiling coldly, you stick`) ||
+            line.startsWith(`With a sudden move, you`) ||
+            line.startsWith(`You skillfully pierce`) ||
+            line.startsWith(`You skillfully puncture`) ||
+            line.startsWith(`You skillfully sink`) ||
+            line.startsWith(`Scornfully, you swing the`)) {
+            const hitKey = `(S) rapier special`;
+            hits[hitKey] = (hits[hitKey] || 0) + 1;
+            hitFound = true;
+            
+          } else {
+            console.log('line not calculated: ', line);
           }
+          
         });
 
         return { ...char, hits };
       });
-//      console.log('updated: ', updatedStats);
+      //      console.log('updated: ', updatedStats);
       setHitCalculator((prevCalculator: HitCalculator) => ({
         ...prevCalculator,
         characterStats: updatedStats,
@@ -176,10 +196,10 @@ const App: React.FC = (): React.ReactElement => {
       }
     };
   }, [showProts]);
-  /* // for debug
-    useEffect(() => {
-       console.log('hCals', hitCalculator);
-    }, [hitCalculator])
+  /*   // for debug
+      useEffect(() => {
+         console.log('hCals', hitCalculator);
+      }, [hitCalculator])
   */
   useEffect(scrollToBottom, [messages]);
 
