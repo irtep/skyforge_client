@@ -4,6 +4,7 @@ import MudScreen from './components/MudScreen';
 import { Box, Grid } from '@mui/material';
 import RightSideBar from './components/RightSideBar';
 import { SkyContext } from './context/skyContext';
+import { hitMessages, HitMsg } from './data/hitMessages';
 
 interface MessageResponse {
   type: string;
@@ -26,6 +27,17 @@ export interface Widths {
   sideBar: number;
 }
 
+export interface CharacterStats {
+  name: string;
+  hits: any[] | null
+};
+
+interface HitCalculator {
+  show: boolean;
+  output: string;
+  characterStats: CharacterStats[]
+};
+
 const App: React.FC = (): React.ReactElement => {
 
   const {
@@ -37,7 +49,9 @@ const App: React.FC = (): React.ReactElement => {
     setTriggers,
     setSavedButtons,
     widths,
-    showProts
+    showProts,
+    hitCalculator,
+    setHitCalculator
   } = useContext(SkyContext);
 
   const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -65,32 +79,66 @@ const App: React.FC = (): React.ReactElement => {
     }
   };
 
-  // Scroll to bottom on component mount or when messages change
+  // Truncate messages if length exceeds 40
   useEffect(() => {
-
-    if (messages.length > 100) {
-      let shortenedMessages = messages;
-
-      for (; shortenedMessages?.length > 90;) {
-        shortenedMessages.shift();
-      }
-
+    if (messages.length > 40) {
+      const shortenedMessages = messages.slice(-30);
       setMessages(shortenedMessages);
     }
+  }, [messages]);
 
-    // match triggers
+  // Handle triggers
+  useEffect(() => {
     if (triggers.length > 0) {
       triggers.forEach((trig: Trigger) => {
-        const checkThis = messages[messages.length - 1].includes(trig.pattern);
-
-        if (checkThis && socket) {
+        if (messages.length > 0 && messages[messages.length - 1].includes(trig.pattern) && socket) {
           socket.emit('command', trig.action);
         }
       });
     }
+  }, [messages, triggers, socket]);
 
-    scrollToBottom();
-  }, [messages]);
+  // Hit calculator
+  useEffect(() => {
+    if (
+      hitCalculator.show &&
+      hitCalculator.characterStats.length > 0 &&
+      messages.length > 0 &&
+      messages[messages.length - 1].includes('********************** Round')
+    ) {
+      const lines = messages[messages.length - 1].split('\n');
+      const updatedStats = hitCalculator.characterStats.map((char: CharacterStats) => {
+        const hits: any = { ...char.hits };
+
+        lines.forEach((line: string) => {
+          let hitFound: boolean = false;
+          if (line.startsWith(`${char.name} `) || line.startsWith(`Grinning diabolically `)) {
+
+            hitMessages.forEach((hitMsg) => {
+              const regex = new RegExp(`\\b${char.name}\\s${hitMsg.msg}\\b`);
+              const critRegex = new RegExp(`\\bGrinning diabolically\\s${char.name}\\s${hitMsg.msg}\\b`, 'i');
+              if (regex.test(line) && !hitFound) {
+                const hitKey = `(${hitMsg.index}) ${hitMsg.msg}`;
+                hits[hitKey] = (hits[hitKey] || 0) + 1;
+                hitFound = true;
+              } else if (critRegex.test(line) && !hitFound) {
+                const hitKey = `(${hitMsg.index}) ${hitMsg.msg}`;
+                hits[hitKey] = (hits[hitKey] || 0) + 1;
+                hitFound = true;
+              }
+            });
+          }
+        });
+
+        return { ...char, hits };
+      });
+//      console.log('updated: ', updatedStats);
+      setHitCalculator((prevCalculator: HitCalculator) => ({
+        ...prevCalculator,
+        characterStats: updatedStats,
+      }));
+    }
+  }, [messages, hitCalculator.show]);
 
   // when component loads
   useEffect(() => {
@@ -112,9 +160,10 @@ const App: React.FC = (): React.ReactElement => {
 
   }, []);
 
+  // Show party prots and effects
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
-    
+
     if (showProts) {
       interval = setInterval(() => {
         console.log('tikker');
@@ -127,11 +176,13 @@ const App: React.FC = (): React.ReactElement => {
       }
     };
   }, [showProts]);
-  /*
+  /* // for debug
     useEffect(() => {
-      console.log('btnss:', widths);
-    })
+       console.log('hCals', hitCalculator);
+    }, [hitCalculator])
   */
+  useEffect(scrollToBottom, [messages]);
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={0}>

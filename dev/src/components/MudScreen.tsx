@@ -73,7 +73,10 @@ const MudScreen: React.FC<MudScreenProps> = ({ messagesContainerRef}) => {
                 onChange={(e) => setCommand(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Enter command"
-                sx={{ background: 'lightGreen' }}
+                sx={{ 
+                    background: 'lightGreen',
+                    padding: 1
+                }}
             />
             <Button onClick={sendCommand}>Send</Button>
 

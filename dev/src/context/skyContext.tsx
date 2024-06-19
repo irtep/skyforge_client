@@ -6,7 +6,18 @@ export const SkyContext: React.Context<any> = createContext(undefined);
 
 interface Props {
     children: React.ReactNode;
-}
+};
+
+interface CharacterStats {
+    name: string;
+    hits: any;
+};
+
+interface HitCalculator {
+    show: boolean;
+    output: string;
+    characterStats: CharacterStats[]
+};
 
 export const SkyProvider: React.FC<Props> = (props: Props): React.ReactElement => {
     const [messages, setMessages] = useState<string[]>([]);
@@ -20,8 +31,18 @@ export const SkyProvider: React.FC<Props> = (props: Props): React.ReactElement =
     const [fontSize, setFontSize] = useState(12);
     const [savedButtons, setSavedButtons] = useState<ButtonItem[]>([]);
     const [widths, setWidths] = useState<Widths>({
-      mudScreen: 10,
-      sideBar: 2
+      mudScreen: 8,
+      sideBar: 4
+    });
+    const [hitCalculator, setHitCalculator] = useState<HitCalculator>({
+        show: false,
+        output: '',
+        characterStats: [
+            {
+                name: 'You',
+                hits: {}
+            }
+        ]
     });
     
     return (
@@ -37,8 +58,8 @@ export const SkyProvider: React.FC<Props> = (props: Props): React.ReactElement =
             triggers, setTriggers,
             fontSize, setFontSize,
             savedButtons, setSavedButtons,
-            widths, setWidths
-
+            widths, setWidths,
+            hitCalculator, setHitCalculator
         }}>
             {props.children}
         </SkyContext.Provider>

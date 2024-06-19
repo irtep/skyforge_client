@@ -2,13 +2,14 @@ import { Box, Button, Container, Switch } from '@mui/material';
 import React, { useContext, useState } from 'react';
 import ProtsBox from './ProtsBox';
 import NewTrigger from './NewTrigger';
-import {  ButtonItem } from '../App';
+import { ButtonItem } from '../App';
 import FontSizeSlider from './FontSizeSlider';
 import EditTrigger from './EditTrigger';
 import EditButton from './EditButton';
 import NewButton from './NewButton';
 import WidthSlider from './WidthSlider';
 import { SkyContext } from '../context/skyContext';
+import HitStatistics from './HitStatistics';
 
 const RightSideBar: React.FC = (): React.ReactElement => {
 
@@ -26,8 +27,8 @@ const RightSideBar: React.FC = (): React.ReactElement => {
         savedButtons,
         setSavedButtons,
         socket,
-        widths,
-        setWidths
+        hitCalculator,
+        setHitCalculator
     } = useContext(SkyContext);
 
     const [newTriggerDialogOpen, setNewTriggerDialogOpen] = useState<boolean>(false);
@@ -81,6 +82,20 @@ const RightSideBar: React.FC = (): React.ReactElement => {
                 inputProps={{ 'aria-label': 'controlled' }}
             />
 
+            <br />
+
+            Show hit stats:
+            <Switch
+                checked={hitCalculator.show}
+                onChange={(e) => {
+                    setHitCalculator({
+                        ...hitCalculator,
+                        show: e.target.checked
+                    });
+                }}
+                inputProps={{ 'aria-label': 'controlled' }}
+            />
+
             {
                 showSettings ?
                     <Container>
@@ -92,20 +107,32 @@ const RightSideBar: React.FC = (): React.ReactElement => {
                         Side bar size
                         <WidthSlider />
                         <Button
+                            variant="contained"
+                            size="small"
+                            sx={{ margin: 1 }}
                             onClick={() => { setEditTriggerDialogOpen(true) }}
                         >Edit old trigger
                         </Button>
 
                         <Button
+                            variant="contained"
+                            size="small"
+                            sx={{ margin: 1 }}
                             onClick={() => { setNewTriggerDialogOpen(true) }}
                         >Create new trigger</Button><br />
                         <Button
+                            variant="contained"
+                            size="small"
+                            sx={{ margin: 1, background: "navy" }}
                             onClick={() => { setEditButtonDialogOpen(true) }}
                         >
                             Edit old button
                         </Button>
 
                         <Button
+                            variant="contained"
+                            size="small"
+                            sx={{ margin: 1, background: "navy" }}
                             onClick={() => { setNewButtonDialogOpen(true) }}
                         >Create new button</Button><br />
                         <EditTrigger
@@ -148,6 +175,9 @@ const RightSideBar: React.FC = (): React.ReactElement => {
                                 return (
                                     <span key={`button: ${ix}`}>
                                         <Button
+                                            variant="contained"
+                                            size="small"
+                                            sx={{ margin: 1 }}
                                             value={b.action}
                                             onClick={() => {
                                                 sendCommand(b.action);
@@ -157,6 +187,13 @@ const RightSideBar: React.FC = (): React.ReactElement => {
                                 )
                             })
                         }
+                    </Container> : <></>
+            }
+
+            {
+                hitCalculator.show ?
+                    <Container>
+                        <HitStatistics />
                     </Container> : <></>
             }
 

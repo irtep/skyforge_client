@@ -9,4 +9,7 @@ Everything no longer seems so red
 No effects to show.
 The connection between you and your blade fades away.
 
+********************** Round
+
+There are no magical effects on the party members around you.
 */
