@@ -1,16 +1,15 @@
 import { Container } from '@mui/material';
-import React from 'react';
+import React, { useContext } from 'react';
+import { SkyContext } from '../context/skyContext';
 
-interface ProtsProps {
-    partyProts: string;
-}
+const ProtsBox: React.FC = () => {
 
-const ProtsBox: React.FC<ProtsProps> = (props: ProtsProps) => {
+    const { partyProts} = useContext(SkyContext);
 
     return (
         <Container>
 
-            jou
+            {partyProts}
 
         </Container>
     );

@@ -1,9 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { io, Socket } from 'socket.io-client';
+import React, { useContext, useEffect, useRef } from 'react';
+import { io } from 'socket.io-client';
 import MudScreen from './components/MudScreen';
 import { Box, Grid } from '@mui/material';
 import RightSideBar from './components/RightSideBar';
 import { SkyContext } from './context/skyContext';
+import { hitMessages, HitMsg } from './data/hitMessages';
 
 interface MessageResponse {
   type: string;
@@ -26,24 +27,34 @@ export interface Widths {
   sideBar: number;
 }
 
+export interface CharacterStats {
+  name: string;
+  hits: any[] | null
+};
+
+interface HitCalculator {
+  show: boolean;
+  output: string;
+  characterStats: CharacterStats[]
+};
+
 const App: React.FC = (): React.ReactElement => {
 
-  const { 
-    messages, setMessages,
-    command, setCommand,
-    socket, setSocket,
-    showProts, setShowProts,
-    showButtons, setShowButtons,
-    showSettings, setShowSettings,
-    partyProts, setPartyProts,
-    triggers, setTriggers,
-    fontSize, setFontSize,
-    savedButtons, setSavedButtons,
-    widths, setWidths
+  const {
+    messages,
+    setMessages,
+    socket,
+    setSocket,
+    triggers,
+    setTriggers,
+    setSavedButtons,
+    widths,
+    showProts,
+    hitCalculator,
+    setHitCalculator
   } = useContext(SkyContext);
 
   const messagesContainerRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!socket) {
@@ -68,35 +79,66 @@ const App: React.FC = (): React.ReactElement => {
     }
   };
 
-  // Scroll to bottom on component mount or when messages change
+  // Truncate messages if length exceeds 40
   useEffect(() => {
-
-    if (messages.length > 100) {
-      let shortenedMessages = messages;
-
-      for (; shortenedMessages?.length > 90;) {
-        shortenedMessages.shift();
-      }
-
+    if (messages.length > 40) {
+      const shortenedMessages = messages.slice(-30);
       setMessages(shortenedMessages);
     }
+  }, [messages]);
 
-    // check if triggers match
-    // match triggers
-    //console.log('trigger.length', triggers.length);
+  // Handle triggers
+  useEffect(() => {
     if (triggers.length > 0) {
-      //console.log('checking triggerst');
       triggers.forEach((trig: Trigger) => {
-        const checkThis = messages[messages.length - 1].includes(trig.pattern);
-        //console.log('cheking for :', trig.pattern);
-        if (checkThis && socket) {
+        if (messages.length > 0 && messages[messages.length - 1].includes(trig.pattern) && socket) {
           socket.emit('command', trig.action);
         }
       });
     }
+  }, [messages, triggers, socket]);
 
-    scrollToBottom();
-  }, [messages]);
+  // Hit calculator
+  useEffect(() => {
+    if (
+      hitCalculator.show &&
+      hitCalculator.characterStats.length > 0 &&
+      messages.length > 0 &&
+      messages[messages.length - 1].includes('********************** Round')
+    ) {
+      const lines = messages[messages.length - 1].split('\n');
+      const updatedStats = hitCalculator.characterStats.map((char: CharacterStats) => {
+        const hits: any = { ...char.hits };
+
+        lines.forEach((line: string) => {
+          let hitFound: boolean = false;
+          if (line.startsWith(`${char.name} `) || line.startsWith(`Grinning diabolically `)) {
+
+            hitMessages.forEach((hitMsg) => {
+              const regex = new RegExp(`\\b${char.name}\\s${hitMsg.msg}\\b`);
+              const critRegex = new RegExp(`\\bGrinning diabolically\\s${char.name}\\s${hitMsg.msg}\\b`, 'i');
+              if (regex.test(line) && !hitFound) {
+                const hitKey = `(${hitMsg.index}) ${hitMsg.msg}`;
+                hits[hitKey] = (hits[hitKey] || 0) + 1;
+                hitFound = true;
+              } else if (critRegex.test(line) && !hitFound) {
+                const hitKey = `(${hitMsg.index}) ${hitMsg.msg}`;
+                hits[hitKey] = (hits[hitKey] || 0) + 1;
+                hitFound = true;
+              }
+            });
+          }
+        });
+
+        return { ...char, hits };
+      });
+//      console.log('updated: ', updatedStats);
+      setHitCalculator((prevCalculator: HitCalculator) => ({
+        ...prevCalculator,
+        characterStats: updatedStats,
+      }));
+    }
+  }, [messages, hitCalculator.show]);
 
   // when component loads
   useEffect(() => {
@@ -117,11 +159,30 @@ const App: React.FC = (): React.ReactElement => {
     }
 
   }, []);
-  /*
+
+  // Show party prots and effects
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+
+    if (showProts) {
+      interval = setInterval(() => {
+        console.log('tikker');
+      }, 1000);
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [showProts]);
+  /* // for debug
     useEffect(() => {
-      console.log('btnss:', widths);
-    })
+       console.log('hCals', hitCalculator);
+    }, [hitCalculator])
   */
+  useEffect(scrollToBottom, [messages]);
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={0}>
@@ -129,41 +190,14 @@ const App: React.FC = (): React.ReactElement => {
           margin: 0
         }}>
           <Box sx={{ height: '100%' }}>
-
             <MudScreen
-              messages={messages}
-              setCommand={setCommand}
-              command={command}
-              socket={socket}
               messagesContainerRef={messagesContainerRef}
-              inputRef={inputRef}
-              showButtons={showButtons}
-              fontSize={fontSize}
             />
-
           </Box>
         </Grid>
 
         <Grid item xs={widths.sideBar} sx={{ margin: 0 }}>
-
-          <RightSideBar
-            showProts={showProts}
-            setShowProts={setShowProts}
-            showButtons={showButtons}
-            setShowButtons={setShowButtons}
-            partyProts={partyProts}
-            triggers={triggers}
-            setTriggers={setTriggers}
-            setFontSize={setFontSize}
-            fontSize={fontSize}
-            showSettings={showSettings}
-            setShowSettings={setShowSettings}
-            savedButtons={savedButtons}
-            setSavedButtons={setSavedButtons}
-            socket={socket}
-            widths={widths}
-            setWidths={setWidths}
-          />
+          <RightSideBar />
         </Grid>
       </Grid>
     </Box>
