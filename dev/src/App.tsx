@@ -4,7 +4,7 @@ import MudScreen from './components/MudScreen';
 import { Box, Grid } from '@mui/material';
 import RightSideBar from './components/RightSideBar';
 import { SkyContext } from './context/skyContext';
-import { hitMessages, HitMsg } from './data/hitMessages';
+import { hitMessages, HitMsg, votkRapierSpecials } from './data/hitMessages';
 
 interface MessageResponse {
   type: string;
@@ -56,6 +56,14 @@ const App: React.FC = (): React.ReactElement => {
 
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
+  // Precompile regex patterns outside of useEffect to avoid recompilation on each render
+  const hitRegexes = hitMessages.map(hitMsg => ({
+    msg: hitMsg.msg,
+    index: hitMsg.index,
+    regex: (charName: string) => new RegExp(`\\b${charName}\\s${hitMsg.msg}\\b`),
+    critRegex: (charName: string) => new RegExp(`\\bGrinning diabolically\\s${charName}\\s${hitMsg.msg}\\b`, 'i')
+  }));
+
   useEffect(() => {
     if (!socket) {
       console.log('connecting: ');
@@ -106,6 +114,63 @@ const App: React.FC = (): React.ReactElement => {
       messages.length > 0 &&
       messages[messages.length - 1].includes('********************** Round')
     ) {
+      const lines = messages[messages.length - 1].split('\n').map((line: string) => line.trim());
+      //console.log('lines: ', lines);
+      const updatedStats = hitCalculator.characterStats.map((char: CharacterStats) => {
+        const hits: any = { ...char.hits };
+        
+        lines.forEach((line: string) => {
+          //console.log('line: ', line);
+          let hitFound: boolean = false;
+          if (
+            line.startsWith(`${char.name} `) || 
+            line.startsWith(`Grinning diabolically `
+            )) {
+            //console.log('starting with You: ', line);
+            hitRegexes.forEach(({ regex, critRegex, msg, index }) => {
+              if (!hitFound && !(line.includes(`You cut your own wrist`))) {
+                if (regex(char.name).test(line)) {
+                  const hitKey = `(${index}) ${msg}`;
+                  hits[hitKey] = (hits[hitKey] || 0) + 1;
+                  hitFound = true;
+                  //console.log('hit: ', hitKey);
+                } else if (critRegex(char.name).test(line)) {
+                  const hitKey = `(${index}) ${msg}`;
+                  hits[hitKey] = (hits[hitKey] || 0) + 1;
+                  hitFound = true;
+                  //console.log('hit: ', hitKey);
+                }
+              }
+            });
+          } if (
+            votkRapierSpecials.some(start => line.startsWith(start)) &&
+            !hitFound
+          ) {
+            const hitKey = `(S) rapier special`;
+            hits[hitKey] = (hits[hitKey] || 0) + 1;
+            hitFound = true;
+            //console.log('hit', hitKey);
+          }
+        });
+        //console.log('--------');
+        return { ...char, hits };
+      });
+
+      setHitCalculator((prevCalculator: HitCalculator) => ({
+        ...prevCalculator,
+        characterStats: updatedStats,
+      }));
+    }
+  }, [messages, hitCalculator.show]);
+  /*
+  // Hit calculator
+  useEffect(() => {
+    if (
+      hitCalculator.show &&
+      hitCalculator.characterStats.length > 0 &&
+      messages.length > 0 &&
+      messages[messages.length - 1].includes('********************** Round')
+    ) {
 
       const lines = messages[messages.length - 1].split('\n');
 
@@ -115,11 +180,14 @@ const App: React.FC = (): React.ReactElement => {
         //console.log('lines: ', lines);
 
         lines.forEach((line: string) => {
+
+          //console.log('analyzin: ', line);
           let hitFound: boolean = false;
+          line = line.trim();
 
           if (line.startsWith(`${char.name} `) ||
             line.startsWith(`Grinning diabolically `)) {
-
+            //console.log('hits');
             hitMessages.forEach((hitMsg) => {
               const regex = new RegExp(`\\b${char.name}\\s${hitMsg.msg}\\b`);
               const critRegex = new RegExp(`\\bGrinning diabolically\\s${char.name}\\s${hitMsg.msg}\\b`, 'i');
@@ -127,10 +195,12 @@ const App: React.FC = (): React.ReactElement => {
                 const hitKey = `(${hitMsg.index}) ${hitMsg.msg}`;
                 hits[hitKey] = (hits[hitKey] || 0) + 1;
                 hitFound = true;
+                //console.log('hit: ', hitKey);
               } else if (critRegex.test(line) && !hitFound) {
                 const hitKey = `(${hitMsg.index}) ${hitMsg.msg}`;
                 hits[hitKey] = (hits[hitKey] || 0) + 1;
                 hitFound = true;
+                //console.log('hit2: ', hitKey);
               }
             });
             // votk rapier specials
@@ -139,15 +209,18 @@ const App: React.FC = (): React.ReactElement => {
             line.startsWith(`You skillfully pierce`) ||
             line.startsWith(`You skillfully puncture`) ||
             line.startsWith(`You skillfully sink`) ||
+            line.startsWith(`You quickly engage and`) ||
+            line.startsWith(`You perform an inhumanly low`) ||
             line.startsWith(`Scornfully, you swing the`)) {
             const hitKey = `(S) rapier special`;
             hits[hitKey] = (hits[hitKey] || 0) + 1;
             hitFound = true;
-            
+            //console.log('special: ', hitKey);
+
           } else {
-            console.log('line not calculated: ', line);
+            //console.log('line not calculated: ', line);
           }
-          
+
         });
 
         return { ...char, hits };
@@ -159,6 +232,7 @@ const App: React.FC = (): React.ReactElement => {
       }));
     }
   }, [messages, hitCalculator.show]);
+  */
 
   // when component loads
   useEffect(() => {

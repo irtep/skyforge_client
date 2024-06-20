@@ -23,7 +23,19 @@ const HitStatistics: React.FC = () => {
                         */}
                         <div>
                             {Object.entries(hits)
-                                .sort(([hitTypeA], [hitTypeB]) => hitTypeA.localeCompare(hitTypeB))
+                                .sort(([hitTypeA], [hitTypeB]) => {
+                                    // Extract numbers from the hit types
+                                    const numA = parseInt(hitTypeA.match(/\d+/)?.[0] || '0', 10);
+                                    const numB = parseInt(hitTypeB.match(/\d+/)?.[0] || '0', 10);
+
+                                    // If numbers are equal, sort lexicographically
+                                    if (numA === numB) {
+                                        return hitTypeA.localeCompare(hitTypeB);
+                                    }
+
+                                    // Otherwise, sort numerically
+                                    return numA - numB;
+                                })
                                 .map(([hitType, count]) => (
                                     <Typography key={hitType}>
                                         {`${hitType}: ${count}`}

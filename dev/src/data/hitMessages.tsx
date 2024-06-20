@@ -2,13 +2,18 @@ export interface HitMsg {
     index: number | 'x';
     msg: string;
 };
-/* not needed as hard coded to App.tsx
-export const votkRapierSpecials: HitMsg[] = [
-    { index: 'x', msg: 'Smiling coldly, you stick' },
-    { index: 'x', msg: 'With a sudden move, you' },
-    { index: 'x', msg: 'Scornfully, you swing the' },
+
+export const votkRapierSpecials: string[] = [
+            `Smiling coldly, you stick`,
+            `With a sudden move, you`,
+            `You skillfully pierce`,
+            `You skillfully puncture`,
+            `You skillfully sink`,
+            `You quickly engage and`,
+            `You perform an inhumanly low`,
+            `Scornfully, you swing the`
 ];
-*/
+
 export const hitMessages: HitMsg[] = [
     // habo
     { index: 'x', msg: 'harm'},
