@@ -87,6 +87,14 @@ const RightSideBar: React.FC = (): React.ReactElement => {
             Show hit stats:
             <Switch
                 checked={hitCalculator.show}
+                sx={{
+                    '& .Mui-checked': {
+                        color: 'red', // Change the color here
+                    },
+                    '& .Mui-checked + .MuiSwitch-track': {
+                        backgroundColor: 'darkRed', // Change the track color here
+                    },
+                }}
                 onChange={(e) => {
                     setHitCalculator({
                         ...hitCalculator,
