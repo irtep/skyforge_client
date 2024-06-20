@@ -3,6 +3,17 @@ export interface HitMsg {
     msg: string;
 };
 
+export const votkRapierSpecials: string[] = [
+            `Smiling coldly, you stick`,
+            `With a sudden move, you`,
+            `You skillfully pierce`,
+            `You skillfully puncture`,
+            `You skillfully sink`,
+            `You quickly engage and`,
+            `You perform an inhumanly low`,
+            `Scornfully, you swing the`
+];
+
 export const hitMessages: HitMsg[] = [
     // habo
     { index: 'x', msg: 'harm'},
