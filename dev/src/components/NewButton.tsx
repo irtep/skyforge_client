@@ -2,6 +2,7 @@ import { Button, Dialog, DialogTitle, Stack, TextField } from '@mui/material';
 import React, { Dispatch, SetStateAction, useRef } from 'react';
 
 interface ButtonItem {
+    id: number;
     name: string;
     action: string;
 }
@@ -30,6 +31,7 @@ const NewButton: React.FC<NewButtonProps> = (props: NewButtonProps): React.React
         buttons = [
             ...buttons,
             {
+                id: (buttons.length > 0) ? Number(buttons[buttons.length-1].id)+1 : 0,
                 name: formRef.current?.nameOfButton.value,
                 action: formRef.current?.actionOfButton.value
             }

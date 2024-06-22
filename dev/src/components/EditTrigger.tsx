@@ -9,8 +9,13 @@ interface EditTriggerProps {
     setTriggers: Dispatch<SetStateAction<Trigger[]>>;
 }
 
-const EditTrigger: React.FC<EditTriggerProps> = (props: EditTriggerProps): React.ReactElement => {
-    const [selectedTrigger, setSelectedTrigger] = useState<Trigger | null>(null);
+const EditTrigger: React.FC<EditTriggerProps> = ({
+    editTriggerDialogOpen,
+    setEditTriggerDialogOpen,
+    triggers,
+    setTriggers
+}: EditTriggerProps): React.ReactElement => {
+    const [selectedTriggerId, setSelectedTriggerId] = useState<number | ''>('');
     const [name, setName] = useState<string>('');
     const [pattern, setPattern] = useState<string>('');
     const [action, setAction] = useState<string>('');
@@ -18,14 +23,15 @@ const EditTrigger: React.FC<EditTriggerProps> = (props: EditTriggerProps): React
     const formRef = useRef<HTMLFormElement>(null);
 
     const handleSelectChange = (event: SelectChangeEvent<string>) => {
-        const foundTrigger = props.triggers.find(t => t.name === event.target.value) || null;
+        const selectedId = event.target.value === '' ? '' : Number(event.target.value);
+        setSelectedTriggerId(selectedId);
+        
+        const foundTrigger = triggers.find(t => t.id === selectedId) || null;
         if (foundTrigger) {
-            setSelectedTrigger(foundTrigger);
             setName(foundTrigger.name);
             setPattern(foundTrigger.pattern);
             setAction(foundTrigger.action);
         } else {
-            setSelectedTrigger(null);
             setName('');
             setPattern('');
             setAction('');
@@ -34,37 +40,37 @@ const EditTrigger: React.FC<EditTriggerProps> = (props: EditTriggerProps): React
 
     const save = (e: React.FormEvent): void => {
         e.preventDefault();
+        if (selectedTriggerId === '') return;
 
-        const updatedTriggers = props.triggers.map(t => 
-            t.name === selectedTrigger?.name 
-            ? { name, pattern, action }
+        const updatedTriggers = triggers.map(t => 
+            t.id === selectedTriggerId 
+            ? { ...t, name, pattern, action }
             : t
         );
 
         localStorage.setItem("triggers", JSON.stringify(updatedTriggers));
-        props.setTriggers(updatedTriggers);
-        props.setEditTriggerDialogOpen(false);
+        setTriggers(updatedTriggers);
+        setEditTriggerDialogOpen(false);
     };
 
     const cancelSend = (): void => {
-        props.setEditTriggerDialogOpen(false);
+        setEditTriggerDialogOpen(false);
     };
 
     useEffect(() => {
-        // Reset form when the dialog opens
-        if (!props.editTriggerDialogOpen) {
-            setSelectedTrigger(null);
+        if (!editTriggerDialogOpen) {
+            setSelectedTriggerId('');
             setName('');
             setPattern('');
             setAction('');
         }
-    }, [props.editTriggerDialogOpen]);
+    }, [editTriggerDialogOpen]);
 
     return (
         <Dialog
             maxWidth="lg"
-            fullWidth={true}
-            open={props.editTriggerDialogOpen}
+            fullWidth
+            open={editTriggerDialogOpen}
             onClose={cancelSend}
         >
             <DialogTitle>Edit a Trigger</DialogTitle>
@@ -75,13 +81,13 @@ const EditTrigger: React.FC<EditTriggerProps> = (props: EditTriggerProps): React
                 ref={formRef}
             >
                 <Select
-                    value={selectedTrigger?.name || ''}
-                    onChange={handleSelectChange}
+                    value={selectedTriggerId === '' ? '' : String(selectedTriggerId)}
+                    onChange={(e) => handleSelectChange(e as SelectChangeEvent<string>)}
                     displayEmpty
                 >
                     <MenuItem value="" disabled>Select a trigger</MenuItem>
-                    {props.triggers.map((trigger: Trigger, i: number) => (
-                        <MenuItem key={i} value={trigger.name}>
+                    {triggers.map((trigger: Trigger) => (
+                        <MenuItem key={trigger.id} value={String(trigger.id)}>
                             {trigger.name}
                         </MenuItem>
                     ))}

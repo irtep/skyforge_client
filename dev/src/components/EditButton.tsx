@@ -2,6 +2,7 @@ import { Button, Dialog, DialogTitle, MenuItem, Select, SelectChangeEvent, Stack
 import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 
 interface ButtonItem {
+    id: number;
     name: string;
     action: string;
 }
@@ -13,21 +14,27 @@ interface EditButtonProps {
     setSavedButtons: Dispatch<SetStateAction<ButtonItem[]>>;
 }
 
-const EditButton: React.FC<EditButtonProps> = (props: EditButtonProps): React.ReactElement => {
-    const [selectedButton, setSelectedButton] = useState<ButtonItem | null>(null);
+const EditButton: React.FC<EditButtonProps> = ({
+    editButtonDialogOpen,
+    setEditButtonDialogOpen,
+    savedButtons,
+    setSavedButtons
+}: EditButtonProps): React.ReactElement => {
+    const [selectedButtonId, setSelectedButtonId] = useState<number | ''>('');
     const [name, setName] = useState<string>('');
     const [action, setAction] = useState<string>('');
 
     const formRef = useRef<HTMLFormElement>(null);
 
     const handleSelectChange = (event: SelectChangeEvent<string>) => {
-        const foundButton = props.savedButtons.find(b => b.name === event.target.value) || null;
+        const selectedId = event.target.value === '' ? '' : Number(event.target.value);
+        setSelectedButtonId(selectedId);
+        
+        const foundButton = savedButtons.find(b => b.id === selectedId) || null;
         if (foundButton) {
-            setSelectedButton(foundButton);
             setName(foundButton.name);
             setAction(foundButton.action);
         } else {
-            setSelectedButton(null);
             setName('');
             setAction('');
         }
@@ -35,36 +42,36 @@ const EditButton: React.FC<EditButtonProps> = (props: EditButtonProps): React.Re
 
     const save = (e: React.FormEvent): void => {
         e.preventDefault();
+        if (selectedButtonId === '') return;
 
-        const updatedButtons = props.savedButtons.map(b => 
-            b.name === selectedButton?.name 
-            ? { name, action }
+        const updatedButtons = savedButtons.map(b => 
+            b.id === selectedButtonId 
+            ? { ...b, name, action }
             : b
         );
 
         localStorage.setItem("buttons", JSON.stringify(updatedButtons));
-        props.setSavedButtons(updatedButtons);
-        props.setEditButtonDialogOpen(false);
+        setSavedButtons(updatedButtons);
+        setEditButtonDialogOpen(false);
     };
 
     const cancelSend = (): void => {
-        props.setEditButtonDialogOpen(false);
+        setEditButtonDialogOpen(false);
     };
 
     useEffect(() => {
-        // Reset form when the dialog opens
-        if (!props.editButtonDialogOpen) {
-            setSelectedButton(null);
+        if (!editButtonDialogOpen) {
+            setSelectedButtonId('');
             setName('');
             setAction('');
         }
-    }, [props.editButtonDialogOpen]);
+    }, [editButtonDialogOpen]);
 
     return (
         <Dialog
             maxWidth="lg"
-            fullWidth={true}
-            open={props.editButtonDialogOpen}
+            fullWidth
+            open={editButtonDialogOpen}
             onClose={cancelSend}
         >
             <DialogTitle>Edit a Button</DialogTitle>
@@ -75,13 +82,13 @@ const EditButton: React.FC<EditButtonProps> = (props: EditButtonProps): React.Re
                 ref={formRef}
             >
                 <Select
-                    value={selectedButton?.name || ''}
-                    onChange={handleSelectChange}
+                    value={selectedButtonId === '' ? '' : String(selectedButtonId)}
+                    onChange={(e) => handleSelectChange(e as SelectChangeEvent<string>)}
                     displayEmpty
                 >
                     <MenuItem value="" disabled>Select a button</MenuItem>
-                    {props.savedButtons.map((button: ButtonItem, i: number) => (
-                        <MenuItem key={i} value={button.name}>
+                    {savedButtons.map((button: ButtonItem) => (
+                        <MenuItem key={button.id} value={String(button.id)}>
                             {button.name}
                         </MenuItem>
                     ))}

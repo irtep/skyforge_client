@@ -12,6 +12,7 @@ interface MessageResponse {
 }
 
 export interface Trigger {
+  id: number;
   name: string;
   pattern: string;
   action: string;
@@ -64,6 +65,15 @@ const App: React.FC = (): React.ReactElement => {
     critRegex: (charName: string) => new RegExp(`\\bGrinning diabolically\\s${charName}\\s${hitMsg.msg}\\b`, 'i')
   }));
 
+  // Function to scroll to the bottom of the messages container
+  const scrollToBottom = () => {
+    if (messagesContainerRef.current) {
+      const container = messagesContainerRef.current;
+      // Set scrollTop to scrollHeight
+      container.scrollTop = container.scrollHeight;
+    }
+  };
+
   useEffect(() => {
     if (!socket) {
       console.log('connecting: ');
@@ -77,15 +87,6 @@ const App: React.FC = (): React.ReactElement => {
       });
     }
   }, [socket, triggers]);
-
-  // Function to scroll to the bottom of the messages container
-  const scrollToBottom = () => {
-    if (messagesContainerRef.current) {
-      const container = messagesContainerRef.current;
-      // Set scrollTop to scrollHeight
-      container.scrollTop = container.scrollHeight;
-    }
-  };
 
   // Truncate messages if length exceeds 40
   useEffect(() => {
@@ -215,6 +216,7 @@ const App: React.FC = (): React.ReactElement => {
          console.log('hCals', hitCalculator);
       }, [hitCalculator])
   */
+
   useEffect(scrollToBottom, [messages]);
 
   return (

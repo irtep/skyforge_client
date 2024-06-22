@@ -1,5 +1,5 @@
 import { Box, Button, Container, Link, Switch } from '@mui/material';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ProtsBox from './ProtsBox';
 import NewTrigger from './NewTrigger';
 import { ButtonItem } from '../App';
@@ -43,7 +43,11 @@ const RightSideBar: React.FC = (): React.ReactElement => {
             socket.emit('command', cmd);
         }
     };
-
+/*
+    useEffect(() => {
+        console.log('trigs ', triggers);
+    });
+*/
     return (
         <Box sx={{
             background: 'darkGreen',
@@ -63,7 +67,7 @@ const RightSideBar: React.FC = (): React.ReactElement => {
             />
 
             <br />
-
+{/*
             Show prots box:
             <Switch
                 checked={showProts}
@@ -72,8 +76,8 @@ const RightSideBar: React.FC = (): React.ReactElement => {
                 }}
                 inputProps={{ 'aria-label': 'controlled' }}
             />
-
             <br />
+*/}
 
             Show buttons:
             <Switch
@@ -146,29 +150,38 @@ const RightSideBar: React.FC = (): React.ReactElement => {
                         />
                         Side bar size
                         <WidthSlider />
-                        <Button
-                            variant="contained"
-                            size="small"
-                            sx={{ margin: 1 }}
-                            onClick={() => { setEditTriggerDialogOpen(true) }}
-                        >Edit old trigger
-                        </Button>
-
+                        {
+                            (triggers.length > 0) ?
+                                <>
+                                    <Button
+                                        variant="contained"
+                                        size="small"
+                                        sx={{ margin: 1 }}
+                                        onClick={() => { setEditTriggerDialogOpen(true) }}
+                                    >Edit old trigger
+                                    </Button>
+                                </> : <></>
+                        }
                         <Button
                             variant="contained"
                             size="small"
                             sx={{ margin: 1 }}
                             onClick={() => { setNewTriggerDialogOpen(true) }}
                         >Create new trigger</Button><br />
-                        <Button
-                            variant="contained"
-                            size="small"
-                            sx={{ margin: 1, background: "navy" }}
-                            onClick={() => { setEditButtonDialogOpen(true) }}
-                        >
-                            Edit old button
-                        </Button>
+                        {
+                            (savedButtons.length > 0) ?
+                                <>
+                                    <Button
+                                        variant="contained"
+                                        size="small"
+                                        sx={{ margin: 1, background: "navy" }}
+                                        onClick={() => { setEditButtonDialogOpen(true) }}
+                                    >
+                                        Edit old button
+                                    </Button>
+                                </> : <></>
 
+                        }
                         <Button
                             variant="contained"
                             size="small"
@@ -246,7 +259,7 @@ const RightSideBar: React.FC = (): React.ReactElement => {
                     </Container> : <></>
             }
 
-        </Box>
+        </Box >
     );
 };
 

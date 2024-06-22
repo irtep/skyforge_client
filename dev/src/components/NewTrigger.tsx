@@ -11,14 +11,7 @@ interface NewTriggerProps {
 };
 
 const NewTrigger: React.FC<NewTriggerProps> = ({setTriggers, triggers, setNewTriggerDialogOpen, newTriggerDialogOpen}): React.ReactElement => {
-/*
-    const { 
-        setTriggers,
-        setNewTriggerDialogOpen,
-        triggers,
-        newTriggerDialogOpen
-      } = useContext(SkyContext);
-*/    
+  
     const formRef: any = useRef<HTMLFormElement>();
 
     const save = (e: React.FormEvent): void => {
@@ -39,6 +32,7 @@ const NewTrigger: React.FC<NewTriggerProps> = ({setTriggers, triggers, setNewTri
         trigs = [
             ...trigs,
             {
+                id: (trigs.length > 0) ? Number(trigs[trigs.length-1].id)+1 : 0,
                 name: formRef.current?.nameOfTrigger.value,
                 pattern: formRef.current?.patternOfTrigger.value,
                 action: formRef.current?.actionOfTrigger.value
