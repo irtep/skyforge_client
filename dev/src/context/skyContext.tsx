@@ -26,6 +26,7 @@ export const SkyProvider: React.FC<Props> = (props: Props): React.ReactElement =
     const [showProts, setShowProts] = useState<boolean>(false);
     const [showButtons, setShowButtons] = useState<boolean>(false);
     const [showSettings, setShowSettings] = useState<boolean>(false);
+    const [links, setLinks] = useState<boolean>(false);
     const [partyProts, setPartyProts] = useState<string>('');
     const [triggers, setTriggers] = useState<Trigger[]>([]);
     const [fontSize, setFontSize] = useState(12);
@@ -59,7 +60,8 @@ export const SkyProvider: React.FC<Props> = (props: Props): React.ReactElement =
             fontSize, setFontSize,
             savedButtons, setSavedButtons,
             widths, setWidths,
-            hitCalculator, setHitCalculator
+            hitCalculator, setHitCalculator,
+            links, setLinks
         }}>
             {props.children}
         </SkyContext.Provider>

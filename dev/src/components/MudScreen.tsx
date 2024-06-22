@@ -1,4 +1,4 @@
-import { Button, Container, Input } from '@mui/material';
+import { Button, Container, Input, Typography } from '@mui/material';
 import React, { RefObject, useContext, useEffect, useRef } from 'react';
 import '../css/colors.css';
 import DOMPurify from 'dompurify';
@@ -79,7 +79,9 @@ const MudScreen: React.FC<MudScreenProps> = ({ messagesContainerRef}) => {
                 }}
             />
             <Button onClick={sendCommand}>Send</Button>
-
+            <Typography sx={{color: "rgb(150,150,150)"}}>
+                version beta 0.0.1
+            </Typography>
         </Container>
     );
 };

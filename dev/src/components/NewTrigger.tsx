@@ -1,36 +1,43 @@
 import { Button, Dialog, DialogTitle, Stack, TextField } from '@mui/material';
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { Dispatch, SetStateAction, useContext, useEffect, useRef } from 'react';
 import { Trigger } from '../App';
 import { SkyContext } from '../context/skyContext';
 
-const NewTrigger: React.FC = (): React.ReactElement => {
+interface NewTriggerProps {
+    setTriggers: Dispatch<SetStateAction<Trigger[]>>;
+    setNewTriggerDialogOpen: Dispatch<SetStateAction<boolean>>;
+    triggers: Trigger[];
+    newTriggerDialogOpen: boolean;
+};
 
+const NewTrigger: React.FC<NewTriggerProps> = ({setTriggers, triggers, setNewTriggerDialogOpen, newTriggerDialogOpen}): React.ReactElement => {
+/*
     const { 
         setTriggers,
         setNewTriggerDialogOpen,
         triggers,
         newTriggerDialogOpen
       } = useContext(SkyContext);
-      
+*/    
     const formRef: any = useRef<HTMLFormElement>();
 
     const save = (e: React.FormEvent): void => {
         e.preventDefault();
 
-        let triggers: Trigger[] = [];
+        let trigs: Trigger[] = [];
 
         const storedTriggers = localStorage.getItem("triggers");
 
         if (storedTriggers) {
             // If it exists, parse the JSON data into an array
-            triggers = JSON.parse(storedTriggers);
+            trigs = JSON.parse(storedTriggers);
         }
 
         // check if one with this name already exists
         //const filtered = triggers.filter((t: any) => t.name === String(formRef.current?.nameOfTrigger.value));
 
-        triggers = [
-            ...triggers,
+        trigs = [
+            ...trigs,
             {
                 name: formRef.current?.nameOfTrigger.value,
                 pattern: formRef.current?.patternOfTrigger.value,
@@ -39,8 +46,8 @@ const NewTrigger: React.FC = (): React.ReactElement => {
         ];
 
         // Save the updated array back to localStorage
-        localStorage.setItem("triggers", JSON.stringify(triggers));
-        setTriggers(triggers);
+        localStorage.setItem("triggers", JSON.stringify(trigs));
+        setTriggers(trigs);
         setNewTriggerDialogOpen(false);
     }
 

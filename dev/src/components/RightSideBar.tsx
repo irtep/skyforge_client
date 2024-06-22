@@ -1,4 +1,4 @@
-import { Box, Button, Container, Switch } from '@mui/material';
+import { Box, Button, Container, Link, Switch } from '@mui/material';
 import React, { useContext, useState } from 'react';
 import ProtsBox from './ProtsBox';
 import NewTrigger from './NewTrigger';
@@ -28,7 +28,9 @@ const RightSideBar: React.FC = (): React.ReactElement => {
         setSavedButtons,
         socket,
         hitCalculator,
-        setHitCalculator
+        setHitCalculator,
+        links,
+        setLinks
     } = useContext(SkyContext);
 
     const [newTriggerDialogOpen, setNewTriggerDialogOpen] = useState<boolean>(false);
@@ -104,6 +106,36 @@ const RightSideBar: React.FC = (): React.ReactElement => {
                 inputProps={{ 'aria-label': 'controlled' }}
             />
 
+            <br />
+
+            Show links:
+            <Switch
+                checked={links}
+                onChange={(e) => {
+                    setLinks(e.target.checked);
+                }}
+                inputProps={{ 'aria-label': 'controlled' }}
+            />
+
+            {
+                links ?
+                    <Container>
+                        <Link
+                            href="https://jeskko.pupunen.net/gmap2/"
+                            target="blank">
+                            world map</Link><br />
+                        <Link
+                            href="https://tnsp.org/maps/"
+                            target="blank">TNSP</Link><br />
+                        <Link
+                            href="https://taikajuoma.ovh/wiki/Main_Page"
+                            target="blank">batwiki</Link><br />
+                        <Link
+                            href="https://www.bat.org"
+                            target="blank">bat.org</Link>
+                    </Container> : <></>
+            }
+
             {
                 showSettings ?
                     <Container>
@@ -143,6 +175,7 @@ const RightSideBar: React.FC = (): React.ReactElement => {
                             sx={{ margin: 1, background: "navy" }}
                             onClick={() => { setNewButtonDialogOpen(true) }}
                         >Create new button</Button><br />
+
                         <EditTrigger
                             editTriggerDialogOpen={editTriggerDialogOpen}
                             setEditTriggerDialogOpen={setEditTriggerDialogOpen}
@@ -150,7 +183,12 @@ const RightSideBar: React.FC = (): React.ReactElement => {
                             setTriggers={setTriggers}
                         />
 
-                        <NewTrigger />
+                        <NewTrigger
+                            newTriggerDialogOpen={newTriggerDialogOpen}
+                            setNewTriggerDialogOpen={setNewTriggerDialogOpen}
+                            triggers={triggers}
+                            setTriggers={setTriggers}
+                        />
 
                         <EditButton
                             editButtonDialogOpen={editButtonDialogOpen}
@@ -185,7 +223,10 @@ const RightSideBar: React.FC = (): React.ReactElement => {
                                         <Button
                                             variant="contained"
                                             size="small"
-                                            sx={{ margin: 1 }}
+                                            sx={{
+                                                margin: 1,
+                                                background: 'magenta'
+                                            }}
                                             value={b.action}
                                             onClick={() => {
                                                 sendCommand(b.action);

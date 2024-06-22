@@ -112,7 +112,7 @@ const App: React.FC = (): React.ReactElement => {
       hitCalculator.show &&
       hitCalculator.characterStats.length > 0 &&
       messages.length > 0 &&
-      messages[messages.length - 1].includes('********************** Round')
+      messages[messages.length - 1].includes('*********** Round')
     ) {
       const lines = messages[messages.length - 1].split('\n').map((line: string) => line.trim());
       //console.log('lines: ', lines);
@@ -160,79 +160,19 @@ const App: React.FC = (): React.ReactElement => {
         ...prevCalculator,
         characterStats: updatedStats,
       }));
-    }
+    } /*else {
+      
+      console.log('not b round: ', messages[messages.length - 1]);
+      console.log(
+        hitCalculator.show,
+        hitCalculator.characterStats.length > 0,
+        messages.length > 0,
+        messages[messages.length - 1].includes('********************** Round')
+      );
+      
+    }*/
+    //console.log('messages.length ', messages.length);
   }, [messages, hitCalculator.show]);
-  /*
-  // Hit calculator
-  useEffect(() => {
-    if (
-      hitCalculator.show &&
-      hitCalculator.characterStats.length > 0 &&
-      messages.length > 0 &&
-      messages[messages.length - 1].includes('********************** Round')
-    ) {
-
-      const lines = messages[messages.length - 1].split('\n');
-
-      const updatedStats = hitCalculator.characterStats.map((char: CharacterStats) => {
-        const hits: any = { ...char.hits };
-
-        //console.log('lines: ', lines);
-
-        lines.forEach((line: string) => {
-
-          //console.log('analyzin: ', line);
-          let hitFound: boolean = false;
-          line = line.trim();
-
-          if (line.startsWith(`${char.name} `) ||
-            line.startsWith(`Grinning diabolically `)) {
-            //console.log('hits');
-            hitMessages.forEach((hitMsg) => {
-              const regex = new RegExp(`\\b${char.name}\\s${hitMsg.msg}\\b`);
-              const critRegex = new RegExp(`\\bGrinning diabolically\\s${char.name}\\s${hitMsg.msg}\\b`, 'i');
-              if (regex.test(line) && !hitFound) {
-                const hitKey = `(${hitMsg.index}) ${hitMsg.msg}`;
-                hits[hitKey] = (hits[hitKey] || 0) + 1;
-                hitFound = true;
-                //console.log('hit: ', hitKey);
-              } else if (critRegex.test(line) && !hitFound) {
-                const hitKey = `(${hitMsg.index}) ${hitMsg.msg}`;
-                hits[hitKey] = (hits[hitKey] || 0) + 1;
-                hitFound = true;
-                //console.log('hit2: ', hitKey);
-              }
-            });
-            // votk rapier specials
-          } else if (line.startsWith(`Smiling coldly, you stick`) ||
-            line.startsWith(`With a sudden move, you`) ||
-            line.startsWith(`You skillfully pierce`) ||
-            line.startsWith(`You skillfully puncture`) ||
-            line.startsWith(`You skillfully sink`) ||
-            line.startsWith(`You quickly engage and`) ||
-            line.startsWith(`You perform an inhumanly low`) ||
-            line.startsWith(`Scornfully, you swing the`)) {
-            const hitKey = `(S) rapier special`;
-            hits[hitKey] = (hits[hitKey] || 0) + 1;
-            hitFound = true;
-            //console.log('special: ', hitKey);
-
-          } else {
-            //console.log('line not calculated: ', line);
-          }
-
-        });
-
-        return { ...char, hits };
-      });
-      //      console.log('updated: ', updatedStats);
-      setHitCalculator((prevCalculator: HitCalculator) => ({
-        ...prevCalculator,
-        characterStats: updatedStats,
-      }));
-    }
-  }, [messages, hitCalculator.show]);
-  */
 
   // when component loads
   useEffect(() => {
