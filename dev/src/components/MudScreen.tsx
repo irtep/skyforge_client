@@ -1,5 +1,5 @@
 import { Button, Container, Input, Typography } from '@mui/material';
-import React, { RefObject, useContext, useEffect, useRef } from 'react';
+import React, { RefObject, useContext, useEffect, useRef, useState } from 'react';
 import '../css/colors.css';
 import DOMPurify from 'dompurify';
 import { SkyContext } from '../context/skyContext';
@@ -8,8 +8,9 @@ interface MudScreenProps {
     messagesContainerRef: RefObject<HTMLDivElement>;
 };
 
-const MudScreen: React.FC<MudScreenProps> = ({ messagesContainerRef}) => {
-
+const MudScreen: React.FC<MudScreenProps> = ({ messagesContainerRef }) => {
+    const [history, setHistory] = useState<string[]>([]);
+    const [historyIndex, setHistoryIndex] = useState<number>(-1);
     const {
         messages,
         setCommand,
@@ -24,6 +25,10 @@ const MudScreen: React.FC<MudScreenProps> = ({ messagesContainerRef}) => {
         if (socket) {
             socket.emit('command', command);
 
+            // Save the command to the history
+            setHistory((prevHistory: string[]) => [...prevHistory, command]);
+            setHistoryIndex(-1); // Reset history index after sending command
+
             if (inputRef.current) {
                 inputRef.current.select();
             }
@@ -35,6 +40,24 @@ const MudScreen: React.FC<MudScreenProps> = ({ messagesContainerRef}) => {
         if (e.key === 'Enter') {
             sendCommand();
         }
+        else if (e.key === 'ArrowUp') {
+            // Navigate to the previous command in history
+            if (history.length > 0 && historyIndex < history.length - 1) {
+                const newIndex = historyIndex + 1;
+                setHistoryIndex(newIndex);
+                setCommand(history[history.length - 1 - newIndex]);
+            }
+        } else if (e.key === 'ArrowDown') {
+            // Navigate to the next command in history
+            if (historyIndex > 0) {
+                const newIndex = historyIndex - 1;
+                setHistoryIndex(newIndex);
+                setCommand(history[history.length - 1 - newIndex]);
+            } else if (historyIndex === 0) {
+                setHistoryIndex(-1);
+                setCommand('');
+            }
+        }
     };
 
     useEffect(() => {
@@ -42,6 +65,14 @@ const MudScreen: React.FC<MudScreenProps> = ({ messagesContainerRef}) => {
             inputRef.current.focus();
         }
     }, []);
+
+  // Truncate command history if length exceeds 10
+  useEffect(() => {
+    if (history.length > 10) {
+      const shortenedMessages = messages.slice(-10);
+      setHistory(shortenedMessages);
+    }
+  }, [history]);
 
     return (
         <Container>
@@ -73,14 +104,16 @@ const MudScreen: React.FC<MudScreenProps> = ({ messagesContainerRef}) => {
                 onChange={(e) => setCommand(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Enter command"
-                sx={{ 
+                sx={{
                     background: 'lightGreen',
                     padding: 1
                 }}
             />
+
             <Button onClick={sendCommand}>Send</Button>
-            <Typography sx={{color: "rgb(150,150,150)"}}>
-                version beta 0.0.2
+
+            <Typography sx={{ color: "rgb(150,150,150)" }}>
+                version beta 0.0.3
             </Typography>
         </Container>
     );

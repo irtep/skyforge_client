@@ -11,7 +11,15 @@ const HitStatistics: React.FC = () => {
     } = useContext(SkyContext);
 
     return (
-        <>
+        <Container sx={{
+            background: "linear-gradient(darkRed, darkRed, red)", 
+            padding: 1,
+            borderRadius: 5,
+            margin: 1
+            }}>
+
+            <Typography sx={{color: "orange"}}>hits:</Typography>
+            
             {hitCalculator.characterStats.map((char: CharacterStats) => {
                 const hits = char.hits || {};
                 return (
@@ -66,7 +74,7 @@ const HitStatistics: React.FC = () => {
                     </Container>
                 );
             })}
-        </>
+        </Container>
     );
 };
 

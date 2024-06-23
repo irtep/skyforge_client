@@ -1,6 +1,7 @@
 import React, { createContext, useState } from 'react';
 import { Socket } from 'socket.io-client';
 import { ButtonItem, Trigger, Widths } from '../App';
+import { Prot } from '../data/prots';
 
 export const SkyContext: React.Context<any> = createContext(undefined);
 
@@ -45,6 +46,8 @@ export const SkyProvider: React.FC<Props> = (props: Props): React.ReactElement =
             }
         ]
     });
+    const [activeProts, setActiveProts] = useState<Prot[]>([]);
+    const [protStopMsg, setProtStopMsg] = useState<string>('');
     
     return (
         <SkyContext.Provider value={{
@@ -61,7 +64,9 @@ export const SkyProvider: React.FC<Props> = (props: Props): React.ReactElement =
             savedButtons, setSavedButtons,
             widths, setWidths,
             hitCalculator, setHitCalculator,
-            links, setLinks
+            links, setLinks,
+            activeProts, setActiveProts,
+            protStopMsg, setProtStopMsg
         }}>
             {props.children}
         </SkyContext.Provider>

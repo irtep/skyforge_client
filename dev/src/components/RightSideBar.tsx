@@ -67,17 +67,24 @@ const RightSideBar: React.FC = (): React.ReactElement => {
             />
 
             <br />
-{/*
+
             Show prots box:
             <Switch
                 checked={showProts}
+                sx={{
+                    '& .Mui-checked': {
+                        color: 'cyan', // Change the color here
+                    },
+                    '& .Mui-checked + .MuiSwitch-track': {
+                        backgroundColor: 'darkBlue', // Change the track color here
+                    },
+                }}
                 onChange={(e) => {
                     setShowProts(e.target.checked);
                 }}
                 inputProps={{ 'aria-label': 'controlled' }}
             />
             <br />
-*/}
 
             Show buttons:
             <Switch

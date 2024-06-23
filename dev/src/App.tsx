@@ -4,11 +4,18 @@ import MudScreen from './components/MudScreen';
 import { Box, Grid } from '@mui/material';
 import RightSideBar from './components/RightSideBar';
 import { SkyContext } from './context/skyContext';
-import { hitMessages, HitMsg, votkRapierSpecials } from './data/hitMessages';
+import { hitMessages, votkRapierSpecials } from './data/hitMessages';
+import { Prot, prots } from './data/prots';
 
 interface MessageResponse {
   type: string;
   data: string;
+}
+
+export interface ActiveProts {
+  prot: Prot;
+  msg: string;
+  target: string;
 }
 
 export interface Trigger {
@@ -52,7 +59,10 @@ const App: React.FC = (): React.ReactElement => {
     widths,
     showProts,
     hitCalculator,
-    setHitCalculator
+    setHitCalculator,
+    activeProts,
+    setActiveProts,
+    setProtStopMsg
   } = useContext(SkyContext);
 
   const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -73,6 +83,18 @@ const App: React.FC = (): React.ReactElement => {
       container.scrollTop = container.scrollHeight;
     }
   };
+
+  const escapeRegExp = (string: string): string => {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+  }
+
+  const extractTextBetweenStrings = (input: string, start: string, stop: string): string | null => {
+    const escapedStart = escapeRegExp(start);
+    const escapedStop = escapeRegExp(stop);
+    const regex = new RegExp(`${escapedStart}(.*?)${escapedStop}`);
+    const match = input.match(regex);
+    return match ? match[1].trim() : null;
+  }
 
   useEffect(() => {
     if (!socket) {
@@ -95,6 +117,62 @@ const App: React.FC = (): React.ReactElement => {
       setMessages(shortenedMessages);
     }
   }, [messages]);
+
+  // incoming prots
+  useEffect(() => {
+    if (prots.length > 0) {
+      prots.forEach((prot: Prot) => {
+        if (messages.length > 0 && messages[messages.length - 1].includes(prot.starts) && socket) {
+          let msg: string = '';
+          let possibleTarget: string = ''; 
+          const lastMessage = messages[messages.length - 1];
+
+          if (prot.target && prot.targetStartIndicator) {
+            const match = extractTextBetweenStrings(lastMessage, prot.targetStartIndicator[0], prot.targetStartIndicator[1])
+
+            console.log('match ', match);
+            if (match && match[1]) {
+              msg = `${prot.name} ("${match}")`;
+              possibleTarget = match;
+            } else {
+              msg = prot.name;
+            }
+          } else {
+            msg = prot.name;
+          }
+
+          setActiveProts([
+            ...activeProts,
+            { prot: prot, msg: msg, target: possibleTarget }
+          ]);
+        }
+      });
+    }
+  }, [messages, setActiveProts, socket]);
+
+  // ending prots
+  useEffect( () => {
+    if (activeProts.length > 0) {
+      const lastMessage = messages[messages.length - 1];
+      activeProts.forEach((prot: ActiveProts) => {
+        if (messages.length > 0 && lastMessage.includes(prot.prot.stops) && socket) {
+          if (prot.target) {
+            console.log('found with target');
+            setProtStopMsg(`${prot.prot.name} of ${prot.target} expired!`);
+            setTimeout( () => { setProtStopMsg('') }, 4000);
+            console.log(': ', prot.target, prot.prot.stops);
+            setActiveProts(activeProts.filter( (aPro: ActiveProts) => !(aPro.prot.stops === prot.prot.stops && aPro.target === prot.target)));          
+          
+          } else {
+            //console.log('found without target');
+            setProtStopMsg(`${prot.prot.name} expired!`);
+            setTimeout( () => { setProtStopMsg('') }, 4000);
+            setActiveProts(activeProts.filter( (aPro: ActiveProts) => aPro.prot.stops !== prot.prot.stops));
+          }
+        }
+      });
+    }
+  }, [messages, setActiveProts, socket]);
 
   // Handle triggers
   useEffect(() => {
@@ -119,12 +197,12 @@ const App: React.FC = (): React.ReactElement => {
       //console.log('lines: ', lines);
       const updatedStats = hitCalculator.characterStats.map((char: CharacterStats) => {
         const hits: any = { ...char.hits };
-        
+
         lines.forEach((line: string) => {
           //console.log('line: ', line);
           let hitFound: boolean = false;
           if (
-            line.startsWith(`${char.name} `) || 
+            line.startsWith(`${char.name} `) ||
             line.startsWith(`Grinning diabolically `
             )) {
             //console.log('starting with You: ', line);
@@ -196,6 +274,7 @@ const App: React.FC = (): React.ReactElement => {
   }, []);
 
   // Show party prots and effects
+  /*
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
 
@@ -211,11 +290,12 @@ const App: React.FC = (): React.ReactElement => {
       }
     };
   }, [showProts]);
-  /*   // for debug
-      useEffect(() => {
-         console.log('hCals', hitCalculator);
-      }, [hitCalculator])
   */
+  // for debug
+  useEffect(() => {
+    console.log('debug', activeProts);
+  }, [activeProts])
+
 
   useEffect(scrollToBottom, [messages]);
 
