@@ -47,6 +47,12 @@ export const prots: Prot[] = [
         starts: 'The pain increases as your body starts to push out organs and limbs that',
         stops: 'The extra organs retract back into your body',
         target: false
+    },
+    {
+        name: 'command blade',
+        starts: 'Pushing your mind into the blade, you create a mental connection to it',
+        stops: 'The extra organs retract back into your body',
+        target: false
     }
 ];
 
@@ -68,5 +74,11 @@ Night's chanting appears to do absolutely nothing.
 <779/602/268> set: spr exp: 63308 wimpy: off parry 0>
 Night utters the magic words 'harnaxan temnahecne'
 You feel your will getting stronger.
+
+
+wear frame;put all weapon in frame;get all armour from frame;eqset wear combat;get rapier from frame;wield rapier;get dragon shield from frame;wield dragon shield;put noeq in frame;get all nullium ring from frame;get all nullium from frame'.
+<779/94/199> set: spr exp: 264485 wimpy: off parry 51>
+Night (party): medi jne
+Night grabs a piece of wood from the pile and tosses it into the f
 
 */
