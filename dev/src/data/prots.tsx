@@ -51,7 +51,7 @@ export const prots: Prot[] = [
     {
         name: 'command blade',
         starts: 'Pushing your mind into the blade, you create a mental connection to it',
-        stops: 'The extra organs retract back into your body',
+        stops: 'The connection between you and your blade fades',
         target: false
     }
 ];
@@ -63,6 +63,10 @@ export const prots: Prot[] = [
  * Night utters the magic words 'Corporem Connecticut Corporee'
 You feel somehow linked to Night!
 
+
+The ship cruises northeast along the tradelane.
+The connection between you and your blade fades away.
+The ship cruises northeast along the tradelane.
 
 Night starts concentrating on a new spell.
 Night (report): Unstun -> caped
