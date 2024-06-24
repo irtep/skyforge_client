@@ -53,6 +53,90 @@ export const prots: Prot[] = [
         starts: 'Pushing your mind into the blade, you create a mental connection to it',
         stops: 'The connection between you and your blade fades',
         target: false
+    },
+    {
+        name: 'war ensemble',
+        starts: 'You feel full of battle rage! Victory is CERTAIN!',
+        stops: 'The effect of war ensemble wears off.',
+        target: false
+    },
+    {
+        name: 'AOA',
+        starts: 'You see a crystal clear shield fade into',
+        stops: 'Your crystal clear shield fades',
+        target: false
+    },
+    {
+        name: 'iron will',
+        starts: 'You feel protected from being stunned',
+        stops: 'You feel no longer protected from being stunned',
+        target: false
+    },
+    {
+        name: 'see invis',
+        starts: 'You feel you can see more than ever',
+        stops: 'Your vision is less sensitive now',
+        target: false
+    },
+    {
+        name: 'floating',
+        starts: 'You feel light, and rise into the',
+        stops: 'You slowly descend until your feet',
+        target: false
+    },
+    {
+        name: 'iron will',
+        starts: 'You feel protected from being stunned',
+        stops: 'You feel no longer protected from being stunned',
+        target: false
+    },
+    {
+        name: 'folk prot',
+        starts: 'You feel protected from',
+        stops: 'protection fades',
+        target: false
+    },/*
+    {  // possible conflict with folk prot so disabled, gotta think
+        name: 'minor prot',
+        starts: 'You feel slightly protected',
+        stops: 'The minor protection fades away',
+        target: false
+    },*/
+    {
+        name: 'ceremony',
+        starts: 'You perform the ceremony',
+        stops: 'You have an unusual feeling as you',
+        target: false
+    },
+    {
+        name: 'Melody',
+        starts: 'You embrace yourself with your melody',
+        stops: 'The embracing melody subsides',
+        target: false
+    },    
+    {
+        name: 'Melody',
+        starts: 'You into an embracing melody',
+        stops: 'The embracing melody subsides',
+        target: false
+    },    
+    {
+        name: 'unstun',
+        starts: 'chanting appears to do absolutely nothing',
+        stops: `It doesn't hurt as much as it normally`,
+        target: false
+    },    
+    {
+        name: 'unpain',
+        starts: 'You feel your will getting stronger',
+        stops: 'You feel your will returning',
+        target: false
+    },        
+    {
+        name: 'AOH',
+        starts: 'You feel burning hatred',
+        stops: 'You feel your anger and hate',
+        target: false
     }
 ];
 
@@ -60,29 +144,9 @@ export const prots: Prot[] = [
 //The pain increases as your body starts to push out organs and limbs that
 //The extra organs retract back into your body
 /**
- * Night utters the magic words 'Corporem Connecticut Corporee'
-You feel somehow linked to Night!
 
 
-The ship cruises northeast along the tradelane.
-The connection between you and your blade fades away.
-The ship cruises northeast along the tradelane.
+You feel odd. Not stronger, but...
 
-Night starts concentrating on a new spell.
-Night (report): Unstun -> caped
-Night (report): Wis set
-Night utters the magic words 'Paxus'
-Night's chanting appears to do absolutely nothing.
-
-
-<779/602/268> set: spr exp: 63308 wimpy: off parry 0>
-Night utters the magic words 'harnaxan temnahecne'
-You feel your will getting stronger.
-
-
-wear frame;put all weapon in frame;get all armour from frame;eqset wear combat;get rapier from frame;wield rapier;get dragon shield from frame;wield dragon shield;put noeq in frame;get all nullium ring from frame;get all nullium from frame'.
-<779/94/199> set: spr exp: 264485 wimpy: off parry 51>
-Night (party): medi jne
-Night grabs a piece of wood from the pile and tosses it into the f
 
 */
