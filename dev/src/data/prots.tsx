@@ -137,6 +137,12 @@ export const prots: Prot[] = [
         starts: 'You feel burning hatred',
         stops: 'You feel your anger and hate',
         target: false
+    },        
+    {
+        name: 'earthskin',
+        starts: 'You feel your skin harden',
+        stops: 'Your skin returns to its original texture',
+        target: false
     }
 ];
 
@@ -145,8 +151,114 @@ export const prots: Prot[] = [
 //The extra organs retract back into your body
 /**
 
+You feel your skin harden.
+Your skin returns to its original texture.
+
 
 You feel odd. Not stronger, but...
 
+line:  ,-----------------------------------------------------------------------------.
+App.tsx:202 line:  | 1.1  Caped          fol <span class="green"> 856<span class="normal">( 856) <span class="bold yellow"> 466<span class="normal">( 938) <span class="cyan">312<span class="normal">(315) |  79 |        99971 |
+App.tsx:202 line:  | 1.2  Night          ldr <span class="cyan">1056<span class="normal">(1246) <span class="green"> 634<span class="normal">( 634) <span class="cyan">309<span class="normal">(400) | 100 |       116973 |
+App.tsx:202 line:  `-----------------------------------------------------------------------------'
+App.tsx:202 line:  | Night's soul        fol <span class="cyan">VERY high <span class="normal"> <span class="green">   full   <span class="normal"> <span class="green">  full  <span class="normal"> | ??? |              |
+App.tsx:202 line:  `-----------------------------------------------------------------------------'
+App.tsx:202 line:  The guard is in bad shape (35%).
+App.tsx:202 line:  <span class="bold">You are casting 'hemorrhage'.<span class="normal">
+App.tsx:202 line:  The guard's powerful bash sends Night sprawling to the floor.<span class="normal">
+App.tsx:202 line:  You are done with the chant.<span class="normal">
+App.tsx:208 starting with You:  You are done with the chant.<span class="normal">
+App.tsx:202 line:  You clap your hands and whisper 'yugzhrr'<span class="normal">
+App.tsx:208 starting with You:  You clap your hands and whisper 'yugzhrr'<span class="normal">
+App.tsx:202 line:  The
+App.tsx:234 --------
+App.tsx:197 lines:  Array(20)
+App.tsx:202 line:  <span class="bold white">********************** Round 5 **********************<span class="normal">
+App.tsx:202 line:  Night's soul companion misses.
+2App.tsx:202 line:  The guard misses.
+App.tsx:202 line:  Night dodges.
+App.tsx:202 line:  Night horribly shreds The guard.
+App.tsx:202 line:  The guard dodges.
+App.tsx:202 line:  You pierce The guard.
+App.tsx:208 starting with You:  You pierce The guard.
+App.tsx:215 hit:  (3) pierce
+App.tsx:202 line:  You puncture The guard.
+App.tsx:208 starting with You:  You puncture The guard.
+App.tsx:215 hit:  (4) puncture
+App.tsx:202 line:  ,-----------------------------------------------------------------------------.
+App.tsx:202 line:  | 1.1  Caped          fol <span class="green"> 856<span class="normal">( 856) <span class="bold yellow"> 419<span class="normal">( 938) <span class="cyan">312<span class="normal">(315) |  79 |        99971 |
+App.tsx:202 line:  | 1.2  Night          ldr <span class="cyan">1034<span class="normal">(1246) <span class="green"> 634<span class="normal">( 634) <span class="cyan">309<span class="normal">(400) | 100 |       116973 |
+App.tsx:202 line:  `-----------------------------------------------------------------------------'
+App.tsx:202 line:  | Night's soul        fol <span class="cyan">VERY high <span class="normal"> <span class="green">   full   <span class="normal"> <span class="green">  full  <span class="normal"> | ??? |              |
+App.tsx:202 line:  `-----------------------------------------------------------------------------'
+App.tsx:202 line:  The guard is in very bad shape (10%).
+App.tsx:202 line:  <span class="bold">You are casting 'hemorrhage'.<span class="normal">
+App.tsx:202 line:  <span class="bold green">You skillfully cast the spell with greater haste.<span class="normal">
+App.tsx:202 line:  Hemorrhage: #
+App.tsx:202 line:  
+App.tsx:234 --------
+App.tsx:197 lines:  (19) ['<span class="bold white">********************** Round 6 **********************<span class="normal">', 'Night dodges.', 'The guard misses.', 'The guard misses.', 'Night heavily shoves The guard with shield.', 'You puncture The guard.', 'You feel the chaos pulse inside you!', "Night utters a prayer for the fallen foe 'In nomine Faerwon. Amen.'", 'Your ring startles you as it briefly flashes <span class="green">green<span class="normal">.', 'Your ring startles you as it briefly flashes <span class="red">red<span class="normal">.', 'Your ring startles you as it briefly flashes <span class="yellow">yellow<span class="normal">.', 'The guard suddenly stops breathing and jerks a cou…es violently, then falls to the ground, lifeless.', 'The guard is DEAD, R.I.P.', 'familiar consume corpse', 'You sense the presence of hidden magical resources in you.', 'hp: <span class="cyan">856<span class="normal"> (8…0 [<span class="green">+997<span class="normal">]', 'You are done with the chant.<span class="normal">', 'Cast hemorrhage at what?<span class="normal">', 'hp: <span class="cyan">856<span class="normal"> (8…ss="normal">] cash: 660 [<span class="normal">] e']
+App.tsx:202 line:  <span class="bold white">********************** Round 6 **********************<span class="normal">
+App.tsx:202 line:  Night dodges.
+2App.tsx:202 line:  The guard misses.
+App.tsx:202 line:  Night heavily shoves The guard with shield.
+App.tsx:202 line:  You puncture The guard.
+App.tsx:208 starting with You:  You puncture The guard.
+App.tsx:215 hit:  (4) puncture
+App.tsx:202 line:  You feel the chaos pulse inside you!
+App.tsx:208 starting with You:  You feel the chaos pulse inside you!
+App.tsx:202 line:  Night utters a prayer for the fallen foe 'In nomine Faerwon. Amen.'
+App.tsx:202 line:  Your ring startles you as it briefly flashes <span class="green">green<span class="normal">.
+App.tsx:202 line:  Your ring startles you as it briefly flashes <span class="red">red<span class="normal">.
+App.tsx:202 line:  Your ring startles you as it briefly flashes <span class="yellow">yellow<span class="normal">.
+App.tsx:202 line:  The guard suddenly stops breathing and jerks a couple of times violently, then falls to the ground, lifeless.
+App.tsx:202 line:  The guard is DEAD, R.I.P.
+App.tsx:202 line:  familiar consume corpse
+App.tsx:202 line:  You sense the presence of hidden magical resources in you.
+App.tsx:208 starting with You:  You sense the presence of hidden magical resources in you.
+App.tsx:202 line:  hp: <span class="cyan">856<span class="normal"> (859) [<span class="normal">] sp: <span class="bold yellow">419<span class="normal"> (941) [<span class="normal">] ep: <span class="cyan">312<span class="normal"> (317) [<span class="normal">] cash: 660 [<span class="normal">] exp: 205950 [<span class="green">+997<span class="normal">]
+App.tsx:202 line:  You are done with the chant.<span class="normal">
+App.tsx:208 starting with You:  You are done with the chant.<span class="normal">
+App.tsx:202 line:  Cast hemorrhage at what?<span class="normal">
 
+
+
+15
+: 
+"The guard is in bad shape (35%)."
+16
+: 
+"<span class=\"bold\">You are casting 'hemorrhage'.<span class=\"normal\">"
+17
+: 
+"The guard's powerful bash sends Night sprawling to the floor.<span class=\"normal\">"
+18
+: 
+"You are done with the chant.<span class=\"normal\">"
+19
+: 
+"You clap your hands and whisper 'yugzhrr'<span class=\"normal\">"
+20
+: 
+"The"
+
+
+15
+: 
+"The guard is in bad shape (35%)."
+16
+: 
+"<span class=\"bold\">You are casting 'hemorrhage'.<span class=\"normal\">"
+17
+: 
+"The guard's powerful bash sends Night sprawling to the floor.<span class=\"normal\">"
+18
+: 
+"You are done with the chant.<span class=\"normal\">"
+19
+: 
+"You clap your hands and whisper 'yugzhrr'<span class=\"normal\">"
+20
+: 
+"The"
 */

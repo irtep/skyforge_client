@@ -130,7 +130,7 @@ const App: React.FC = (): React.ReactElement => {
           if (prot.target && prot.targetStartIndicator) {
             const match = extractTextBetweenStrings(lastMessage, prot.targetStartIndicator[0], prot.targetStartIndicator[1])
 
-            console.log('match ', match);
+            //console.log('match ', match);
             if (match && match[1]) {
               msg = `${prot.name} ("${match}")`;
               possibleTarget = match;
@@ -191,7 +191,7 @@ const App: React.FC = (): React.ReactElement => {
       hitCalculator.show &&
       hitCalculator.characterStats.length > 0 &&
       messages.length > 0 &&
-      messages[messages.length - 1].includes('*********** Round')
+      messages[messages.length - 1].includes('******** Round')
     ) {
       const lines = messages[messages.length - 1].split('\n').map((line: string) => line.trim());
       //console.log('lines: ', lines);
@@ -231,7 +231,7 @@ const App: React.FC = (): React.ReactElement => {
             //console.log('hit', hitKey);
           }
         });
-        //console.log('--------');
+        console.log('--------');
         return { ...char, hits };
       });
 
@@ -292,10 +292,12 @@ const App: React.FC = (): React.ReactElement => {
   }, [showProts]);
   */
   // for debug
+
+  /*
   useEffect(() => {
     console.log('debug', activeProts);
   }, [activeProts])
-
+*/
 
   useEffect(scrollToBottom, [messages]);
 
