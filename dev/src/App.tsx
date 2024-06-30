@@ -98,12 +98,13 @@ const App: React.FC = (): React.ReactElement => {
 
   useEffect(() => {
     if (!socket) {
-      console.log('connecting: ');
+      //console.log('connecting: ');
       const newSocket = io('http://localhost:3333');  // Connect to the server
       setSocket(newSocket);
 
       // input from batmud comes here
       newSocket.on('message', (response: MessageResponse) => {
+        //console.log('response: ', response);
         setMessages((prevMessages: string[]) => [...prevMessages, response.data]);
         scrollToBottom();
       });
@@ -112,6 +113,7 @@ const App: React.FC = (): React.ReactElement => {
 
   // Truncate messages if length exceeds 40
   useEffect(() => {
+    //console.log('messages: ', messages);
     if (messages.length > 40) {
       const shortenedMessages = messages.slice(-30);
       setMessages(shortenedMessages);

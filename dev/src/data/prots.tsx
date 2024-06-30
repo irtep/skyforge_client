@@ -143,6 +143,18 @@ export const prots: Prot[] = [
         starts: 'You feel your skin harden',
         stops: 'Your skin returns to its original texture',
         target: false
+    },        
+    {
+        name: 'the shadow',
+        starts: 'You feel the shadows embrace you',
+        stops: 'The shadows clear off',
+        target: false
+    },        
+    {
+        name: 'familiar darkness',
+        starts: 'Your Shadow Familiar starts moving around you,',
+        stops: 'Your Shadow Familiar no longer maintains the Vanquish',
+        target: false
     }
 ];
 
@@ -151,114 +163,87 @@ export const prots: Prot[] = [
 //The extra organs retract back into your body
 /**
 
-You feel your skin harden.
-Your skin returns to its original texture.
+UI:
+look at me
+Caped Pete the Lich Catfolk (undead).
+He is in excellent shape.
+His fists are surrounded by infernal black flames!
+	Caped's equipment:
+Rig: Bamboo equipment frame |> Rixx-Tec IV <|  [68% full]
+Ring: a golden ring
+Head: white helmet of the defender labeled as fr::com::SF 
+Amulet: a golden medallion with five onyxes labeled as fr::com 
+Bracelet: an alabaster bracelet dripping with salt water 
+Wielded in right hand: a round combat shield with a metal spike 
+Finger: Ring of the Participant [**]
+Finger: a tiny burning ring  
+Belt: Sword-belt of resistance labeled as fr::com::SF
+Both legs and upper body: crystallic amazon battlesuit labeled as SF::fr::aCom::com 
+Both feet: the Shoes that were lost that were found, but could be lost again possibly labeled as fr::aCom::com
+On boots: Buckle of the Wanderers
+Surrounding: a deep black large shadow familiar
+Tattoo: a tattoo of the symbol of chaos
+Around the neck: the crystal pendant of the Navigators
+Journal: a small black diary with a symbol of darkness
+<812/898/295> set: combat exp: 16294 wimpy: off parry 0>
+
+backend:
+raw data:  look at me
+Caped Pete the Lich Catfolk (undead).
+He is in excellent shape.
+His fists are surrounded by infernal black flames!
+        Caped's equipment:
+Rig: Bamboo equipment frame |> Rixx-Tec IV <| <red glow> [68% full]
+Ring: a golden ring
+Head: white helmet of the defender labeled as fr::com::SF <red glow>
+Amulet: a golden medallion with five onyxes labeled as fr::com <red glow>
+Bracelet: an alabaster bracelet dripping with salt water <red glow>
+Wielded in right hand: a round combat shield with a metal spike <red glow>
+Finger: Ring of the Participant [**]
+Finger: a tiny burning ring <christmas glow> <red glow>
+Belt: Sword-belt of resistance labeled as fr::com::SF
+Both legs and upper body: crystallic amazon battlesuit labeled as SF::fr::aCom::com <red glow>
+Both feet: the Shoes that were lost that were found, but could be lost again possibly labeled as fr::aCom::com
+On boots: Buckle of the Wanderers
+Surrounding: a deep black large shadow familiar
+Tattoo: a tattoo of the symbol of chaos
+Around the neck: the crystal pendant of the Navigators
+Journal: a small black diary with a symbol of darkness
+<812/898/295> set: combat exp: 16294 wimpy: off parry 0>ÿù
+converted:  look at me
+Caped Pete the Lich Catfolk (undead).
+He is in excellent shape.
+His fists are surrounded by infernal black flames!
+        Caped's equipment:
+Rig: <span class="bold magenta">Bamboo equipment frame |&gt; Rixx-Tec IV &lt;|<span class="normal"><span class="red"> <red glow><span class="normal"> [68% full]<span class="normal">
+Ring: <span class="bold white">a golden ring<span class="normal">
+Head: <span class="bold magenta">white helmet of the defender labeled as fr::com::SF<span class="normal"><span class="red"> <red glow><span class="normal"><span class="normal">
+Amulet: <span class="bold magenta">a golden medallion with five onyxes labeled as fr::com<span class="normal"><span class="red"> <red glow><span class="normal"><span class="normal">
+Bracelet: <span class="bold magenta">an alabaster bracelet dripping with salt water<span class="normal"><span class="red"> <red glow><span class="normal"><span class="normal">
+Wielded in right hand: <span class="bold yellow">a round combat shield with a metal spike<span class="normal"><span class="red"> <red glow><span class="normal"><span class="normal">
+Finger: <span class="bold magenta">Ring of the Participant [**]<span class="normal">
+Finger: <span class="bold magenta"><span class="bold red">a tiny burning ring<span class="normal"> <span class="bold red"><christmas glow><span class="normal"><span class="normal"><span class="red"> <red glow><span class="normal"><span class="normal">
+Belt: <span class="bold magenta">Sword-belt of resistance labeled as fr::com::SF<span class="normal">
+Both legs and upper body: <span class="bold magenta">crystallic amazon battlesuit labeled as SF::fr::aCom::com<span class="normal"><span class="red"> <red glow><span class="normal"><span class="normal">
+Both feet: <span class="bold magenta">the Shoes that were lost that were found, but could be lost again possibly labeled as fr::aCom::com<span class="normal">
+On boots: <span class="bold white">Buckle of the Wanderers<span class="normal">
+Surrounding: <span class="bold white">a deep black large shadow familiar<span class="normal">
+Tattoo: <span class="bold white">a tattoo of the symbol of chaos<span class="normal">
+Around the neck: <span class="bold white">the crystal pendant of the Navigators<span class="normal">
+Journal: <span class="bold white">a small black diary with a symbol of darkness<span class="normal">
+<812/898/295> set: combat exp: 16294 wimpy: off parry 0>
+
+REACT:
+response from server:
+"look at me\r\n
+Caped Pete the Lich Catfolk (undead).\r\n
+He is in excellent shape.\r\n
+His fists are surrounded by infernal black flames!\r\n\t
+Caped's equipment:\r\n
+Rig: <span class=\"bold magenta\">Bamboo equipment frame |&gt; Rixx-Tec IV &lt;|<span class=\"normal\"><span class=\"red\"> <red glow><span class=\"normal\"> [68% full]<span class=\"normal\">\r\n
+Ring: <span class=\"bold white\">a golden ring<span class=\"normal\">\r\nHead: <span class=\"bold magenta\">white helmet of the defender labeled as fr::com::SF<span class=\"normal\"><span class=\"red\"> <red glow><span class=\"normal\"><span class=\"normal\">\r\nAmulet: <span class=\"bold magenta\">a golden medallion with five onyxes labeled as fr::com<span class=\"normal\"><span class=\"red\"> <red glow><span class=\"normal\"><span class=\"normal\">\r\nBracelet: <span class=\"bold magenta\">an alabaster bracelet dripping with salt water<span class=\"normal\"><span class=\"red\"> <red glow><span class=\"normal\"><span class=\"normal\">\r\nWielded in right hand: <span class=\"bold yellow\">a round combat shield with a metal spike<span class=\"normal\"><span class=\"red\"> <red glow><span class=\"normal\"><span class=\"normal\">\r\nFinger: <span class=\"bold magenta\">Ring of the Participant [**]<span class=\"normal\">\r\nFinger: <span class=\"bold magenta\"><span class=\"bold red\">a tiny burning ring<span class=\"normal\"> <span class=\"bold red\"><christmas glow><span class=\"normal\"><span class=\"normal\"><span class=\"red\"> <red glow><span class=\"normal\"><span class=\"normal\">\r\nBelt: <span class=\"bold magenta\">Sword-belt of resistance labeled as fr::com::SF<span class=\"normal\">\r\nBoth legs and upper body: <span class=\"bold magenta\">crystallic amazon battlesuit labeled as SF::fr::aCom::com<span class=\"normal\"><span class=\"red\"> <red glow><span class=\"normal\"><span class=\"normal\">\r\nBoth feet: <span class=\"bold magenta\">the Shoes that were lost that were found, but could be lost again possibly labeled as fr::aCom::com<span class=\"normal\">\r\nOn boots: <span class=\"bold white\">Buckle of the Wanderers<span class=\"normal\">\r\nSurrounding: <span class=\"bold white\">a deep black large shadow familiar<span class=\"normal\">\r\nTattoo: <span class=\"bold white\">a tattoo of the symbol of chaos<span class=\"normal\">\r\nAround the neck: <span class=\"bold white\">the crystal pendant of the Navigators<span class=\"normal\">\r\nJournal: <span class=\"bold white\">a small black diary with a symbol of darkness<span class=\"normal\">\r\n<812/898/295> set: combat exp: 16294 wimpy: off parry 0>"
+in state variable:
+"look at me\r\nCaped Pete the Lich Catfolk (undead).\r\nHe is in excellent shape.\r\nHis fists are surrounded by infernal black flames!\r\n\tCaped's equipment:\r\nRig: <span class=\"bold magenta\">Bamboo equipment frame |&gt; Rixx-Tec IV &lt;|<span class=\"normal\"><span class=\"red\"> <red glow><span class=\"normal\"> [68% full]<span class=\"normal\">\r\nRing: <span class=\"bold white\">a golden ring<span class=\"normal\">\r\nHead: <span class=\"bold magenta\">white helmet of the defender labeled as fr::com::SF<span class=\"normal\"><span class=\"red\"> <red glow><span class=\"normal\"><span class=\"normal\">\r\nAmulet: <span class=\"bold magenta\">a golden medallion with five onyxes labeled as fr::com<span class=\"normal\"><span class=\"red\"> <red glow><span class=\"normal\"><span class=\"normal\">\r\nBracelet: <span class=\"bold magenta\">an alabaster bracelet dripping with salt water<span class=\"normal\"><span class=\"red\"> <red glow><span class=\"normal\"><span class=\"normal\">\r\nWielded in right hand: <span class=\"bold yellow\">a round combat shield with a metal spike<span class=\"normal\"><span class=\"red\"> <red glow><span class=\"normal\"><span class=\"normal\">\r\nFinger: <span class=\"bold magenta\">Ring of the Participant [**]<span class=\"normal\">\r\nFinger: <span class=\"bold magenta\"><span class=\"bold red\">a tiny burning ring<span class=\"normal\"> <span class=\"bold red\"><christmas glow><span class=\"normal\"><span class=\"normal\"><span class=\"red\"> <red glow><span class=\"normal\"><span class=\"normal\">\r\nBelt: <span class=\"bold magenta\">Sword-belt of resistance labeled as fr::com::SF<span class=\"normal\">\r\nBoth legs and upper body: <span class=\"bold magenta\">crystallic amazon battlesuit labeled as SF::fr::aCom::com<span class=\"normal\"><span class=\"red\"> <red glow><span class=\"normal\"><span class=\"normal\">\r\nBoth feet: <span class=\"bold magenta\">the Shoes that were lost that were found, but could be lost again possibly labeled as fr::aCom::com<span class=\"normal\">\r\nOn boots: <span class=\"bold white\">Buckle of the Wanderers<span class=\"normal\">\r\nSurrounding: <span class=\"bold white\">a deep black large shadow familiar<span class=\"normal\">\r\nTattoo: <span class=\"bold white\">a tattoo of the symbol of chaos<span class=\"normal\">\r\nAround the neck: <span class=\"bold white\">the crystal pendant of the Navigators<span class=\"normal\">\r\nJournal: <span class=\"bold white\">a small black diary with a symbol of darkness<span class=\"normal\">\r\n<812/898/295> set: combat exp: 16294 wimpy: off parry 0>"
 
 
-You feel odd. Not stronger, but...
-
-line:  ,-----------------------------------------------------------------------------.
-App.tsx:202 line:  | 1.1  Caped          fol <span class="green"> 856<span class="normal">( 856) <span class="bold yellow"> 466<span class="normal">( 938) <span class="cyan">312<span class="normal">(315) |  79 |        99971 |
-App.tsx:202 line:  | 1.2  Night          ldr <span class="cyan">1056<span class="normal">(1246) <span class="green"> 634<span class="normal">( 634) <span class="cyan">309<span class="normal">(400) | 100 |       116973 |
-App.tsx:202 line:  `-----------------------------------------------------------------------------'
-App.tsx:202 line:  | Night's soul        fol <span class="cyan">VERY high <span class="normal"> <span class="green">   full   <span class="normal"> <span class="green">  full  <span class="normal"> | ??? |              |
-App.tsx:202 line:  `-----------------------------------------------------------------------------'
-App.tsx:202 line:  The guard is in bad shape (35%).
-App.tsx:202 line:  <span class="bold">You are casting 'hemorrhage'.<span class="normal">
-App.tsx:202 line:  The guard's powerful bash sends Night sprawling to the floor.<span class="normal">
-App.tsx:202 line:  You are done with the chant.<span class="normal">
-App.tsx:208 starting with You:  You are done with the chant.<span class="normal">
-App.tsx:202 line:  You clap your hands and whisper 'yugzhrr'<span class="normal">
-App.tsx:208 starting with You:  You clap your hands and whisper 'yugzhrr'<span class="normal">
-App.tsx:202 line:  The
-App.tsx:234 --------
-App.tsx:197 lines:  Array(20)
-App.tsx:202 line:  <span class="bold white">********************** Round 5 **********************<span class="normal">
-App.tsx:202 line:  Night's soul companion misses.
-2App.tsx:202 line:  The guard misses.
-App.tsx:202 line:  Night dodges.
-App.tsx:202 line:  Night horribly shreds The guard.
-App.tsx:202 line:  The guard dodges.
-App.tsx:202 line:  You pierce The guard.
-App.tsx:208 starting with You:  You pierce The guard.
-App.tsx:215 hit:  (3) pierce
-App.tsx:202 line:  You puncture The guard.
-App.tsx:208 starting with You:  You puncture The guard.
-App.tsx:215 hit:  (4) puncture
-App.tsx:202 line:  ,-----------------------------------------------------------------------------.
-App.tsx:202 line:  | 1.1  Caped          fol <span class="green"> 856<span class="normal">( 856) <span class="bold yellow"> 419<span class="normal">( 938) <span class="cyan">312<span class="normal">(315) |  79 |        99971 |
-App.tsx:202 line:  | 1.2  Night          ldr <span class="cyan">1034<span class="normal">(1246) <span class="green"> 634<span class="normal">( 634) <span class="cyan">309<span class="normal">(400) | 100 |       116973 |
-App.tsx:202 line:  `-----------------------------------------------------------------------------'
-App.tsx:202 line:  | Night's soul        fol <span class="cyan">VERY high <span class="normal"> <span class="green">   full   <span class="normal"> <span class="green">  full  <span class="normal"> | ??? |              |
-App.tsx:202 line:  `-----------------------------------------------------------------------------'
-App.tsx:202 line:  The guard is in very bad shape (10%).
-App.tsx:202 line:  <span class="bold">You are casting 'hemorrhage'.<span class="normal">
-App.tsx:202 line:  <span class="bold green">You skillfully cast the spell with greater haste.<span class="normal">
-App.tsx:202 line:  Hemorrhage: #
-App.tsx:202 line:  
-App.tsx:234 --------
-App.tsx:197 lines:  (19) ['<span class="bold white">********************** Round 6 **********************<span class="normal">', 'Night dodges.', 'The guard misses.', 'The guard misses.', 'Night heavily shoves The guard with shield.', 'You puncture The guard.', 'You feel the chaos pulse inside you!', "Night utters a prayer for the fallen foe 'In nomine Faerwon. Amen.'", 'Your ring startles you as it briefly flashes <span class="green">green<span class="normal">.', 'Your ring startles you as it briefly flashes <span class="red">red<span class="normal">.', 'Your ring startles you as it briefly flashes <span class="yellow">yellow<span class="normal">.', 'The guard suddenly stops breathing and jerks a cou…es violently, then falls to the ground, lifeless.', 'The guard is DEAD, R.I.P.', 'familiar consume corpse', 'You sense the presence of hidden magical resources in you.', 'hp: <span class="cyan">856<span class="normal"> (8…0 [<span class="green">+997<span class="normal">]', 'You are done with the chant.<span class="normal">', 'Cast hemorrhage at what?<span class="normal">', 'hp: <span class="cyan">856<span class="normal"> (8…ss="normal">] cash: 660 [<span class="normal">] e']
-App.tsx:202 line:  <span class="bold white">********************** Round 6 **********************<span class="normal">
-App.tsx:202 line:  Night dodges.
-2App.tsx:202 line:  The guard misses.
-App.tsx:202 line:  Night heavily shoves The guard with shield.
-App.tsx:202 line:  You puncture The guard.
-App.tsx:208 starting with You:  You puncture The guard.
-App.tsx:215 hit:  (4) puncture
-App.tsx:202 line:  You feel the chaos pulse inside you!
-App.tsx:208 starting with You:  You feel the chaos pulse inside you!
-App.tsx:202 line:  Night utters a prayer for the fallen foe 'In nomine Faerwon. Amen.'
-App.tsx:202 line:  Your ring startles you as it briefly flashes <span class="green">green<span class="normal">.
-App.tsx:202 line:  Your ring startles you as it briefly flashes <span class="red">red<span class="normal">.
-App.tsx:202 line:  Your ring startles you as it briefly flashes <span class="yellow">yellow<span class="normal">.
-App.tsx:202 line:  The guard suddenly stops breathing and jerks a couple of times violently, then falls to the ground, lifeless.
-App.tsx:202 line:  The guard is DEAD, R.I.P.
-App.tsx:202 line:  familiar consume corpse
-App.tsx:202 line:  You sense the presence of hidden magical resources in you.
-App.tsx:208 starting with You:  You sense the presence of hidden magical resources in you.
-App.tsx:202 line:  hp: <span class="cyan">856<span class="normal"> (859) [<span class="normal">] sp: <span class="bold yellow">419<span class="normal"> (941) [<span class="normal">] ep: <span class="cyan">312<span class="normal"> (317) [<span class="normal">] cash: 660 [<span class="normal">] exp: 205950 [<span class="green">+997<span class="normal">]
-App.tsx:202 line:  You are done with the chant.<span class="normal">
-App.tsx:208 starting with You:  You are done with the chant.<span class="normal">
-App.tsx:202 line:  Cast hemorrhage at what?<span class="normal">
-
-
-
-15
-: 
-"The guard is in bad shape (35%)."
-16
-: 
-"<span class=\"bold\">You are casting 'hemorrhage'.<span class=\"normal\">"
-17
-: 
-"The guard's powerful bash sends Night sprawling to the floor.<span class=\"normal\">"
-18
-: 
-"You are done with the chant.<span class=\"normal\">"
-19
-: 
-"You clap your hands and whisper 'yugzhrr'<span class=\"normal\">"
-20
-: 
-"The"
-
-
-15
-: 
-"The guard is in bad shape (35%)."
-16
-: 
-"<span class=\"bold\">You are casting 'hemorrhage'.<span class=\"normal\">"
-17
-: 
-"The guard's powerful bash sends Night sprawling to the floor.<span class=\"normal\">"
-18
-: 
-"You are done with the chant.<span class=\"normal\">"
-19
-: 
-"You clap your hands and whisper 'yugzhrr'<span class=\"normal\">"
-20
-: 
-"The"
 */

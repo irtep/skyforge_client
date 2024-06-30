@@ -245,7 +245,8 @@ const RightSideBar: React.FC = (): React.ReactElement => {
                                             size="small"
                                             sx={{
                                                 margin: 1,
-                                                background: 'magenta'
+                                                color: 'rgb(200,200,200)',
+                                                background: 'purple'
                                             }}
                                             value={b.action}
                                             onClick={() => {

@@ -22,7 +22,8 @@ span.bold {
   }
   
   span.red {
-    color: #d08356;
+    /*color: #d08356;*/
+    color: "red";
   }
   
   span.green {
@@ -54,7 +55,8 @@ span.bold {
   }
   
   span.red-bg {
-    background: #d08356;
+    /*background: #d08356;*/
+    background: "red";
   }
   
   span.green-bg {
