@@ -104,7 +104,7 @@ const App: React.FC = (): React.ReactElement => {
 
       // input from batmud comes here
       newSocket.on('message', (response: MessageResponse) => {
-        //console.log('response: ', response);
+        //console.log('response: ', response.data);
         setMessages((prevMessages: string[]) => [...prevMessages, response.data]);
         scrollToBottom();
       });
@@ -113,8 +113,8 @@ const App: React.FC = (): React.ReactElement => {
 
   // Truncate messages if length exceeds 40
   useEffect(() => {
-    //console.log('messages: ', messages);
     if (messages.length > 40) {
+      console.log('trunkating');
       const shortenedMessages = messages.slice(-30);
       setMessages(shortenedMessages);
     }
@@ -241,17 +241,7 @@ const App: React.FC = (): React.ReactElement => {
         ...prevCalculator,
         characterStats: updatedStats,
       }));
-    } /*else {
-      
-      console.log('not b round: ', messages[messages.length - 1]);
-      console.log(
-        hitCalculator.show,
-        hitCalculator.characterStats.length > 0,
-        messages.length > 0,
-        messages[messages.length - 1].includes('********************** Round')
-      );
-      
-    }*/
+    }
     //console.log('messages.length ', messages.length);
   }, [messages, hitCalculator.show]);
 
@@ -275,26 +265,7 @@ const App: React.FC = (): React.ReactElement => {
 
   }, []);
 
-  // Show party prots and effects
-  /*
-  useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
-
-    if (showProts) {
-      interval = setInterval(() => {
-        console.log('tikker');
-      }, 1000);
-    }
-
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-  }, [showProts]);
-  */
   // for debug
-
   /*
   useEffect(() => {
     console.log('debug', activeProts);
@@ -302,7 +273,11 @@ const App: React.FC = (): React.ReactElement => {
 */
 
   useEffect(scrollToBottom, [messages]);
-
+/*
+  useEffect( () => {
+    console.log('msg: ', messages);
+  }, [messages]);
+*/
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={0}>

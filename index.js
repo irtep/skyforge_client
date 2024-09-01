@@ -59,30 +59,7 @@ io.on('connection', (socket) => {
             });
 
             mud.setEncoding('latin1');
-            /*
-            mud.on('data', (data) => {
-                buffer += data;
-            
-                // Check for end of a complete message.
-                // This example assumes the message ends with a newline character.
-                if (buffer.includes('\n')) {
-                    // Split the buffer by newline to handle multiple messages
-                    let messages = buffer.split('\n');
-                    
-                    // Process all complete messages except the last chunk if it's incomplete
-                    for (let i = 0; i < messages.length - 1; i++) {
-                        const message = messages[i];
-                        console.log('raw data: ', message);
-                        const converted = convert(message);
-                        console.log('converted: ', converted);
-                        socket.emit('message', createResponse('update', converted));
-                    }
-            
-                    // Retain the last chunk if it might be incomplete
-                    buffer = messages[messages.length - 1];
-                }
-            });
-            */
+
             mud.on('data', (data) => {
                 //console.log('raw data: ', data);
                 const converted = convert(data);

@@ -1,7 +1,6 @@
 import { Button, Container, Input, Typography } from '@mui/material';
 import React, { RefObject, useContext, useEffect, useRef, useState } from 'react';
 import '../css/colors.css';
-import DOMPurify from 'dompurify';
 import { SkyContext } from '../context/skyContext';
 
 interface MudScreenProps {
@@ -93,7 +92,7 @@ const MudScreen: React.FC<MudScreenProps> = ({ messagesContainerRef }) => {
                 }}
             >
                 {messages.map((message: any, index: number) => (
-                    <div key={index} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(message) }} />
+                    <div key={`msgs ${index}`} dangerouslySetInnerHTML={{ __html: message }} />
                 ))}
             </Container>
 

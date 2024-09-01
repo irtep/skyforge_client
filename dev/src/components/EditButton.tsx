@@ -87,8 +87,8 @@ const EditButton: React.FC<EditButtonProps> = ({
                     displayEmpty
                 >
                     <MenuItem value="" disabled>Select a button</MenuItem>
-                    {savedButtons.map((button: ButtonItem) => (
-                        <MenuItem key={button.id} value={String(button.id)}>
+                    {savedButtons.map((button: ButtonItem, i: number) => (
+                        <MenuItem key={`eb ${i}`} value={String(button.id)}>
                             {button.name}
                         </MenuItem>
                     ))}

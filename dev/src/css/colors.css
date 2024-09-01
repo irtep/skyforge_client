@@ -22,12 +22,11 @@ span.bold {
   }
   
   span.red {
-    /*color: #d08356;*/
-    color: "red";
+    color: rgb(200,0,0);
   }
   
   span.green {
-    color: #a2a96f;
+    color: rgb(0,200,0);
   }
   
   span.yellow {
@@ -35,15 +34,15 @@ span.bold {
   }
   
   span.blue {
-    color: #8a9597;
+    color: rgb(0,0,200);
   }
   
   span.magenta {
-    color: #be96b3;
+    color: #d227c1;
   }
   
   span.cyan {
-    color: #74dad9;
+    color: #34dbd8;
   }
   
   span.white {
@@ -55,8 +54,7 @@ span.bold {
   }
   
   span.red-bg {
-    /*background: #d08356;*/
-    background: "red";
+    color: rgb(200,0,0);
   }
   
   span.green-bg {
