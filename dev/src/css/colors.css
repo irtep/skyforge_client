@@ -30,7 +30,7 @@ span.bold {
   }
   
   span.yellow {
-    color: #e3d96f;
+    color: #f3e008;
   }
   
   span.blue {
@@ -40,7 +40,11 @@ span.bold {
   span.magenta {
     color: #d227c1;
   }
-  
+   
+  span.gold {
+    color: rgb(147, 145, 8);
+  }
+
   span.cyan {
     color: #34dbd8;
   }

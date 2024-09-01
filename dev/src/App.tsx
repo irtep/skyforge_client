@@ -6,6 +6,7 @@ import RightSideBar from './components/RightSideBar';
 import { SkyContext } from './context/skyContext';
 import { hitMessages, votkRapierSpecials } from './data/hitMessages';
 import { Prot, prots } from './data/prots';
+import { lites, Lite } from './data/lites';
 
 interface MessageResponse {
   type: string;
@@ -57,7 +58,6 @@ const App: React.FC = (): React.ReactElement => {
     setTriggers,
     setSavedButtons,
     widths,
-    showProts,
     hitCalculator,
     setHitCalculator,
     activeProts,
@@ -104,8 +104,14 @@ const App: React.FC = (): React.ReactElement => {
 
       // input from batmud comes here
       newSocket.on('message', (response: MessageResponse) => {
-        //console.log('response: ', response.data);
-        setMessages((prevMessages: string[]) => [...prevMessages, response.data]);
+        // get lites
+        let tempResp: string = response.data;
+        lites.forEach( (lite: Lite) => {
+          tempResp = tempResp.replace(lite.input, lite.output);
+          //console.log('lites ', lite.input, lite.output);
+        });
+        //console.log('tempResp: ', tempResp);
+        setMessages((prevMessages: string[]) => [...prevMessages, tempResp]);
         scrollToBottom();
       });
     }
@@ -114,7 +120,6 @@ const App: React.FC = (): React.ReactElement => {
   // Truncate messages if length exceeds 40
   useEffect(() => {
     if (messages.length > 40) {
-      console.log('trunkating');
       const shortenedMessages = messages.slice(-30);
       setMessages(shortenedMessages);
     }
@@ -126,7 +131,7 @@ const App: React.FC = (): React.ReactElement => {
       prots.forEach((prot: Prot) => {
         if (messages.length > 0 && messages[messages.length - 1].includes(prot.starts) && socket) {
           let msg: string = '';
-          let possibleTarget: string = ''; 
+          let possibleTarget: string = '';
           const lastMessage = messages[messages.length - 1];
 
           if (prot.target && prot.targetStartIndicator) {
@@ -153,23 +158,22 @@ const App: React.FC = (): React.ReactElement => {
   }, [messages, setActiveProts, socket]);
 
   // ending prots
-  useEffect( () => {
+  useEffect(() => {
     if (activeProts.length > 0) {
       const lastMessage = messages[messages.length - 1];
       activeProts.forEach((prot: ActiveProts) => {
         if (messages.length > 0 && lastMessage.includes(prot.prot.stops) && socket) {
           if (prot.target) {
-            console.log('found with target');
             setProtStopMsg(`${prot.prot.name} of ${prot.target} expired!`);
-            setTimeout( () => { setProtStopMsg('') }, 4000);
+            setTimeout(() => { setProtStopMsg('') }, 4000);
             console.log(': ', prot.target, prot.prot.stops);
-            setActiveProts(activeProts.filter( (aPro: ActiveProts) => !(aPro.prot.stops === prot.prot.stops && aPro.target === prot.target)));          
-          
+            setActiveProts(activeProts.filter((aPro: ActiveProts) => !(aPro.prot.stops === prot.prot.stops && aPro.target === prot.target)));
+
           } else {
             //console.log('found without target');
             setProtStopMsg(`${prot.prot.name} expired!`);
-            setTimeout( () => { setProtStopMsg('') }, 4000);
-            setActiveProts(activeProts.filter( (aPro: ActiveProts) => aPro.prot.stops !== prot.prot.stops));
+            setTimeout(() => { setProtStopMsg('') }, 4000);
+            setActiveProts(activeProts.filter((aPro: ActiveProts) => aPro.prot.stops !== prot.prot.stops));
           }
         }
       });
@@ -273,11 +277,11 @@ const App: React.FC = (): React.ReactElement => {
 */
 
   useEffect(scrollToBottom, [messages]);
-/*
-  useEffect( () => {
-    console.log('msg: ', messages);
-  }, [messages]);
-*/
+  /*
+    useEffect( () => {
+      console.log('msg: ', messages);
+    }, [messages]);
+  */
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={0}>
