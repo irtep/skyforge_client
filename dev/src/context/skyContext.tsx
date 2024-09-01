@@ -48,6 +48,7 @@ export const SkyProvider: React.FC<Props> = (props: Props): React.ReactElement =
     });
     const [activeProts, setActiveProts] = useState<Prot[]>([]);
     const [protStopMsg, setProtStopMsg] = useState<string>('');
+    const [map, showMap] = useState<boolean>(false);
     
     return (
         <SkyContext.Provider value={{
@@ -66,7 +67,8 @@ export const SkyProvider: React.FC<Props> = (props: Props): React.ReactElement =
             hitCalculator, setHitCalculator,
             links, setLinks,
             activeProts, setActiveProts,
-            protStopMsg, setProtStopMsg
+            protStopMsg, setProtStopMsg,
+            map, showMap
         }}>
             {props.children}
         </SkyContext.Provider>

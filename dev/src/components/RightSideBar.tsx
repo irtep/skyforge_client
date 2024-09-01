@@ -30,7 +30,9 @@ const RightSideBar: React.FC = (): React.ReactElement => {
         hitCalculator,
         setHitCalculator,
         links,
-        setLinks
+        setLinks,
+        map,
+        setMap
     } = useContext(SkyContext);
 
     const [newTriggerDialogOpen, setNewTriggerDialogOpen] = useState<boolean>(false);
@@ -128,6 +130,16 @@ const RightSideBar: React.FC = (): React.ReactElement => {
                 inputProps={{ 'aria-label': 'controlled' }}
             />
 
+            <br />
+            
+            Show map:
+            <Switch
+                checked={map}
+                onChange={(e) => {
+                    setMap(e.target.checked);
+                }}
+                inputProps={{ 'aria-label': 'controlled' }}
+            />
             {
                 links ?
                     <Container>
@@ -267,6 +279,12 @@ const RightSideBar: React.FC = (): React.ReactElement => {
                     </Container> : <></>
             }
 
+            {
+                map.show ?
+                    <Container>
+                        map tähän
+                    </Container> : <></>
+            }
         </Box >
     );
 };
