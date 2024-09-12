@@ -14,6 +14,12 @@ import {
   deleteSelectedButton
 } from './functions/buttonManager.js';
 
+import {
+  indexValue,
+  historyList,
+  KeyDown
+} from './functions/commandHistory.js';
+
 export const socket = io();
 
 /***************************
@@ -61,6 +67,12 @@ btnEditorCloseSpan.onclick = function () { // buttons editor
 }
 
 /***************************
+ *  Commandline:
+ ***************************/
+// Command line
+const commandLine = document.getElementById("cLine");
+
+/***************************
  *  Event listeners:
  ***************************/
 
@@ -73,6 +85,15 @@ for (var i = 0; i < commandButtons.length; i++) {
 document.getElementById('cLine').addEventListener("keydown", function (e) {
   if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
     sendMessage();
+    KeyDown("EnterKey", commandLine.value);
+  }
+  if (e.keyCode === 38) {  //checks whether the pressed key is "UpArrow"
+    KeyDown("KeyUp", null);
+    commandLine.value = historyList[indexValue];
+  }
+  if (e.keyCode === 40) {  //checks whether the pressed key is "DownArrow"
+    KeyDown("KeyDown", null);
+    commandLine.value = historyList[indexValue];
   }
 });
 
