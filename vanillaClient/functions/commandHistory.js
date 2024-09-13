@@ -4,8 +4,8 @@ export var historyList = [];
 export function KeyDown(key, data) {
     // enter-key has been pressed
     if (key === "EnterKey") {
-        // check data not empty
-        if (data != "") {
+        // check data not empty and atleast 3 length
+        if (data != "" && data.length > 2) {
             // save input into inputdata
             historyList.push(data);
             // history max length is 10

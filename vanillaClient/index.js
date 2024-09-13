@@ -90,10 +90,12 @@ document.getElementById('cLine').addEventListener("keydown", function (e) {
   if (e.keyCode === 38) {  //checks whether the pressed key is "UpArrow"
     KeyDown("KeyUp", null);
     commandLine.value = historyList[indexValue];
+    commandLine.select();
   }
   if (e.keyCode === 40) {  //checks whether the pressed key is "DownArrow"
     KeyDown("KeyDown", null);
     commandLine.value = historyList[indexValue];
+    commandLine.select();
   }
 });
 
