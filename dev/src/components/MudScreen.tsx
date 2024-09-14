@@ -46,7 +46,8 @@ const MudScreen: React.FC<MudScreenProps> = ({ messagesContainerRef }) => {
                 setHistoryIndex(newIndex);
                 setCommand(history[history.length - 1 - newIndex]);
             }
-        } else if (e.key === 'ArrowDown') {
+        }
+        else if (e.key === 'ArrowDown') {
             // Navigate to the next command in history
             if (historyIndex > 0) {
                 const newIndex = historyIndex - 1;
@@ -54,6 +55,55 @@ const MudScreen: React.FC<MudScreenProps> = ({ messagesContainerRef }) => {
                 setCommand(history[history.length - 1 - newIndex]);
             } else if (historyIndex === 0) {
                 setHistoryIndex(-1);
+                setCommand('');
+            }
+        } 
+        // numpad movements
+        else if (e.code === 'Numpad7') {
+            if (socket) {
+                socket.emit('command', 'nw');
+                setCommand('');
+            }
+        }
+        else if (e.code === 'Numpad8') {
+            if (socket) {
+                socket.emit('command', 'n');
+                setCommand('');
+            }
+        }
+        else if (e.code === 'Numpad9') {
+            if (socket) {
+                socket.emit('command', 'ne');
+                setCommand('');
+            }
+        }
+        else if (e.code === 'Numpad4') {
+            if (socket) {
+                socket.emit('command', 'w');
+                setCommand('');
+            }
+        }
+        else if (e.code === 'Numpad6') {
+            if (socket) {
+                socket.emit('command', 'e');
+                setCommand('');
+            }
+        }
+        else if (e.code === 'Numpad1') {
+            if (socket) {
+                socket.emit('command', 'sw');
+                setCommand('');
+            }
+        }
+        else if (e.code === 'Numpad2') {
+            if (socket) {
+                socket.emit('command', 's');
+                setCommand('');
+            }
+        }
+        else if (e.code === 'Numpad3') {
+            if (socket) {
+                socket.emit('command', 'se');
                 setCommand('');
             }
         }
