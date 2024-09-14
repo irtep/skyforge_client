@@ -87,7 +87,7 @@ const EditTrigger: React.FC<EditTriggerProps> = ({
                 >
                     <MenuItem value="" disabled>Select a trigger</MenuItem>
                     {triggers.map((trigger: Trigger) => (
-                        <MenuItem key={trigger.id} value={String(trigger.id)}>
+                        <MenuItem key={` trigKey ${trigger.id}`} value={String(trigger.id)}>
                             {trigger.name}
                         </MenuItem>
                     ))}

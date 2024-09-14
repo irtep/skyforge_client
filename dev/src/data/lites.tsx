@@ -13,6 +13,10 @@ export const lites: Lite[] = [
         input: 'golden arrow',
         output: '<span class="magenta">golden arrow</span>'
     },
+    {
+        input: 'levin bolt',
+        output: '<span class="magenta">levin bolt</span>'
+    },
     // fire spells
 
     {
@@ -54,6 +58,10 @@ export const lites: Lite[] = [
     {
         input: 'herbal poison spray',
         output: '<span class="green">herbal poison spray</span>'
+    },
+    {
+        input: 'venom strike',
+        output: '<span class="green">venom strike</span>'
     },
     // cold spells
 

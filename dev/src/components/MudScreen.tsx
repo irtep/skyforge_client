@@ -68,9 +68,10 @@ const MudScreen: React.FC<MudScreenProps> = ({ messagesContainerRef }) => {
   // Truncate command history if length exceeds 10
   useEffect(() => {
     if (history.length > 10) {
-      const shortenedMessages = messages.slice(-10);
+      const shortenedMessages = history.slice(-10);
       setHistory(shortenedMessages);
     }
+    //console.log('history: ', history, historyIndex);
   }, [history]);
 
     return (
