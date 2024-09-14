@@ -166,7 +166,7 @@ const App: React.FC = (): React.ReactElement => {
           if (prot.target) {
             setProtStopMsg(`${prot.prot.name} of ${prot.target} expired!`);
             setTimeout(() => { setProtStopMsg('') }, 4000);
-            console.log(': ', prot.target, prot.prot.stops);
+            //console.log(': ', prot.target, prot.prot.stops);
             setActiveProts(activeProts.filter((aPro: ActiveProts) => !(aPro.prot.stops === prot.prot.stops && aPro.target === prot.target)));
 
           } else {
