@@ -115,7 +115,23 @@ export const lites: Lite[] = [
         output: '<span class="magenta">bolt of knowledge</span>'
 
     },
+    // druid spells
 
+    {
+        input: 'star light',
+        output: '<span class="magenta">star light</span>'
+
+    },
+    {
+        input: 'wither flesh',
+        output: '<span class="green">wither flesh</span>'
+
+    },
+    {
+        input: 'hoar frost',
+        output: '<span class="cyan">hoar frost</span>'
+
+    },
     // other
     {
         input: 'You are done with the chant.',
