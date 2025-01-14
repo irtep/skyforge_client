@@ -106,13 +106,38 @@ const App: React.FC = (): React.ReactElement => {
       newSocket.on('message', (response: MessageResponse) => {
         // get lites
         let tempResp: string = response.data;
-        lites.forEach( (lite: Lite) => {
+        lites.forEach((lite: Lite) => {
           tempResp = tempResp.replace(lite.input, lite.output);
           //console.log('lites ', lite.input, lite.output);
         });
         //console.log('tempResp: ', tempResp);
+        // Append the message directly to the container
+        if (messagesContainerRef.current) {
+          const messageDiv = document.createElement('div');
+          // instead of state variables, goes directly to dom.
+          // because data comes so fast, that there would be data loss
+          // if using state variables.
+          messageDiv.innerHTML = tempResp;
+          messagesContainerRef.current.appendChild(messageDiv);
+          // saves to message too, to enable triggers etc.
+          setMessages((prevMessages: string[]) => [...prevMessages, tempResp]);
+
+          // Limit the number of lines (or child nodes) in the container
+          const maxLines: number = 250;
+          while (
+            messagesContainerRef.current.childNodes.length > maxLines &&
+            messagesContainerRef.current.firstChild
+          ) {
+            messagesContainerRef.current.removeChild(messagesContainerRef.current.firstChild);
+          }
+          // Scroll to the bottom
+          messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+        }
+        /*
         setMessages((prevMessages: string[]) => [...prevMessages, tempResp]);
         scrollToBottom();
+        */
+
       });
     }
   }, [socket, triggers]);

@@ -142,9 +142,9 @@ const MudScreen: React.FC<MudScreenProps> = ({ messagesContainerRef }) => {
                     paddingBottom: 5
                 }}
             >
-                {messages.map((message: any, index: number) => (
+                {/*messages.map((message: any, index: number) => (
                     <div key={`msgs ${index}`} dangerouslySetInnerHTML={{ __html: message }} />
-                ))}
+                ))*/}
             </Container>
 
             <Input
@@ -163,7 +163,7 @@ const MudScreen: React.FC<MudScreenProps> = ({ messagesContainerRef }) => {
             <Button onClick={sendCommand}>Send</Button>
 
             <Typography sx={{ color: "rgb(150,150,150)" }}>
-                [version: beta 0.1.1]
+                [version: test 0.2.2]
             </Typography>
         </Container>
     );
