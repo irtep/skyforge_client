@@ -12,7 +12,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const port = 3333;
 
-const httpServer = http.createServer(app);
+const httpServer = http.createServer(app);              
 const io = new Server(httpServer, {
     cors: {
         origin: ["http://localhost:5555"],  // allow requests from React app

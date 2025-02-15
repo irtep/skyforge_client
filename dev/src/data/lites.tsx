@@ -144,5 +144,9 @@ export const lites: Lite[] = [
     {
         input: 'tree',
         output: '<span class="green">tree</span>'
+    },
+    {
+        input: 'updated',
+        output: '<span class="magenta">updated</span>'
     }
 ];

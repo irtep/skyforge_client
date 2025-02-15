@@ -102,7 +102,7 @@ const App: React.FC = (): React.ReactElement => {
       const newSocket = io('http://localhost:3333');  // Connect to the server
       setSocket(newSocket);
 
-      // input from batmud comes here
+      // input from batmud comes here   
       newSocket.on('message', (response: MessageResponse) => {
         // get lites
         let tempResp: string = response.data;
