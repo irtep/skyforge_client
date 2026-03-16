@@ -146,7 +146,15 @@ export const lites: Lite[] = [
         output: '<span class="green">tree</span>'
     },
     {
-        input: 'updated',
-        output: '<span class="magenta">updated</span>'
+        input: 'Master',
+        output: '<span class="yellow">Master</span>'
+    },
+    {
+        input: 'master',
+        output: '<span class="yellow">master</span>'
+    },
+    {
+        input: 'harm',
+        output: '<span class="cyan">harm</span>'
     }
 ];
