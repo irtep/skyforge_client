@@ -84,40 +84,64 @@ let attributes = {
 };
 
 export const convert = (data) => {
-    var matches = data.match(/\[((\d*);){0,2}(\d*)m/g);
-
-    // Escaping < and > to be displayed as text
+    // Escaping < and > to be displayed safely as text
     data = data.replace(/</g, '&lt;');
     data = data.replace(/>/g, '&gt;');
 
-    if (matches) {
-        for (var i = 0; i < matches.length; i++) {
-            var match = matches[i];
-            var codes = match.replace('[', '').replace('m', '').split(';');
-            for (var c = 0; c < codes.length; c++) {
-                codes[c] = attributes[codes[c]] || '';
-            }
-            data = data.replace(match, '<span class="' + codes.join(' ') + '">');
-        }
-    }
+    // 1. Match standard ANSI and Truecolor sequences (looking for the \x1b or escape prefix)
+    // Note: If your incoming string has raw escape chars missing, the regex below handles the remaining '[' 
+    const ansiRegex = /(?:|\\x1b)?\[([\d;]+)m/g;
 
-    // Removing unwanted characters
+    data = data.replace(ansiRegex, (match, group) => {
+        const codes = group.split(';').map(Number);
+        let styles = [];
+        let classes = [];
+
+        for (let i = 0; i < codes.length; i++) {
+            const code = codes[i];
+
+            // Handle Truecolor Foreground: [38;2;R;G;Bm
+            if (code === 38 && codes[i + 1] === 2) {
+                const r = codes[i + 2];
+                const g = codes[i + 3];
+                const b = codes[i + 4];
+                styles.push(`color: rgb(${r},${g},${b});`);
+                i += 4; // Skip processed parameters
+                continue;
+            }
+
+            // Handle Truecolor Background: [48;2;R;G;Bm
+            if (code === 48 && codes[i + 1] === 2) {
+                const r = codes[i + 2];
+                const g = codes[i + 3];
+                const b = codes[i + 4];
+                styles.push(`background-color: rgb(${r},${g},${b});`);
+                i += 4; // Skip processed parameters
+                continue;
+            }
+
+            // Fallback to your classic 16-color attributes mapping
+            if (attributes[code]) {
+                classes.push(attributes[code]);
+            }
+        }
+
+        // Build the span tag dynamically
+        let attrString = '';
+        if (classes.length > 0) attrString += `class="${classes.join(' ')}" `;
+        if (styles.length > 0) attrString += `style="${styles.join(' ')}"`;
+
+        return attrString ? `<span ${attrString.trim()}>` : '<span>';
+    });
+
+    // Removing unwanted MUD telnet/control characters
     data = data.replace(/ÿù/g, '');
     data = data.replace(//g, '');
 
-/* // seems, that this is not needed atm...
-    // Final clean-up attempt for known patterns
-    for (let i = 30; i < 38; i++) {
-        data = data.replace(new RegExp("\\[" + i + "m", "g"), "");
-        data = data.replace(new RegExp("\\[0;" + i + "m", "g"), "");
-        data = data.replace(new RegExp("\\[1;" + i + "m", "g"), "");
-        data = data.replace(new RegExp("\\[" + i + ";1m", "g"), "");
-    }
-*/
-    // Close all open <span> tags
+    // Close all open <span> tags elegantly
     data = data.replace(/<\/span>(?!<\/span>)/g, '</span><span>');
 
-    // Ensuring all spans are properly closed
+    // Ensuring all spans are properly closed balancing checks
     let openSpans = (data.match(/<span/g) || []).length;
     let closeSpans = (data.match(/<\/span>/g) || []).length;
     while (closeSpans < openSpans) {
