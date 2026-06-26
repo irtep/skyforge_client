@@ -163,7 +163,7 @@ const MudScreen: React.FC<MudScreenProps> = ({ messagesContainerRef }) => {
             <Button onClick={sendCommand}>Send</Button>
 
             <Typography sx={{ color: "rgb(150,150,150)" }}>
-                [version: test 0.3.0]
+                [version: test 0.3.1]
             </Typography>
         </Container>
     );
