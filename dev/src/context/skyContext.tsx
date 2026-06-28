@@ -48,7 +48,8 @@ export const SkyProvider: React.FC<Props> = (props: Props): React.ReactElement =
     });
     const [activeProts, setActiveProts] = useState<Prot[]>([]);
     const [protStopMsg, setProtStopMsg] = useState<string>('');
-    const [map, showMap] = useState<boolean>(false);
+    const [map, setMap] = useState<boolean>(false);
+    const [mapUrl, setMapUrl] = useState<string>('');
     
     return (
         <SkyContext.Provider value={{
@@ -68,7 +69,8 @@ export const SkyProvider: React.FC<Props> = (props: Props): React.ReactElement =
             links, setLinks,
             activeProts, setActiveProts,
             protStopMsg, setProtStopMsg,
-            map, showMap
+            map, setMap,
+            mapUrl, setMapUrl
         }}>
             {props.children}
         </SkyContext.Provider>
