@@ -1,5 +1,5 @@
 import { Box, Button, Container, Link, Switch } from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, /*useEffect,*/ useState } from 'react';
 import ProtsBox from './ProtsBox';
 import NewTrigger from './NewTrigger';
 import { ButtonItem } from '../App';
@@ -32,7 +32,9 @@ const RightSideBar: React.FC = (): React.ReactElement => {
         links,
         setLinks,
         map,
-        setMap
+        setMap,
+        mapUrl,
+        setWidths
     } = useContext(SkyContext);
 
     const [newTriggerDialogOpen, setNewTriggerDialogOpen] = useState<boolean>(false);
@@ -47,12 +49,12 @@ const RightSideBar: React.FC = (): React.ReactElement => {
     };
 /*
     useEffect(() => {
-        console.log('trigs ', triggers);
+        console.log('mapUrl ', mapUrl, ' map: ', map);
     });
 */
     return (
         <Box sx={{
-            background: 'darkGreen',
+            background: 'linear-gradient(to right, black, darkgreen, darkgreen, darkgreen, darkgreen)',
             height: '100%',
             padding: 2,
             borderRadius: 5,
@@ -131,12 +133,16 @@ const RightSideBar: React.FC = (): React.ReactElement => {
             />
 
             <br />
-            
+
             Show map:
             <Switch
                 checked={map}
                 onChange={(e) => {
                     setMap(e.target.checked);
+                    setWidths({
+                        sideBar: 6,
+                        mudScreen: 6});
+                    sendCommand('whereami link');
                 }}
                 inputProps={{ 'aria-label': 'controlled' }}
             />
@@ -280,10 +286,33 @@ const RightSideBar: React.FC = (): React.ReactElement => {
             }
 
             {
-                map.show ?
-                    <Container>
-                        map tähän
-                    </Container> : <></>
+                map ?
+                    <Container sx={{ mt: 1, textAlign: 'center' }}>
+                        <button
+                            style={{background: 'rgb(160,160,160)', margin: 1}}
+                            onClick={ () => {sendCommand('whereami link');}}
+                        >
+                            update map
+                        </button>
+                        {mapUrl ? (
+                            <iframe
+                                src={mapUrl}
+                                title="MUD Map"
+                                width="100%"
+                                height="300px"
+                                style={{
+                                    border: '1px solid darkgreen',
+                                    borderRadius: '4px',
+                                    background: 'white' // Prevents see-through issues
+                                }}
+                            />
+                        ) : (
+                            <Box sx={{ fontStyle: 'italic', color: 'gray', fontSize: '0.85rem' }}>
+                                Waiting for map URL from game...
+                            </Box>
+                        )}
+                    </Container>
+                    : <></>
             }
         </Box >
     );

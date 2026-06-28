@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogTitle, Stack, TextField } from '@mui/material';
-import React, { Dispatch, SetStateAction, useContext, useEffect, useRef } from 'react';
+import React, { Dispatch, SetStateAction, /*useContext,*/ useEffect, useRef } from 'react';
 import { Trigger } from '../App';
-import { SkyContext } from '../context/skyContext';
+//import { SkyContext } from '../context/skyContext';
 
 interface NewTriggerProps {
     setTriggers: Dispatch<SetStateAction<Trigger[]>>;

@@ -1,7 +1,7 @@
 import { Container, Typography } from '@mui/material';
 import React, { useContext } from 'react';
 import { SkyContext } from '../context/skyContext';
-import { Prot } from '../data/prots';
+//import { Prot } from '../data/prots';
 import { ActiveProts } from '../App';
 
 const ProtsBox: React.FC = () => {

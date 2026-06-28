@@ -62,7 +62,9 @@ const App: React.FC = (): React.ReactElement => {
     setHitCalculator,
     activeProts,
     setActiveProts,
-    setProtStopMsg
+    setProtStopMsg,
+    setMapUrl,
+    map
   } = useContext(SkyContext);
 
   const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -106,6 +108,19 @@ const App: React.FC = (): React.ReactElement => {
       newSocket.on('message', (response: MessageResponse) => {
         // get lites
         let tempResp: string = response.data;
+
+        // This regex looks for common image/web URLs (http or https) if map is shown
+
+        console.log('map is true!');
+        const urlRegex = /(https?:\/\/[^\s$.?#].[^\s]*)/gi;
+        const foundUrls = tempResp.match(urlRegex);
+
+        if (foundUrls && foundUrls.length > 0) {
+          // Strip out any HTML tags if the URL is wrapped in something from the backend
+          const cleanUrl = foundUrls[0].replace(/<[^>]*>/g, '');
+          setMapUrl(cleanUrl);
+        }
+
         lites.forEach((lite: Lite) => {
           tempResp = tempResp.replace(lite.input, lite.output);
           //console.log('lites ', lite.input, lite.output);
@@ -140,7 +155,7 @@ const App: React.FC = (): React.ReactElement => {
 
       });
     }
-  }, [socket, triggers]);
+  }, [socket, triggers, setMapUrl]);
 
   // Truncate messages if length exceeds 40
   useEffect(() => {
