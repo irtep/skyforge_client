@@ -152,3 +152,63 @@ export const convert = (data) => {
     return data;
 };
 
+// TESTING PART for broker ANSI codes ??? ei hajua toimiiko edes / sopiiko tähän koodiin ??? :O
+let ansiBuffer = '';
+
+function ansiFixer(data) {
+    let newData = '';
+    // Integrate any text/code from the previous package that may have been left incomplete.
+    let rawText = ansiBuffer + data;
+    ansiBuffer = '';
+
+    let index = 0;
+    let textBuffer = '';
+    while (index < rawText.length) {
+        if (rawText[i] === '\x1B') {
+            // If we are at the very end of a packet and don’t know what follows, we leave it in the buffer.
+            if (i + 1 >= rawText.length)
+            {
+                ansiBuffer = rawText.substring(i);
+                break;
+            }
+
+            if (rawText[i + 1] == '[') {
+                let codeBegin = i + 2;
+                let codeEnd = rawText.indexOf('m', codeBegin);
+
+                // BUG FIX 1: If 'm' is not found, the code was split between packets!
+                // Save the beginning of the code for the next packet.
+                if (codeEnd === -1) {
+                    ansiBuffer = rawText.substring(i);
+                    break;
+                }
+
+                // Print the text that has accumulated before the code
+                if (textBuffer.length > 0) {
+                    newData += convert(textBuffer); // <-- onko OK ???
+                    textBuffer = '';
+                }     
+                /* OUTO PALA KOODIA ??? tarvitaanko edes ???
+                
+                string koodiSisalto = raakaTeksti.Substring(koodinAlku, koodinLoppu - koodinAlku);
+                _nykyinenAnsiVari = HaeAnsiVari(koodiSisalto);
+
+                i = koodinLoppu + 1;
+                continue;
+                
+                */
+            }
+
+            textBuffer.Append(rawText[i]);
+            index++;
+        }
+    }
+
+    // Let's print the rest of the texts
+    if (textBuffer.length > 0)
+    {
+        newData += convert(textBuffer); // <-- onko OK ???
+    }
+
+    return newData;
+};
