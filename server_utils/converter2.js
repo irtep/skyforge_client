@@ -1,8 +1,8 @@
 /*
-    Initially tested in operation within a separate test project (26.11.2026 klo 0:15)
-    ----------------------------------------------------------------------------------
+    Test done: (26.11.2026 14:00) - STATUS = OK
+    -------------------------------------------
 
-    TODO: replace the old converter.js file with a new one, while keeping the old converter.js file?
+    TODO: Fix and remove extra telnet characters from text
 */
 
 const attributes = {
@@ -34,9 +34,6 @@ export class AnsiStreamConverter {
             this.buffer = incompleteMatch;
             data = data.slice(0, incompleteMatch.index);
         }
-
-        // Combine consecutive complete codes
-        data = data.replace(/[\x1b\u001b]\[([0-9;]+)m[\x1b\u001b]\[([0-9;]+)m/g, '\x1b[$1;$2m');
 
         let html = '';
         let isSpanOpen = false;
@@ -80,30 +77,65 @@ export class AnsiStreamConverter {
         return html;
     }
 
-    _updateState(codeString) {
+        _updateState(codeString) {
         if (!codeString || codeString === '0') {
             this.activeClasses = [];
             this.activeStyles = [];
             return;
         }
 
+        // We categorize colors and styles so that we know which legacy class the new code replaces.
+        const fgClasses = ['black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white'];
+        const bgClasses = ['black-bg', 'red-bg', 'green-bg', 'yellow-bg', 'blue-bg', 'magenta-bg', 'cyan-bg', 'white-bg'];
+
         const codes = codeString.split(';').map(Number);
         for (let i = 0; i < codes.length; i++) {
             const code = codes[i];
+
             if (code === 0) {
                 this.activeClasses = [];
                 this.activeStyles = [];
+            } else if (code === 22) {
+                // MUDs use code 22 to remove bold formatting without resetting the entire color.
+                this.activeClasses = this.activeClasses.filter(c => c !== 'bold');
+            } else if (code === 24) {
+                // Code 24 removes the underline
+                this.activeClasses = this.activeClasses.filter(c => c !== 'underline');
+            } else if (code === 39) {
+                // Code 39 resets only the text color to the default.
+                this.activeClasses = this.activeClasses.filter(c => !fgClasses.includes(c));
+                this.activeStyles = this.activeStyles.filter(s => !s.startsWith('color:'));
+            } else if (code === 49) {
+                // Code 49 resets only the background color to the default.
+                this.activeClasses = this.activeClasses.filter(c => !bgClasses.includes(c));
+                this.activeStyles = this.activeStyles.filter(s => !s.startsWith('background-color:'));
             } else if (code === 38 && codes[i + 1] === 2 && codes.length >= i + 5) {
+                // New Truecolor text color: both the old Truecolor and the 16-color text class are removed
+                this.activeClasses = this.activeClasses.filter(c => !fgClasses.includes(c));
                 this.activeStyles = this.activeStyles.filter(s => !s.startsWith('color:'));
                 this.activeStyles.push(`color: rgb(${codes[i + 2]}, ${codes[i + 3]}, ${codes[i + 4]})`);
                 i += 4;
             } else if (code === 48 && codes[i + 1] === 2 && codes.length >= i + 5) {
+                // New Truecolor background color: remove the old background color
+                this.activeClasses = this.activeClasses.filter(c => !bgClasses.includes(c));
                 this.activeStyles = this.activeStyles.filter(s => !s.startsWith('background-color:'));
                 this.activeStyles.push(`background-color: rgb(${codes[i + 2]}, ${codes[i + 3]}, ${codes[i + 4]})`);
                 i += 4;
             } else if (attributes[code]) {
-                if (!this.activeClasses.includes(attributes[code])) {
-                    this.activeClasses.push(attributes[code]);
+                const attrName = attributes[code];
+
+                if (fgClasses.includes(attrName)) {
+                    // If a new 16-color text color (e.g., yellow) is added, the old one (e.g., green) and Truecolor are removed
+                    this.activeClasses = this.activeClasses.filter(c => !fgClasses.includes(c));
+                    this.activeStyles = this.activeStyles.filter(s => !s.startsWith('color:'));
+                } else if (bgClasses.includes(attrName)) {
+                    // If a new background color is added, the old background color is removed
+                    this.activeClasses = this.activeClasses.filter(c => !bgClasses.includes(c));
+                    this.activeStyles = this.activeStyles.filter(s => !s.startsWith('background-color:'));
+                }
+
+                if (!this.activeClasses.includes(attrName)) {
+                    this.activeClasses.push(attrName);
                 }
             }
         }
@@ -116,33 +148,8 @@ export class AnsiStreamConverter {
     }
 }
 
-/***************************
- *  When application starts:
- ***************************/
-let mud_screen = document.getElementById('mudScreen');
-let testi = '';
-
 const converter = new AnsiStreamConverter();
 
-// Pala 1: Loppuu keskeneräiseen vihreän värin koodiin "\x1b[3"
-const pala1 = 'Olipa kerran \x1b[3';
-
-// Pala 2: Alkaa loppuosalla "2m" -> muodostaa ehjän "\x1b[32m" koodin! Väri jää päälle.
-const pala2 = '2mvihreä peikko, ';
-
-// Pala 3: Jatkaa vihreänä, kunnes "\x1b[0m" nollaa värin ja aloittaa uuden Truecolor-värin
-const pala3 = 'joka söi \x1b[0m\x1b[38;2;255;140;0mtaikaporkkanan\x1b[0m.';
-
-console.log('Pala 1:', converter.convertChunk(pala1));
-console.log('Pala 2:', converter.convertChunk(pala2));
-console.log('Pala 3:', converter.convertChunk(pala3));
-
-window.onload = (() => {
-    
-    testi += converter.convertChunk(pala1);
-    testi += converter.convertChunk(pala2);
-    testi += converter.convertChunk(pala3);
-
-    mud_screen.innerHTML = testi;
-
-});
+export const convert = (data) => {
+    return converter.convertChunk(data);
+};
