@@ -1,8 +1,8 @@
 /*
-    ALUSTAVASTI TESTATTU TOIMIVANA (26.11.2026 klo 0:15)
-    ----------------------------------------------------
+    Initially tested in operation within a separate test project (26.11.2026 klo 0:15)
+    ----------------------------------------------------------------------------------
 
-    TODO: sovittaa vanhan converter.js tiedoston tilalle ja säilyttää vanha converter.js tiedosto?
+    TODO: replace the old converter.js file with a new one, while keeping the old converter.js file?
 */
 
 const attributes = {
@@ -15,39 +15,39 @@ const attributes = {
 
 export class AnsiStreamConverter {
     constructor() {
-        this.buffer = '';        // Tallentaa katkenneen ANSI-koodin alun seuraavaa palaa varten
-        this.activeClasses = []; // Muistaa päällä olevat luokat palojen välillä
-        this.activeStyles = [];  // Muistaa päällä olevat Truecolor-tyylit
+        this.buffer = '';        // Stores the beginning of an interrupted ANSI code for the next chunk
+        this.activeClasses = []; // Remembers which classes are active between segments
+        this.activeStyles = [];  // Remembers active Truecolor styles
     }
 
     convertChunk(data) {
-        // 0. Yhdistetään edellisen palan keskeneräinen koodi uuden palan alkuun
+        // Combine the incomplete code from the previous piece with the beginning of the new piece
         data = this.buffer + data;
         this.buffer = '';
 
-        // Suojataan HTML-merkit
+        // Escape HTML characters
         data = data.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-        // 1. Etsitään ja talletetaan palan loppuun jäänyt keskeneräinen ANSI-koodi (esim. "\x1b[3")
+        // Locate and store any incomplete ANSI code left at the end of the chunk (e.g., "\x1b[3")
         const incompleteMatch = data.match(/[\x1b\u001b](?:\[[0-9;]*)?$/);
         if (incompleteMatch) {
             this.buffer = incompleteMatch;
             data = data.slice(0, incompleteMatch.index);
         }
 
-        // Yhdistetään peräkkäiset kokonaiset koodit
+        // Combine consecutive complete codes
         data = data.replace(/[\x1b\u001b]\[([0-9;]+)m[\x1b\u001b]\[([0-9;]+)m/g, '\x1b[$1;$2m');
 
         let html = '';
         let isSpanOpen = false;
 
-        // Jos edellisestä palasta jäi väri päälle, avataan se heti uuden palan alussa
+        // If any color from the previous piece remains, remove it right at the start of the new piece
         if (this.activeClasses.length > 0 || this.activeStyles.length > 0) {
             html += this._buildSpanTag();
             isSpanOpen = true;
         }
 
-        // Pilkotaan teksti osiin ANSI-koodien kohdalta
+        // Split the text into parts at the ANSI codes
         const parts = data.split(/([\x1b\u001b]\[[0-9;]*m)/g);
 
         for (const part of parts) {
@@ -71,8 +71,8 @@ export class AnsiStreamConverter {
             }
         }
 
-        // Suljetaan tämän palan <span>, jotta jokainen pala on validia HTML:ää
-        // (Tila pysyy silti tallessa this.activeClasses / this.activeStyles -muuttujissa!)
+        // Close the <span> for this piece, so that each piece is valid HTML
+        // (The state is still preserved in the `this.activeClasses` and `this.activeStyles` variables!)
         if (isSpanOpen) {
             html += '</span>';
         }
